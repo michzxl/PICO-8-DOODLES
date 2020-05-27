@@ -1,0 +1,622 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="BookmarkManager">
+    <bookmark url="file://$PROJECT_DIR$/wildflower.lua" line="388" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="adfbc538-ba47-4908-a571-ef27d898ea38" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/wildflower.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/wildflower.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SNIPPETS/PICO-KIT/LICENSE" beforeDir="false" afterPath="$PROJECT_DIR$/PICO-KIT/LICENSE" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SNIPPETS/PICO-KIT/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/PICO-KIT/pico-kit README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SNIPPETS/PICO-KIT/example.p8" beforeDir="false" afterPath="$PROJECT_DIR$/PICO-KIT/example.p8" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SNIPPETS/PICO-KIT/starter.p8" beforeDir="false" afterPath="$PROJECT_DIR$/PICO-KIT/pico-kit.p8" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SNIPPETS/PICO-KIT/tilephysics.p8" beforeDir="false" afterPath="$PROJECT_DIR$/PICO-KIT/tilephysics.p8" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bins.lua" beforeDir="false" afterPath="$PROJECT_DIR$/bins.lua" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wildflower.lua" beforeDir="false" afterPath="$PROJECT_DIR$/wildflower.lua" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wildflower.p8" beforeDir="false" afterPath="$PROJECT_DIR$/wildflower.p8" afterDir="false" />
+    </list>
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="DatabaseView">
+    <option name="SHOW_INTERMEDIATE" value="true" />
+    <option name="GROUP_DATA_SOURCES" value="true" />
+    <option name="GROUP_SCHEMA" value="true" />
+    <option name="GROUP_CONTENTS" value="false" />
+    <option name="SORT_POSITIONED" value="false" />
+    <option name="SHOW_EMPTY_GROUPS" value="false" />
+    <option name="AUTO_SCROLL_FROM_SOURCE" value="false" />
+    <option name="HIDDEN_KINDS">
+      <set />
+    </option>
+    <expand />
+    <select />
+  </component>
+  <component name="FavoritesManager">
+    <favorites_list name="wildflower" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/wildflower.lua">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="3900">
+              <caret line="195" column="3" selection-start-line="195" selection-start-column="3" selection-end-line="195" selection-end-column="3" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/PICO-KIT/pico-kit.p8">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="3000">
+              <caret line="208" selection-start-line="208" selection-end-line="208" />
+              <folding>
+                <element signature="n#make#0" />
+                <element signature="n#search#0" />
+                <element signature="n#parent_function#0" />
+                <element signature="n#oop.class#0" />
+                <element signature="n#tools.assign#0" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/PICO-KIT/pico-kit README.md">
+          <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+            <state split_layout="SPLIT">
+              <first_editor relative-caret-position="140">
+                <caret line="6" column="152" lean-forward="true" selection-start-line="6" selection-start-column="152" selection-end-line="6" selection-end-column="152" />
+              </first_editor>
+              <second_editor />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/PICO-KIT/example.p8">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="40">
+              <caret line="2" column="8" selection-start-line="2" selection-start-column="8" selection-end-line="2" selection-end-column="8" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/PICO-KIT/tilephysics.p8">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="140">
+              <caret line="7" column="4" lean-forward="true" selection-start-line="7" selection-start-column="4" selection-end-line="7" selection-end-column="4" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/PICO-KIT/LICENSE">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/linked.lua">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/bins.lua">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="960">
+              <caret line="48" selection-start-line="48" selection-end-line="137" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/README.md">
+          <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+            <state split_layout="SPLIT">
+              <first_editor relative-caret-position="160">
+                <caret line="8" column="17" selection-start-line="8" selection-start-column="17" selection-end-line="8" selection-end-column="17" />
+              </first_editor>
+              <second_editor />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>grow_</find>
+      <find>&quot;grass</find>
+      <find>launch_handful</find>
+      <find>--</find>
+      <find>head_col</find>
+      <find>add_entity</find>
+      <find>launch_</find>
+      <find>del_</find>
+      <find>insert_</find>
+      <find>&quot;insert tail</find>
+      <find>manhattan</find>
+      <find>dist(</find>
+      <find>plant_</find>
+      <find>draw_flower</find>
+      <find>printh</find>
+      <find>del_flower</find>
+      <find>del_entity</find>
+      <find>del_linked</find>
+      <find>del_lik</find>
+      <find>add_</find>
+      <find>put_in</find>
+      <find>dist</find>
+    </findStrings>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/src/player.lua" />
+        <option value="$PROJECT_DIR$/src/wildflower.p8" />
+        <option value="$PROJECT_DIR$/src/flowers.lua" />
+        <option value="$PROJECT_DIR$/src/main.lua" />
+        <option value="$PROJECT_DIR$/snippets (not mine!)/pico-kit-master/starter.p8" />
+        <option value="$PROJECT_DIR$/SNIPPETS/collisions_snippet.p8" />
+        <option value="$PROJECT_DIR$/SNIPPETS/keyboard_mouse.p8" />
+        <option value="$PROJECT_DIR$/flowers.lua" />
+        <option value="$PROJECT_DIR$/SNIPPETS/superdebug.p8" />
+        <option value="$PROJECT_DIR$/main.lua" />
+        <option value="$PROJECT_DIR$/wildflower.p8" />
+        <option value="$PROJECT_DIR$/jaws.p8" />
+        <option value="$PROJECT_DIR$/jaws.lua" />
+        <option value="$PROJECT_DIR$/bins.lua" />
+        <option value="$PROJECT_DIR$/README.md" />
+        <option value="$PROJECT_DIR$/wildflower.lua" />
+        <option value="$PROJECT_DIR$/PICO-KIT/README.md" />
+        <option value="$PROJECT_DIR$/PICO-KIT/example.p8" />
+        <option value="$PROJECT_DIR$/PICO-KIT/starter.p8" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="423" />
+    <option name="y" value="148" />
+    <option name="width" value="783" />
+    <option name="height" value="702" />
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectView">
+    <navigator proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="Scope" />
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="wildflower" type="b2602c69:ProjectViewProjectNode" />
+              <item name="wildflower" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="wildflower" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../CAB" />
+    <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
+    <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\micheal\AppData\Roaming\pico-8\carts\work\wildflower\PICO-KIT" />
+      <recent name="C:\Users\micheal\AppData\Roaming\pico-8\carts\work\wildflower" />
+      <recent name="C:\Users\micheal\AppData\Roaming\pico-8\carts\work\wildflower\snippets (not mine!)" />
+    </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="adfbc538-ba47-4908-a571-ef27d898ea38" name="Default Changelist" comment="" />
+      <created>1556532051055</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1556532051055</updated>
+      <workItem from="1556532052137" duration="14479000" />
+      <workItem from="1556599334175" duration="7869000" />
+      <workItem from="1556613409719" duration="13755000" />
+      <workItem from="1556796835017" duration="1841000" />
+      <workItem from="1556916475309" duration="9167000" />
+      <workItem from="1557005413733" duration="2422000" />
+      <workItem from="1557447965226" duration="5670000" />
+      <workItem from="1558122620187" duration="887000" />
+      <workItem from="1558130388840" duration="4082000" />
+      <workItem from="1558462058099" duration="6148000" />
+      <workItem from="1558531430218" duration="7958000" />
+      <workItem from="1558565456094" duration="713000" />
+      <workItem from="1558567094605" duration="4352000" />
+      <workItem from="1558626392922" duration="2702000" />
+      <workItem from="1561266559616" duration="51000" />
+    </task>
+    <task id="LOCAL-00001" summary="some credits.">
+      <created>1556532152133</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1556532152133</updated>
+    </task>
+    <task id="LOCAL-00002" summary="player animations.">
+      <created>1556533108605</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1556533108605</updated>
+    </task>
+    <task id="LOCAL-00003" summary="more grass types!">
+      <created>1556534061384</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1556534061384</updated>
+    </task>
+    <task id="LOCAL-00004" summary="launch seeds radially!">
+      <created>1556535143100</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1556535143100</updated>
+    </task>
+    <task id="LOCAL-00005" summary="added todo to readme">
+      <created>1556536414102</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1556536414102</updated>
+    </task>
+    <task id="LOCAL-00006" summary="misc">
+      <created>1556536476848</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1556536476848</updated>
+    </task>
+    <task id="LOCAL-00007" summary="misc">
+      <created>1556614130247</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1556614130247</updated>
+    </task>
+    <task id="LOCAL-00008" summary="lots.&#10;faster performance w/ particle calculations.&#10;faster flower proximity detection (via sweep line).&#10;general improvements.">
+      <created>1556633003258</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1556633003258</updated>
+    </task>
+    <task id="LOCAL-00009" summary="shadows. misc.">
+      <created>1557448654993</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1557448654993</updated>
+    </task>
+    <task id="LOCAL-00010" summary="misc. setting up">
+      <created>1558122809702</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1558122809702</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
+    <servers />
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="82096000" />
+  </component>
+  <component name="TodoView">
+    <todo-panel id="selected-file">
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="680" y="84" width="783" height="702" extended-state="0" />
+    <layout>
+      <window_info x="0" y="0" width="434" height="856" id="Documentation" order="0" sideWeight="0.5030303" side_tool="true" weight="0.13006397" />
+      <window_info id="Favorites" order="1" side_tool="true" weight="0.18550107" />
+      <window_info active="true" content_ui="combo" id="Project" order="2" sideWeight="0.4969697" visible="true" weight="0.17430703" />
+      <window_info id="Structure" order="3" weight="0.14251012" />
+      <window_info anchor="bottom" id="Messages" order="0" />
+      <window_info anchor="bottom" id="Docker" order="1" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Database Changes" order="2" />
+      <window_info anchor="bottom" id="Version Control" order="3" sideWeight="0.49946696" weight="0.32994923" />
+      <window_info anchor="bottom" id="Python Console" order="4" sideWeight="0.49946696" weight="0.32994923" />
+      <window_info anchor="bottom" id="Terminal" order="5" sideWeight="0.49946696" weight="0.32994923" />
+      <window_info anchor="bottom" id="Event Log" order="6" sideWeight="0.50053304" side_tool="true" weight="0.32912722" />
+      <window_info anchor="bottom" id="Message" order="7" />
+      <window_info anchor="bottom" id="Find" order="8" weight="0.32912722" />
+      <window_info anchor="bottom" id="Run" order="9" />
+      <window_info anchor="bottom" id="Debug" order="10" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="11" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="12" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="13" sideWeight="0.49946696" weight="0.32994923" />
+      <window_info anchor="bottom" id="LuaJ" order="14" weight="0.2426869" />
+      <window_info anchor="right" id="SciView" order="0" weight="0.32955465" />
+      <window_info anchor="right" id="Database" order="1" weight="0.32955465" />
+      <window_info anchor="right" id="Commander" order="2" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="3" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="4" weight="0.25" />
+    </layout>
+    <layout-to-restore>
+      <window_info x="0" y="0" width="434" height="856" id="Documentation" order="0" sideWeight="0.5030303" side_tool="true" weight="0.13006397" />
+      <window_info id="Favorites" order="1" side_tool="true" weight="0.18550107" />
+      <window_info content_ui="combo" id="Project" order="2" sideWeight="0.4969697" visible="true" weight="0.17246963" />
+      <window_info id="Structure" order="3" weight="0.14251012" />
+      <window_info anchor="bottom" id="Messages" order="0" />
+      <window_info anchor="bottom" id="Docker" order="1" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Database Changes" order="2" />
+      <window_info anchor="bottom" id="Version Control" order="3" sideWeight="0.49946696" weight="0.32994923" />
+      <window_info anchor="bottom" id="Python Console" order="4" sideWeight="0.49946696" weight="0.32994923" />
+      <window_info anchor="bottom" id="Terminal" order="5" sideWeight="0.49946696" weight="0.32994923" />
+      <window_info anchor="bottom" id="Event Log" order="6" sideWeight="0.50053304" side_tool="true" weight="0.32912722" />
+      <window_info anchor="bottom" id="Message" order="7" />
+      <window_info anchor="bottom" id="Find" order="8" weight="0.32912722" />
+      <window_info anchor="bottom" id="Run" order="9" />
+      <window_info anchor="bottom" id="Debug" order="10" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="11" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="12" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="13" sideWeight="0.49946696" weight="0.32994923" />
+      <window_info anchor="bottom" id="LuaJ" order="14" weight="0.2426869" />
+      <window_info anchor="right" id="SciView" order="0" weight="0.32955465" />
+      <window_info anchor="right" id="Database" order="1" weight="0.32955465" />
+      <window_info anchor="right" id="Commander" order="2" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="3" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="4" weight="0.25" />
+    </layout-to-restore>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="RECENTLY_FILTERED_USER_GROUPS">
+                <collection />
+              </option>
+              <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
+                <collection />
+              </option>
+              <option name="COLUMN_ORDER">
+                <list>
+                  <option value="0" />
+                  <option value="1" />
+                  <option value="2" />
+                  <option value="3" />
+                </list>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="RECENT_FILTERS">
+      <map>
+        <entry key="Branch">
+          <value>
+            <list />
+          </value>
+        </entry>
+        <entry key="User">
+          <value>
+            <list />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="some credits." />
+    <MESSAGE value="player animations." />
+    <MESSAGE value="more grass types!" />
+    <MESSAGE value="launch seeds radially!" />
+    <MESSAGE value="added todo to readme" />
+    <MESSAGE value="misc" />
+    <MESSAGE value="lots.&#10;faster performance w/ particle calculations.&#10;faster flower proximity detection (via sweep line).&#10;general improvements." />
+    <MESSAGE value="shadows. misc." />
+    <MESSAGE value="misc. setting up" />
+    <option name="LAST_COMMIT_MESSAGE" value="misc. setting up" />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/src/wildflower.p8.png" />
+    <entry file="file://$PROJECT_DIR$/src/player.lua" />
+    <entry file="file://$PROJECT_DIR$/../harvest-moon-ish/src/main.p8">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3480">
+          <caret line="174" column="18" selection-start-line="174" selection-start-column="18" selection-end-line="174" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/flowers.lua" />
+    <entry file="file://$PROJECT_DIR$/SNIPPETS/anim_snippet.p8">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="6" column="28" selection-start-line="6" selection-start-column="28" selection-end-line="6" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/SNIPPETS/collisions.p8">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2320">
+          <caret line="116" selection-start-line="116" selection-end-line="116" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/SNIPPETS/collisions_snippet.p8">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="320">
+          <caret line="16" column="15" selection-start-line="16" selection-start-column="15" selection-end-line="16" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/SNIPPETS/event_handler.p8">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="100">
+          <caret line="5" column="14" selection-start-line="5" selection-start-column="14" selection-end-line="5" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/SNIPPETS/keyboard_mouse.p8">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="140">
+          <caret line="7" column="9" selection-start-line="7" selection-start-column="9" selection-end-line="7" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/SNIPPETS/superdebug.p8">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1660">
+          <caret line="82" column="24" selection-start-line="82" selection-start-column="24" selection-end-line="82" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jaws.p8" />
+    <entry file="file://$PROJECT_DIR$/jaws.lua" />
+    <entry file="file://$PROJECT_DIR$/wildflower.p8">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="300">
+          <caret line="15" selection-start-line="15" selection-end-line="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wildflower.lua">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3900">
+          <caret line="195" column="3" selection-start-line="195" selection-start-column="3" selection-end-line="195" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PICO-KIT/pico-kit.p8">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3000">
+          <caret line="208" selection-start-line="208" selection-end-line="208" />
+          <folding>
+            <element signature="n#make#0" />
+            <element signature="n#search#0" />
+            <element signature="n#parent_function#0" />
+            <element signature="n#oop.class#0" />
+            <element signature="n#tools.assign#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PICO-KIT/example.p8">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="40">
+          <caret line="2" column="8" selection-start-line="2" selection-start-column="8" selection-end-line="2" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PICO-KIT/tilephysics.p8">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="140">
+          <caret line="7" column="4" lean-forward="true" selection-start-line="7" selection-start-column="4" selection-end-line="7" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PICO-KIT/LICENSE">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/linked.lua">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bins.lua">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="960">
+          <caret line="48" selection-start-line="48" selection-end-line="137" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="160">
+            <caret line="8" column="17" selection-start-line="8" selection-start-column="17" selection-end-line="8" selection-end-column="17" />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PICO-KIT/pico-kit README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="140">
+            <caret line="6" column="152" lean-forward="true" selection-start-line="6" selection-start-column="152" selection-end-line="6" selection-end-column="152" />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+  </component>
+  <component name="masterDetails">
+    <states>
+      <state key="ProjectJDKs.UI">
+        <settings>
+          <last-edited>10.0</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ScopeChooserConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.20342612" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+    </states>
+  </component>
+</project>

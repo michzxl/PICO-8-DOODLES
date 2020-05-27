@@ -1,0 +1,86 @@
+pico-8 cartridge // http://www.pico-8.com
+version 18
+__lua__
+debug = false
+
+--init main palette
+--exists in [8,15]
+pal(1,1+128,1)
+pal(12,12+128,1)
+pal(11,3+128,1)
+pal(14,14+128,1)
+pal(10,15+128,1)
+pal(8,8+128,1)
+pal(13,13+128,1)
+
+--drawing function
+function dr(x,y,p) 
+	circfill(x,y,1,p) 
+end
+
+--print cpu usage
+function stats()
+	s=flr(stat(1)*100) .. "% cpu"
+	rectfill(0,0,28,5,0)
+	print(s,0,0,7)
+end
+
+--init screen space
+rectfill(0,0,128,128,1)
+for i=1,4000 do
+	--navy & white
+	dr(rnd(128),rnd(128),rnd(1)<0.5 and 1 or 7)
+end
+for i=1,1000 do
+	--full palette
+	dr(rnd(128),rnd(128),rnd(8)+8)
+end
+
+t=0
+::control::
+t+=0.0166
+
+for i=1,1500 do
+	x=rnd(128)
+	y=rnd(128)
+
+	--clear map if press button
+	if btn(4) then
+		dr(x,y,1)
+	elseif btn(5) then
+		dr(x,y,7)
+	else
+	
+		--edges may create navy/white
+		if (flr(x)==0 or flr(y)==127) and rnd(1)<0.01 then
+			pset(x,y,rnd(1)<0.5 and 1 or 7)
+		end
+		
+		--if nearby pixels are same,
+		--maybe change color.
+		--will break down large areas
+		p=pget(x,y)
+		if pget(x+1,y)==p 
+					and pget(x,y-1)==p 
+					and rnd(1)<0.05 then
+			dr(x,y,rnd(8)+8)
+		end
+		
+		--propel the color.
+		if rnd(1)<0.75 then
+			dr(x+1,y-1,p)
+		else
+			dr(x,y,p)
+		end
+	end
+end
+
+if debug then stats() end
+flip() goto control
+__gfx__
+00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+00700700000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+00077000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+00077000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+00700700000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
