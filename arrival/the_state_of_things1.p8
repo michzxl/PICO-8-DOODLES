@@ -4,68 +4,119 @@ __lua__
 --the state of things
 --by ???
 
--- round down a to the nearest multiple of unit
-function fflr(a, unit)
-	return a - a%unit
+function _init()
+	pal({
+		[0]=0,7,--black/white
+		2,8+128,
+		13+128,13,--lavender
+		1,12+128,--blue
+		3+128,3,--green
+		135,142,--yellow/orange
+		8+128,8,--red
+		6,7,--white/gray
+	},1)
+
+	-- when t is an odd integer,
+	-- the rect hits the center.
+	period=4
+	t=-1
+
+	cls()
+
+	pattern_i=1
+	patterns={
+		pattern0,
+		pattern1,
+		pattern2,
+	}
+	pattern=patterns[pattern_i]
 end
 
--- palette defined in pairs.
-pal({
-	[0]=0,7,--black/white (0 omitted)
-	2,8+128,
-	13+128,13,--lavender
-	1,12+128,--blue
-	3+128,3,--green
-	135,142,--yellow/orange
-	8+128,8,--red
-	6,7,--white/gray
-},1)
+function _update()
+	t+=1/60
 
-t=-1
+	if (t+3)%(period/2)<=1/60 then
+		if rnd(1)<0.33 then
+			for i=1,rnd(5) do
+				pattern_i=pattern_i%#patterns+1
+			end
+		else
+			pattern_i=1
+		end
+		pattern=patterns[pattern_i]
+	end
 
--- time it takes for the rectangle's movement to repeat.
--- note that at t=k*period/2 (for all int k), the rectangle has area=0
-period=4
+	ct4,st2=cos(t/period),sin(t/(period/2))
+	st16=sin(t/16)
+	st8=sin(t/8)
 
-cls()
-::♥::  -- label. goto(♥) takes us back here.
-t+=1/60
+	smpl=1300*abs(ct4)
+	for i=1,smpl do pattern() end
 
---cache some shitty trig (which all trig is)
-ct4,st2=cos(t/period),sin(t/(period/2))
-st16=sin(t/16)
-st8=sin(t/8)
+	-- point where xo,yo=0,0
+	circfill(32*st2+64, 32*ct4+64, 2, t*16%15+1)
 
--- sampling rate proportional-ish to area of rectangle.
-smpl=1200*abs(ct4)
-for i=1,smpl do
+end
+
+function pattern0()
+	-- distribution of xo,yo is a uniform rectangle.
 	xo=rnd(80) - 64 -- [-64,16]
 	yo=rnd(150) - 75 -- [-75,75]
-	-- distribution of xo,yo is a uniform rectangle.
 
+	-- rotate & scale x,y
 	x=(xo+32)*st2 - yo*ct4
 	y=(xo+32)*ct4 + yo*st2
-	-- rotate & scale x,y
 
 	c = -st8 * x/16
-	  + cos(x/64 - t/2) * y/32
-	  + (xo/32 + yo/32 + y)/(st16*4+12)
-	  + t
+	+ cos(x/64 - t/2) * y/32
+	+ (xo/32 + yo/32 + y)/(st16*4+12)
+	+ t
 	
-	c = flr(c%2) -- map c to 0 or 1
-
-	-- the color will change each time the rectangle's area=0
-	c += fflr(t+1,period/2)
+	c=flr(c%2)--{0,1}
+	c+=fflr(t+1,period/2)--{k,k+1}
 	
-	-- draw, adjust center to (64,64)
 	circ(x+64,y+64,1,c)
 end
 
--- draw a lil circle to the point where xo,yo=0,0
--- (this traces out the path of the rectangle)
-circfill(32*st2+64,32*ct4+64,2,t*16%15+1)
+function pattern1()
+	xo=rnd(80) - 64
+	yo=rnd(150) - 75
 
-flip() goto ♥
+	x=(xo+32)*st2 - yo*ct4
+	y=(xo+32)*ct4 + yo*st2
+
+	c = -st8 * x/16
+	+ cos(xo/64 - t/2) * y/32
+	+ t
+	
+	c=flr(c%2)
+	c+=fflr(t+1,period/2)
+	
+	circ(x+64,y+64,1,c)
+end
+
+function pattern2()
+	xo=rnd(80) - 64
+	yo=rnd(150) - 75
+
+	x=(xo+32)*st2 - yo*ct4
+	y=(xo+32)*ct4 + yo*st2
+
+	c=sin(xo/64-t/4)+sin(y/64)
+	c=c%(t*2) 
+	c=c+2*t
+
+	c=flr(c%2)--{0,1}
+	c+=fflr(t+1,period/2)--{k,k+1}
+
+	circ(x+64,y+64,1,c)
+end
+
+function fflr(a, unit)
+	-- slightly wrong
+	return a - a%unit
+end
+
 __label__
 07070000070077777770000000700007770707007770000000000000007707000000777777777777777770007777777777000700077777070700000777777770
 07700000000007777777070000070777777070777770000000000700077777070000707707777777777707000777777770700000077770700000007077777700
