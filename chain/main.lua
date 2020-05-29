@@ -58,9 +58,6 @@ function _draw()
     end
 
     circfill(mx,my,1,10)
-
-    print(stat(1),0,0,10)
-    print(stat(0),0,6,12)
 end
 
 function sqr(a) return a*a end

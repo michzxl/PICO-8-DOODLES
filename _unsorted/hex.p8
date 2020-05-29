@@ -50,10 +50,6 @@ function hex(cx,cy,gx,gy,w,h,c)
  end
 end
 
-function cpu(c1,c2)
-	rectfill(0,0,24,6,c2)
-	print("∧"..flr(stat(1)*100).."%",1,1,c1)
-
 end
 -->8
 ⧗=0

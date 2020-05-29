@@ -35,7 +35,4 @@ for x=0,128,16 do
  end
 end
 
---cpu usage
---print(flr(stat(1)*100),0,0,12)
-
 flip()goto ♥

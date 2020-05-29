@@ -37,6 +37,4 @@ for i=1,1300 do
 	circ(x,y,1,c2)
 end
 
-print(stat(1),0,0,10)
-
 flip() goto ★

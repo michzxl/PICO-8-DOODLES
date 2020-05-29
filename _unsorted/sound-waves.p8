@@ -3,7 +3,6 @@ version 18
 __lua__
 function sqr(a) return a*a end
 function dist(x1,y1,x2,y2) return sqrt(sqr(x2-x1)+sqr(y2-y1)) end
-function show_cpu(c1,c2) cp=flr(stat(1)*100) rectfill(0,0,12+4*#(tostr(cp)),6,c2) print("∧"..cp.."%",1,1,c1) end
 function nsin(a) return (sin(a)+1)/2 end
 function ncos(a) return (cos(a)+1)/2 end
 function tan(a) return sin(a)/cos(a) end

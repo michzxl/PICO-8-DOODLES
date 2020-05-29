@@ -18,13 +18,6 @@ function dr(x,y,p)
 	circfill(x,y,1,p) 
 end
 
---print cpu usage
-function stats()
-	s=flr(stat(1)*100) .. "% cpu"
-	rectfill(0,0,28,5,0)
-	print(s,0,0,7)
-end
-
 --init screen space
 rectfill(0,0,128,128,1)
 for i=1,4000 do
@@ -75,7 +68,6 @@ for i=1,1500 do
 	end
 end
 
-if debug then stats() end
 flip() goto control
 __gfx__
 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000

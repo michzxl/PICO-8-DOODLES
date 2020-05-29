@@ -75,8 +75,6 @@ function _update()
 		c=boxblur(x,y,3)
 		circ(x,y,1,c)
 	end
-	
-	print(stat(1),0,0,15)
 end
 -->8
 function sx(x,y,c)
