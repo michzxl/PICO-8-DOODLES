@@ -82,42 +82,35 @@ pal(palettes.reds, 1)
 
 t=0
 dt=0.016
-█=1000
+█=900
 kill=0
 function sqr(a) return a*a end
 cls()
 ::♥::
 t+=dt
 
-t8=t%12
-
-if t8<1/30 then t=rnd(1) end
-
 st=sin(t)
+st4=sin(t/8)
 st2=sin(t/4)
+st1=sin(t/2)
 
-for i=1,█ do
-	--ang=rnd(1)
-	--d=rnd(50)
-	--x=cos(ang)*d
-	--y=sin(ang)*d
+for i=1,1100 do
 	y=rnd(128)-64
 	x=rnd(128)-64
 
- --x=rnd(128)-64
-	--y=rnd(128)-64
- c=0
-	c= (x - 2*sin(y/(50+10*st) + t - 2*sin(t/2)) - t) / 8
+	c= (x - 2*sin(y/(50+10*st) + t - 2*st1) - t) / 8
+		+ sin((x-st*10)*(y-t*5-st*10)/10000)
+		+ sin(x/32) + sin((y+t*10%100)/32)
 	
-	c=c + sin((x-st*10)*(y-t*5-st*10)/10000)
-	
-	c=c + sin(x/32) * sin((y+t*10%100)/32)
+	c=c*x/64*y/128*x/(128)
+	c=c/1.33
+	c=c+cos(st4/2)
 
 	c = ctriwave(c+t*2, 5.6, 8.8, 4)
 	
-	
 	circ(x+64,y+64,1,c)
 end
+
 
 flip() goto ♥
 __gfx__
