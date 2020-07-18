@@ -3,41 +3,31 @@ version 21
 __lua__
 t=0
 dt=0.016
-█=1000
 kill=0
-function sqr(a) return a*a end
+p={10,9,8}
 cls()
 ::♥::
 t+=dt
 
-if btn(3) then t-=dt*2 end
-
 if btn(0) then kill-=.001 end
 if btn(1) then kill+=.001 end
+if btn(3) then t-=dt*2 end
 
 st=sin(t)
 st2=sin(t/4)
 
-for i=1,█ do
-	--ang=rnd(1)
-	--d=rnd(50)
-	--x=cos(ang)*d
-	--y=sin(ang)*d
+for i=1,1000 do
 	y=rnd(128)-64
 	x=rnd(128)-64
 
- --x=rnd(128)-64
-	--y=rnd(128)-64
- c=0
-	c= (x - 2*sin(y/(50+10*st) + t - 2*sin(t/2)) - t) / 8
+	c=(x - 2*sin(y/(50+10*st) + t - 2*sin(t/2)) - t) / 8
 	
-	c=c + sin((x-st*10)*(y-t*5-st*10)/10000)
+	 + sin((x-st*10)*(y-t*5-st*10)/10000)
 	
-	c=c + sin(x/32) * sin((y+t*10%100)/32)
+	 + sin(x/32) * sin((y+t*10%100)/32)
 	
-	c=c+y*kill
+	 + y*kill
 	
-	p={10,9,8}
 	c=p[flr(c)%3+1]
 	
 	circ(x+64,y+64,1,c)
