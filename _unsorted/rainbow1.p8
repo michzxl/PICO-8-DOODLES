@@ -1,5 +1,5 @@
 pico-8 cartridge // http://www.pico-8.com
-version 18
+version 29
 __lua__
 for i=0,7 do
 	pal(i,i+8+128,1)
@@ -9,20 +9,20 @@ t=0
 ::★::
 
 t+=0.01
+st3=sin(t/3)
+st5=sin(t/5)
 
 for i=1,1700 do
-	x=rnd(128)
-	y=rnd(128)
-	s=sin(t/3)
+	x,y=rnd(128),rnd(128)
 	
 	c=flr(
-		     (x+sin(y/30+sin(t/5)*5)*6*s)/(24 * (s-1.8)) 
-		    +y/(48 * (s-1.8))
+		     (x+sin(y/30+st5*5)*6*st3)/(24 * (st3-1.8)) 
+		    +y/(48 * (st3-1.8))
 		    +8*t
 	  )
 	c=c%8+8
 
-	if rnd(1)<0.75*s then
+	if rnd(1)<1.25*st3 then
 		c-=8
 	end
 	
