@@ -1,5 +1,5 @@
 pico-8 cartridge // http://www.pico-8.com
-version 18
+version 29
 __lua__
 function sqr(a) return a*a end
 function dist(x1,y1,x2,y2) return sqrt(sqr(x2-x1)+sqr(y2-y1)) end
@@ -32,7 +32,7 @@ for i=1,500 do
 	d=dist(64,64,x,y)
 	c=d/35+t/4
 	c=flr(c)%2
-	c=c+d/79+t/8
+	c=c+d/79+t/8+sin(x/64-cos(y/128))
 	c=c%2
 	circ(x,y,1,c)
 end
@@ -40,7 +40,7 @@ end
 for i=1,1 do
 	--r=(rnd(40+sin(t/8)*8)+20)
 	r=(sin(t/4)+1)/2*30+20
-	circ(64,64,r,7)
+	circ(64,64,r+rnd(3)-1,7)
 end
 
 if rnd(1)<0.2 then
