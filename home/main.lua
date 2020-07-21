@@ -60,9 +60,8 @@ function _update()
 
 
     if debug then
-        sprint(stat(0),0,6,10)
-        sprint(stage,0,12,10)
-        sprint(t,0,18,10)
+        -- sprint(stage,0,12,10)
+        -- sprint(t,0,18,10)
     end
 end
 

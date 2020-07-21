@@ -27,7 +27,6 @@ for i=1,500*st+█ do
 	circ(x+64,y+64,1,c)
 end
 
-print(stat(1),0,0,10)
 
 flip() goto ♥
 __gfx__

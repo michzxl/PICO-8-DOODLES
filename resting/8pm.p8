@@ -83,6 +83,4 @@ end
 
 --sspr(0,0,128,128)
 
-show_cpu(10,0)
---drw_mouse(mx-1,my-1)
 flip() goto ♥

@@ -42,7 +42,6 @@ for i=1,5 do
 	line(x1,y1,x2,y2,c)
 end
 
-print(stat(1),0,0,7)
 
 flip() goto ♥
 __gfx__

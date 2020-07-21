@@ -49,9 +49,6 @@ pset(x-2,y-1,12)
 pset(x+2,y-1,12)
 line(x-2,y+1,x+2,y+1,12)
 
--- cpu usage
--- print(stat(1),0,0,10)
-
 flip()goto ⌂
 __label__
 ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff

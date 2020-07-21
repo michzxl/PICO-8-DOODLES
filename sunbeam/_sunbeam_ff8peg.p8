@@ -88,9 +88,6 @@ for i=1,1000 do
 	circ(x,y,1,p)
 end
 
--- cpu usage
-print(stat(1),0,0,10)
-
 flip()goto ⌂
 __label__
 fffffffaaaaaaaaaa9999999fffffffff8888888ffffffff222222222fffffffffffffffaaaaaaa999999999ffffffff8888888f8fffffff2222222fffffffff

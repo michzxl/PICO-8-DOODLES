@@ -55,7 +55,6 @@ end
 circ(63,10*sin(⧗/2+.02)+30,5,12)
 circ(63,10*sin(⧗/2)+30,5,12)
 
-print(stat(1),0,0,10)
 
 flip()goto ⌂
 __label__

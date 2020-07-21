@@ -1,7 +1,8 @@
 pico-8 cartridge // http://www.pico-8.com
 version 29
 __lua__
--- basic template
+--assembly okay
+--@???
 
 function _init()
 	dt=1/30

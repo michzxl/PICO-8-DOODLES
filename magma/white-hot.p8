@@ -90,6 +90,4 @@ end
 
 sspr(0,0,128,128,0,0)
 
-print(stat(1),0,0,10)
-
 flip() goto ♥

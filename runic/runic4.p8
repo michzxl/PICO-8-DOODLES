@@ -156,8 +156,6 @@ if ti<frames(5) then
 	print("change color scheme with ❎",1,128-7,7)
 end
 
---rectfill(0,0,30,6,0)
---print(stat(1),0,0,7)
 
 flip() goto ⌂
 __gfx__

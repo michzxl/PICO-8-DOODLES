@@ -49,6 +49,5 @@ for i=1,1000 do
  end
 end
 
-print(stat(1),0,0,10)
 
 flip() goto ♥
