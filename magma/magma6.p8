@@ -1,5 +1,5 @@
 pico-8 cartridge // http://www.pico-8.com
-version 27
+version 29
 __lua__
 palettes={
 	[0]={
@@ -9,7 +9,8 @@ palettes={
 		12+128,
 		12,
 		7,
-	},{
+	},
+	{
 		1+128,
 		1,
 		3+128,
@@ -55,7 +56,7 @@ palettes={
 
 curr_pal=-1
 function next_palette()
-	curr_pal = (curr_pal + 1)%#palettes
+	curr_pal = (curr_pal + 1)%5
 	pal(palettes[curr_pal], 1)
 end
 next_palette()

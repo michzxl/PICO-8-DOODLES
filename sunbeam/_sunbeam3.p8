@@ -1,5 +1,5 @@
 pico-8 cartridge // http://www.pico-8.com
-version 19
+version 27
 __lua__
 
 ⧗=0
@@ -29,17 +29,11 @@ for i=1,250 do
 	x = abs(x0-64) + 64
 	y = y0
 	
-	c= x/16
-	 + (y+⧗*16)/32
-	 + x/12 + y/32 + y/64
+	c= y/16
+	 + (y+x+⧗*16)/32
 	
 	dist=(sqr(x-64)+sqr(y-64))
-	if dist<sqr(40+cos(⧗/8)*20) then
-		c=c*-1
-		c=c%5+9
-	elseif dist<sqr(50+sin(⧗/4)*45) then
-		c=rnd(1)<0.99 and 8 or 7
-	else
+	if dist>sqr(50+sin(⧗/4)*45) then
 		c=c%8+1
 	end
 	
@@ -49,7 +43,7 @@ end
 for i=1,1000 do
 	x,y=rnd(128),rnd(128)
 	
-	p=pget(x-1*sgn(x-64),y+2)
+	p=pget(x-0.5*sgn(x-64 + y),y-0.5*sgn(y-64))
 	
 	p=p~=0 and p or 8
 	

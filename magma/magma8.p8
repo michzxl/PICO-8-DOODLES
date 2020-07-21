@@ -1,110 +1,8 @@
 pico-8 cartridge // http://www.pico-8.com
-version 29
+version 27
 __lua__
--- basic template
 
-function _init()
-	dt=1/30
-	t=0
-	tf=0
-	bk=8
-	cls()
-
-	medium_rare={
-		3+128,
-		1+128,
-		1,
-		2+128,
-		8+128,
-		8,
-		14+128,
-		15+128,
-		15,
-		7
-	}
-	noir={
-		0,
-		0,
-		7,
-		7
-	}
-	reds={
-		2+128,
-		2,
-		8+128,
-		8,
-		9+128,
-		9,
-		10,
-		7+128,
-		7
-	}
-	pal(medium_rare, 1)
-end
-
-function _update()
-	-- cls()
-	t+=dt
-	tf+=1
-	st8=sin(t/8)
-	
-	for i=1,70 do
-		ox,oy=get_oxy()
-		for y=oy,oy+bk-1,1.2 do
-			for x=ox,ox+bk-1,2 do
-				c = flr(sin(x/64+y/16)-y*(sin(x/64)))/40
-					+ sin(x/80 - t/8)
-					+ t
-					+ x\32*st8
-				c=_color(c)
-
-				pset(x,y,c)
-			end
-		end
-	end
-end
-
--->8
-function sqr(a) 
-	return a*a 
-end
-
-function dist(x1,y1,x2,y2) 
-	return sqrt(sqr(x2-x1)+sqr(y2-y1)) 
-end
-
-function sqrdist(x1,y1,x2,y2) 
-	return sqr(x2-x1)+sqr(y2-y1) 
-end
-
--- moves a towards b with factor t.
--- if t=0, returns a. if t=1, returns b.
-function lerp(a,b,t)
-    return a + t * (b - a)
-end
-
--- like lerp, but with a constant factor (as opposed to a relative factor)
-function approach(a,b,t)
-    if a<=b then
-        return min(a+t,b)
-    elseif a>b then
-        return max(a-t,b)
-    end
-end
-
-function lerp_slow(a,b,t)
-    if b-a==0 then return a end
-    return a + 1 / (t * (b - a))
-end
-
-function fflr(a, unit)
-    return flr(a / unit) * unit
-end
-
--- triangle wave, period 1, range [0,0.5]
-function triwave(x)
-    return abs((x + .5) % 1 - .5)
-end
+#include _vec.lua
 
 -- "complex" triangle wave, range [center - amplitude/2, center + amplitude/2]
 -- to visualize -> https://www.desmos.com/calculator/lbicgo2khe
@@ -121,209 +19,205 @@ function rtriwave(x, y1, y2, period)
     return ctriwave(x, amplitude, center, period)
 end
 
--- n-gon, n sides and maximum radius 1
--- visualize it -> https://www.desmos.com/calculator/njxxfrv23z
-function ngon(ang, n)
-    local top = rmax * cos(0.5 / n)
-    local bot = cos(triwave(n * ang - 0.5) / 2 / n)
-    return top / bot
+--@nusan
+function clip(v)
+    return max(-1,min(128,v))
 end
 
--- ngon, n sides and minimum radius 1
-function ngon_min(ang,n)
-    local top = 1
-    local bot = cos(triwave(n * ang - 0.5) / 2 / n)
-    return top / bot
+function lerp(a,b,alpha)
+    return a*(1.0-alpha)+b*alpha
 end
 
--- returns a func that represents an n-gon with max radius 1
--- if use_min is true, 1 will instead be the min radius of the n-gon
-function ngon_maker(n, use_min)
-    local tmp=use_min_radius and 1 or cos(0.5/n)
-    return function(ang)
-        local top = tmp
-        local bot = cos(triwave(n*ang-0.5)/2/n)
-        return top / bot
-    end
-end
+-- draws a filled convex polygon
+-- v is an array of vertices
+-- {x1, y1, x2, y2} etc
+function render_poly(v,col)
+ vn = {}
+ for vv in all(v) do
+	add(vn, vv.x)
+	add(vn, vv.y)
+ end
+ v = vn
 
-function _color(x)
-	return 17.6 * abs((x/16-0.25)%1-0.5) + 1.1
-end
+ col=col or 5
 
-mcos=cos
-msin=sin
-function rotx_gl(x, y, z, ang)
-    return x, y * mcos(ang) - z * msin(ang), y * msin(ang) + z * mcos(ang)
-end
+ -- initialize scan extents
+ -- with ludicrous values
+ local x1,x2={},{}
+ for y=0,127 do
+  x1[y],x2[y]=128,-1
+ end
+ local y1,y2=128,-1
 
-function roty_gl(x, y, z, ang)
-    return z * msin(ang) + x * mcos(ang), y, z * mcos(ang) - x * msin(ang)
-end
+ -- scan convert each pair
+ -- of vertices
+ for i=1, #v/2 do
+  local next=i+1
+  if (next>#v/2) next=1
 
-function rotz_gl(x, y, z, ang)
-    return x * mcos(ang) - y * msin(ang), x * msin(ang) + y * mcos(ang), z
-end
+  -- alias verts from array
+  local vx1=flr(v[i*2-1])
+  local vy1=flr(v[i*2])
+  local vx2=flr(v[next*2-1])
+  local vy2=flr(v[next*2])
 
-function rotyxzc(x, y, z, ay, ax, az, cx)
-    local ox, oy, oz = 0, 0, 0
-    ox, oy, oz = roty_gl(x, y, z, ay)
-    ox, oy, oz = rotx_gl(ox, oy, oz, ax)
-    ox, oy, oz = rotz_gl(ox, oy, oz, az)
+  if vy1>vy2 then
+   -- swap verts
+   local tempx,tempy=vx1,vy1
+   vx1,vy1=vx2,vy2
+   vx2,vy2=tempx,tempy
+  end 
 
-    ox, oy, oz = rotx_gl(ox, oy, oz, cx)
-    return ox, oy, oz
-end
+  -- skip horizontal edges and
+  -- offscreen polys
+  if vy1~=vy2 and vy1<128 and
+   vy2>=0 then
 
--- mode is a string that specifies the axis of each rotation specified in the args
--- i.e. 'xyzyxz' for 6 rotations in x,y,z,y,x,z global axes, in that order.
-function rotmode(x,y,z,mode,...)
-  for i=1,#mode do
-    local s = string.sub(mode,i,i)
-    func=rotmodes[s]
-    if rotmodes[s] then
-      return func(x,y,z,arg[i])
-    end
+   -- clip edge to screen bounds
+   if vy1<0 then
+    vx1=(0-vy1)*(vx2-vx1)/(vy2-vy1)+vx1
+    vy1=0
+   end
+   if vy2>127 then
+    vx2=(127-vy1)*(vx2-vx1)/(vy2-vy1)+vx1
+    vy2=127
+   end
+
+   -- iterate horizontal scans
+   for y=vy1,vy2 do
+    if (y<y1) y1=y
+    if (y>y2) y2=y
+
+    -- calculate the x coord for
+    -- this y coord using math!
+    x=(y-vy1)*(vx2-vx1)/(vy2-vy1)+vx1
+
+    if (x<x1[y]) x1[y]=x
+    if (x>x2[y]) x2[y]=x
+   end 
   end
-end
-local rotmodes={
-  x=rotx,
-  y=roty,
-  z=rotz
-}
+ end
 
-function rotyxz_cam(x, y, z, ay, ax, az, cy, cx, cz)
-    x, y, z = roty_gl(x, y, z, ay)
-    x, y, z = rotx_gl(x, y, z, ax)
-    x, y, z = rotz_gl(x, y, z, az)
+ -- render scans
+ for y=y1,y2 do
+  local sx1=flr(max(0,x1[y]))
+  local sx2=flr(min(127,x2[y]))
 
-    x, y, z = roty_gl(x, y, z, cy)
-    x, y, z = rotx_gl(x, y, z, cx)
-    x, y, z = rotz_gl(x, y, z, cz)
-    return x, y, z
+  local c=col*16+col
+  local ofs1=flr((sx1+1)/2)
+  local ofs2=flr((sx2+1)/2)
+  memset(0x6000+(y*64)+ofs1,c,ofs2-ofs1)
+  pset(sx1,y,c)
+  pset(sx2,y,c)
+ end 
 end
 
--- https://www.lexaloffle.com/bbs/?tid=2477
--- by @Felice on pico-8 BBS
--- a: array to be sorted in-place
--- c: comparator (optional, defaults to ascending)
--- l: first index to be sorted (optional, defaults to 1)
--- r: last index to be sorted (optional, defaults to #a)
-function qsort(a,c,l,r)
-    c,l,r=c or ascending,l or 1,r or #a
-    if l<r then
-        if c(a[r],a[l]) then
-            a[l],a[r]=a[r],a[l]
-        end
-        local lp,rp,k,p,q=l+1,r-1,l+1,a[l],a[r]
-        while k<=rp do
-            if c(a[k],p) then
-                a[k],a[lp]=a[lp],a[k]
-                lp=lp+1
-            elseif not c(a[k],q) then
-                while c(q,a[rp]) and k<rp do
-                    rp=rp-1
-                end
-                a[k],a[rp]=a[rp],a[k]
-                rp=rp-1
-                if c(a[k],p) then
-                    a[k],a[lp]=a[lp],a[k]
-                    lp=lp+1
-                end
-            end
-            k=k+1
-        end
-        lp=lp-1
-        rp=rp+1
-        a[l],a[lp]=a[lp],a[l]
-        a[r],a[rp]=a[rp],a[r]
-        qsort(a,c,l,lp-1       )
-        qsort(a,c,  lp+1,rp-1  )
-        qsort(a,c,       rp+1,r)
-    end
-end
-
--->8
-palettes={
-	blues={
-		3+128,
-		1+128,
-		1,
-		12+128,
-		12,
-		7,
-	},
-	greens={
-		1+128,
-		1,
-		3+128,
-		3,
-		11+128,
-		11,
-		10+128,
-		10,
-		7+128,
-		7,
-	},
-	medium_rare={
-		3+128,
-		1+128,
-		1,
-		2+128,
-		8+128,
-		8,
-		14+128,
-		15+128,
-		15,
-		7,
-	},
-	noir={
-		0,
-		0,
-		7,
-		7,
-	},
-	reds={
-		2+128,
-		2,
-		8+128,
-		8,
-		9+128,
-		9,
-		10,
-		7+128,
-		7,
-	},
-	grays={
-		0+128,
-		2+128,
-		13+128,
-		5,
-		6+128,
-		6,
-		7,
-	}
-}
-
--->8
-
-
-function get_oxy()
-	ox=rnd(128+bk)-8
-	oy=rnd(128+bk)-8
-	local ch = rnd(1)
-	if ch<0.05 then
-		ox-=1
-	elseif ch<0.1 then
-		ox+=1
+function polyf(tbl,c,cfunc)
+	c=c or 15
+	p1=tbl[1]
+	if #tbl==1 then
+		pset(p1.x,p1.y,c)
+	elseif #tbl==2 then
+		p2=tbl[2]
+		x1,y1=p1:xy()
+		x2,y2=p2:xy()
+		line(x1,y1,x2,y2,c)
+	else
+		for i=0,#tbl-2-1 do
+			ix=i+2
+			p2=tbl[ix]
+			p3=tbl[ix+1]
+			render_poly({p1,p2,p3},4)
+		end
 	end
-	return ox,oy
 end
+
+pal({
+	2+128,
+	2,
+	8+128,
+	8,
+	9+128,
+	9,
+	10,
+	7+128,
+	7,
+}, 1)
+
+t=2
+dt=0.016
+█=1000
+kill=0
+function sqr(a) return a*a end
+
+cls()
+filler = 0b1010010110100101
+
+::♥::
+t+=dt
+t8=t%8
+
+if t8<dt*2 then t=rnd(1) end
+
+st=sin(t)
+st4=sin(t/4)
+st2=sin(t/2)
+
+hh=5000
+
+for i=1,1000 do
+	y=rnd(128)-64
+	x=rnd(128)-64
+
+	x=x - sin(y/32 - t)*(cos(t/16)*8)
+
+	c = (-2*sin(y/(50+10*st) + t - 2*st2) - t) / 8
+	c += sin(x/(64 + sin(x/16 + t)*8)) * sin((y+t*8)/32)
+	
+	c = ctriwave(c+t*2, 5.6, 8.8, 6+st4*1)
+	
+	
+	circ(x+64,y+64,1,c)
+end
+
+s=(4+sin(t/8)*1.5)
+kmod = rnd(1)<0.05
+ps={}
+for i=0,1,1/s do
+	ang = i + t/4 + sin(t/2 + i/8)/16
+	ymod = sin(t/8)*8
+	r = 16 + sin(t/4 + i/2)*8
+	w = 3 + rnd(1) + sin(t/4 + i)*1
+	if kmod then 
+		w*=2
+		r=r-2 
+	end
+	add(ps, {ang=ang,r=r,w=w})
+end
+for i=1,s do
+	p1 = ps[i]
+	p2 = ps[i%s + 1]
+
+	p1v = vec.frompolar(p1.ang, p1.r) + vec(64,64) + vec(0,p1.ymod)
+	p2v = vec.frompolar(p2.ang,p2.r) + vec(64,64) + vec(0,p2.ymod)
+
+	vector = (p2v-p1v):norm()
+	orth = vector:perp()
+
+	b1 = p1v + orth*p1.w/2
+	b2 = p1v - orth*p1.w/2
+	b3 = p2v - orth*p2.w/2
+	b4 = p2v + orth*p2.w/2
+
+	col=flr(ctriwave(t*2 + 1, 5.6, 8.8, 6+st4*1))
+	render_poly({b1,b2,b3,b4},col)
+end
+
+flip() goto ♥
 __gfx__
-01000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-17100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-17710000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-17771000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-17777100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-17711100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-01171000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+00700700000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+00077000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+00077000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+00700700000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000

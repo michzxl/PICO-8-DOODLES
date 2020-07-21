@@ -89,24 +89,17 @@ cls()
 t+=dt
 t8=t%12
 
-if t8<1/30 then t=rnd(4)-2 end
+if t8<1/30 then t=rnd(1) end
 
 st=sin(t)
 st4=sin(t/4)
 st2=sin(t/2)
 
-
 for i=1,1000 do
-	--ang=rnd(1)
-	--d=rnd(50)
-	--x=cos(ang)*d
-	--y=sin(ang)*d
 	y=rnd(128)-64
 	ox=rnd(128)-64
 	x=ox
 
- --x=rnd(128)-64
-	--y=rnd(128)-64
  	c=0
 
 	c = (0 - 2*sin(y/(50+10*st) + t - 2*st2) - t) / 8
@@ -119,17 +112,12 @@ for i=1,1000 do
 	
 	c=c + sin(x/32) * sin((y+t*10%100)/32)
 
-	
 	--p={10,9,8}
 	c = ctriwave(c+t*2, 5.6, 8.8, 6+st4*1)
 	--c=c%#palettes.reds+1
 	
 	circ(ox+64,y+64,1,c)
 end
-
---if t<4 then
---	print("❎:swap palette",0,120,7)
---end
 
 flip() goto ♥
 __gfx__
