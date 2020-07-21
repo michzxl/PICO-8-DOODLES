@@ -13,21 +13,101 @@ function _init()
 	time=0
 	
 	s="when time stands still. when i leave this earth. will i be ok?…"
-	c=t_txtr(s,{8,8},{15,15},2,{
+	cr=t_txtr(s,{8,8},{15,15},2,{
 		allcaps=true
 	})
 	
 	cls()
+
+	pal(12,12+128,1)
 end
 
 function _update()
 	time+=1/30
-	
-	cls()
-	map(0,0)
-	--pal(10,time*4,0)
-	coresume(c.go)
-	--pal(10,10,0)
+
+	if time<5 then
+		coresume(cr.go)
+	elseif time<7.5 then
+		do_it()
+		coresume(cr.go)
+	else
+		do_it()
+		do_it_two()
+		coresume(cr.go)
+	end
+
+	rectfill(0,0,7,128,0)
+	rectfill(0,0,128,7,0)
+	rectfill(120,0,128,129,0)
+	rectfill(7,120,129,129,0)
+
+	map()
+end
+
+function do_it()
+	for i=1,1000 do
+		y=rnd(128-16)-64+8
+		x=rnd(128-16)-64+8
+		
+		c=
+			sin(y/600 + sin(time/10) + 1)
+			+flr(x/10 + y/13)
+			+sin(x/80)
+			+cos(y/80)
+			+time
+		
+		c=c%2
+		
+		circ(x+64,y+64,1,c)
+	end
+end
+
+local pts={}
+function do_it_two()
+	if #pts<64 then
+		if rnd(1)<0.5 then
+			add(pts,{
+				x=rnd(128),
+				y=0,
+				t=0,
+				r=rnd(8)
+			})
+		else
+			add(pts,{
+				x=rnd(128),
+				y=128,
+				t=0,
+				r=rnd(8)
+			})
+		end
+	end
+
+	for pt in all(pts) do
+		pt.t = pt.t + 1/30
+		pt.y = pt.y + sin(time/8)*4
+
+		if pt.y<0then
+			del(pts,pt)
+			add(pts,{
+				x=rnd(128),
+				y=128,
+				t=0,
+				r=rnd(8),
+			})
+		elseif pt.y>128 then
+			del(pts,pt)
+			add(pts,{
+				x=rnd(128),
+				y=0,
+				t=0,
+				r=rnd(8)
+			})
+		end
+	end
+
+	for pt in all(pts) do
+		circ(pt.x,pt.y,pt.r,12)
+	end
 end
 
 -->8
