@@ -76,6 +76,10 @@ function rtriwave(x, y1, y2, period)
     return ctriwave(x, amplitude, center, period)
 end
 
+function palettewave(x, palette, period)
+	return ctriwave(x, #palette/2+1.1, #palette-1.2, period)
+end
+
 t=0
 dt=0.016
 █=1020
