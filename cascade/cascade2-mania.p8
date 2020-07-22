@@ -1,5 +1,5 @@
 pico-8 cartridge // http://www.pico-8.com
-version 18
+version 29
 __lua__
 
 function _init()
@@ -60,9 +60,6 @@ function _update()
 
 	draw()
 	check_timer()
-
-	stats()
-	drw_mouse(mx-1,my-1)
 end
 
 -->8

@@ -1,5 +1,5 @@
 pico-8 cartridge // http://www.pico-8.com
-version 21
+version 29
 __lua__
 --cascade 3
 --by ???
@@ -38,7 +38,7 @@ for i=1,500 do
 		ca,sa=cos(ang),sin(ang)
 		x,y=ra*ca,ra*sa
 		
-		r2=ra+1.5
+		r2=ra-1.5
 		ang2=ang+2/360
 		ca,sa=cos(ang2),sin(ang2)
 		smpl=pget(r2*ca+64,r2*sa+64)
