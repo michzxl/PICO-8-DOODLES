@@ -1,8 +1,6 @@
 pico-8 cartridge // http://www.pico-8.com
 version 18
 __lua__
-█=1000
-
 ⧗=0
 a1=50
 
@@ -19,7 +17,7 @@ end
 
 --partial screen clear
 -- = fade effect
-for i=1,█ do
+for i=1,1000 do
 	x,y=rnd(128),rnd(128)
 	circ(x,y,1,0)
 end
@@ -28,12 +26,12 @@ end
 for x=0,128,16+cos(⧗/24)*8 do
  for y=0,128,16+sin(⧗/8)*8 do
  	if y<=128 and x<=128 then
-			 
-	  r=  3.5 * sin(⧗) --cycle with time
-	    + 4.5 * sin(x/17) --add variation with x
-	    + 3.0 * sin(sin(y/a1%⧗/4)) -- uh clue, but looks good
-	    + 3.0 -- base radius
-	  circfill(x-(sin(⧗-x/8)*10),y,r,7)
+	  	r=  3.5 * sin(⧗)
+	     + 4.5 * sin(x/17)
+	     + 3.0 * sin(sin(y/a1%⧗/4))
+	     + 3.0
+		dx = x - (sin(⧗-x/8)*10)
+	  circfill(dx,y,r,7)
  	end
  end
 end

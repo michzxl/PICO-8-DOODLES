@@ -1,7 +1,6 @@
 pico-8 cartridge // http://www.pico-8.com
 version 18
 __lua__
-█=1000
 ⧗=0
 
 cs={1,5,6,7,13}
@@ -13,7 +12,7 @@ cls()
 ::⌂::
 ⧗+=0.0167
 
-for i=1,█ do
+for i=1,1000 do
 	x,y=flr(rnd(128)),flr(rnd(128))
 	if x==0 or y==0 then
 		if rnd(1)<.1 then

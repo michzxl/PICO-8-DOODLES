@@ -22,11 +22,11 @@ end
 rectfill(0,0,128,128,1)
 for i=1,4000 do
 	--navy & white
-	dr(rnd(128),rnd(128),rnd(1)<0.5 and 1 or 7)
+	circfill(rnd(128),rnd(128),1,rnd(1)<0.5 and 1 or 7)
 end
 for i=1,1000 do
 	--full palette
-	dr(rnd(128),rnd(128),rnd(8)+8)
+	circfill(rnd(128),rnd(128),1,rnd(8)+8)
 end
 
 t=0

@@ -74,10 +74,6 @@ function scaled(point,a)
 	)
 end
 
-function mod_sin(time)
-	return sin(2 * pi * time / 3.7) * 30/360
-end
-
 function rotz(point, origin, ang)
 	local sina,cosa=
 		sin(ang), cos(ang)
