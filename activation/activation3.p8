@@ -31,7 +31,7 @@ for x=0,128,16+sin(⧗/24)*8 do
 			+ 2.0 * sin(sin(y/a1%⧗/4))
 			+ 1
 		dx=x-(sin(⧗-x/8)*10)
-	  circfill(,y,r,7)
+	  circfill(x,y,r,7)
  	end
  end
 end
