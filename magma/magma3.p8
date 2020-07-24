@@ -1,47 +1,122 @@
 pico-8 cartridge // http://www.pico-8.com
-version 21
+version 27
 __lua__
-t=0
-dt=0.016
-kill=0
-function sqr(a) return a*a end
+palettes={
+	blues={
+		3+128,
+		1+128,
+		1,
+		12+128,
+		12,
+		7,
+	},
+	greens={
+		1+128,
+		1,
+		3+128,
+		3,
+		11+128,
+		11,
+		10+128,
+		10,
+		7+128,
+		7,
+	},
+	medium_rare={
+		3+128,
+		1+128,
+		1,
+		2+128,
+		8+128,
+		8,
+		14+128,
+		15+128,
+		15,
+		7,
+	},
+	noir={
+		0,
+		0,
+		7,
+		7,
+	},
+	reds={
+		2+128,
+		2,
+		8+128,
+		8,
+		9+128,
+		9,
+		10,
+		7+128,
+		7,
+	},
+	grays={
+		0+128,
+		2+128,
+		13+128,
+		5,
+		6+128,
+		6,
+		7,
+	}
+}
 
-g={8,8+128,9,9+128,10,10+128,
-   11,11+128,12,12+128,13,
-   13+128,14,14+128,15,15+128}
-for i=1,#g do
-	pal(i,g[i],1)
+-- "complex" triangle wave, range [center - amplitude/2, center + amplitude/2]
+-- to visualize -> https://www.desmos.com/calculator/lbicgo2khe
+function ctriwave(x, center, amplitude, period)
+    local a, b, p = amplitude or 1, center or 0, period or 1
+    local core = abs((x / p - 0.25) % 1 - 0.5)
+    return 2 * a * core - a / 2 + b
 end
 
-p={10,9,8}
+-- "range" triangle wave, range [y1,y2]
+function rtriwave(x, y1, y2, period)
+    local amplitude = (y2 - y1)
+    local center = (y1 + y2) / 2
+    return ctriwave(x, amplitude, center, period)
+end
 
+pal(palettes.reds, 1)
+
+t=2
+dt=0.016
+█=1000
+kill=0
+function sqr(a) return a*a end
 cls()
 ::♥::
 t+=dt
+t8=t%12
 
-if btn(3) then t-=dt*2 end
-
-if btn(0) then kill-=.001 end
-if btn(1) then kill+=.001 end
+if t8<1/30 then t=rnd(1) end
 
 st=sin(t)
-st1=sin(t/2)
-st2=sin(t/4)
-cct=cos(st1/2)
+st4=sin(t/4)
+st2=sin(t/2)
 
-for i=1,1300 do
-	x,y=rnd(128)-64,rnd(128)-64
+for i=1,1000 do
+	y=rnd(128)-64
+	ox=rnd(128)-64
+	x=ox
 
- c=0
-	c=(x - 2*sin(y/(50+10*st) + t - 2*st1) - t) / 8
-	  + sin((x-st*50)*(y-t*5-st*10)/10000)
-			+ y*kill + cct
+ 	c=0
+
+	c = (0 - 2*sin(y/(50+10*st) + t - 2*st2) - t) / 8
+
+	if t8>4 then c+=x/8 end
+	if t8>8 then c+=y/8 end
 	
-	c=p[flr(c)%3+1]
+	hh = 5000
+	c=c + sin((x-st*10)*(y-t*5-st*10)/hh)
 	
-	c+=(x/64)+.5*(y/18)+t*2
+	c=c + sin(x/32) * sin((y+t*10%100)/32)
+
+	--p={10,9,8}
+	c = ctriwave(c+t*2, 5.6, 8.8, 6+st4*1)
+	--c=c%#palettes.reds+1
 	
-	circ(x+64,y+64,1,c)
+	circ(ox+64,y+64,1,c)
 end
 
 flip() goto ♥

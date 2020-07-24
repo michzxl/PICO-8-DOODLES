@@ -1,16 +1,17 @@
 pico-8 cartridge // http://www.pico-8.com
-version 29
+version 27
 __lua__
+
 palettes={
-	[0]={
-		0,
+	blues={
+		3+128,
 		1+128,
 		1,
 		12+128,
 		12,
 		7,
 	},
-	{
+	greens={
 		1+128,
 		1,
 		3+128,
@@ -21,19 +22,26 @@ palettes={
 		10,
 		7+128,
 		7,
-	},{
-		0,
+	},
+	medium_rare={
+		3+128,
 		1+128,
 		1,
 		2+128,
-		2,
 		8+128,
 		8,
 		14+128,
 		15+128,
 		15,
 		7,
-	},{
+	},
+	noir={
+		0,
+		0,
+		7,
+		7,
+	},
+	reds={
 		2+128,
 		2,
 		8+128,
@@ -43,7 +51,8 @@ palettes={
 		10,
 		7+128,
 		7,
-	},{
+	},
+	grays={
 		0+128,
 		2+128,
 		13+128,
@@ -53,13 +62,6 @@ palettes={
 		7,
 	}
 }
-
-curr_pal=-1
-function next_palette()
-	curr_pal = (curr_pal + 1)%5
-	pal(palettes[curr_pal], 1)
-end
-next_palette()
 
 -- "complex" triangle wave, range [center - amplitude/2, center + amplitude/2]
 -- to visualize -> https://www.desmos.com/calculator/lbicgo2khe
@@ -76,50 +78,39 @@ function rtriwave(x, y1, y2, period)
     return ctriwave(x, amplitude, center, period)
 end
 
-function palettewave(x, palette, period)
-	return ctriwave(x, #palette/2+1.1, #palette-1.2, period)
-end
+pal(palettes.reds, 1)
 
 t=0
 dt=0.016
-█=1020
+█=900
 kill=0
 function sqr(a) return a*a end
 cls()
 ::♥::
 t+=dt
 
-if btnp(5) then
-	next_palette()
-end
-
-if t%16<dt then t=0 end
-
 st=sin(t)
-st2=sin(t/8)
-st1=sin(t/4)
+st4=sin(t/8)
+st2=sin(t/4)
+st1=sin(t/2)
 
-for i=1,1000 do
+for i=1,1100 do
+	y=rnd(128)-64
 	x=rnd(128)-64
-	y = rnd(128)-64
-	c= (x - 2*(y/(50+10*st) + t/2 - 2*st1) - t/2) / 8
 
-		+ sin((x-st*10)*(y-t*5-st2*10)/500)
-		+ sin(x/32) * sin((y+t*10%100)/32)
+	c= (x - 2*sin(y/(50+10*st) + t - 2*st1) - t) / 8
+		+ sin((x-st*10)*(y-t*5-st*10)/10000)
+		+ sin(x/32) + sin((y+t*10%100)/32)
+	
+	c=c*x/64*y/128*x/(128)
+	c=c/1.33
+	c=c+cos(st4/2)
 
-
-	c=c*x/32+y/32+x/(64*(st2+1.1))
-	--c=c/1.33
-	c=c/8
-		+cos(st1/2)
-
-	c = ctriwave(c+t*2, #palettes[curr_pal]/2+1.1, #palettes[curr_pal]-1.2, 4)
+	c = ctriwave(c+t*2, 5.6, 8.8, 4)
+	
 	circ(x+64,y+64,1,c)
 end
 
-if t<4 then
-	print("press x press x",0,120,0)
-end
 
 flip() goto ♥
 __gfx__
