@@ -25,19 +25,17 @@ function upd(c)
 	end
 end
 
-function sqr(x) return x*x end
-
 ::♥::
 
 foreach(cs,upd)
 
 for i=1,1000 do
-	x=rnd(128)
-	y=rnd(128)
+	local x=rnd(128)
+	local y=rnd(128)
 
-	num=0
+	local num=0
 	for c in all(cs) do
-		if sqr(x-c.x) + sqr(y-c.y) < c.r*c.r then
+		if (x-c.x)*(x-c.x) + (y-c.y)*(y-c.y) < c.r*c.r then
 	 	num+=1
 	 end
  end
