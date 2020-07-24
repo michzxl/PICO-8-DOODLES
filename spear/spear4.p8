@@ -1,5 +1,5 @@
 pico-8 cartridge // http://www.pico-8.com
-version 18
+version 29
 __lua__
 cc={0,5+128,7,5+128}
 for i=1,#cc do
@@ -7,25 +7,30 @@ for i=1,#cc do
 end
 
 t=0
-█=1000
 
+cls()
 ::♥::
-t+=0.016
+t+=1/30
 
-for i=1,█ do
-	x=rnd(128)-64
-	y=rnd(128)-64
-	
-	c=abs(x/15+sin(t/8)*y/32+sin(y/64)*0.25)
-	c=c + 1.7*flr(y/44-t) 
-	c=c - y/44%sin(t/16)
-	c=c-sin(x/64)*0.5
-	c=(c-t) %#cc+1 --color
-	
-	circ(x+64,y+64,1,c)
+bk=8
+hx,hy=1,1
+st16 = sin(t/16)
+for i=1,85+50*sin(t/16) do
+	local ox=rnd(128+bk*2)-8
+	local oy=rnd(128+bk*2)-8
+	for dy=oy-64,oy+bk-1-64,hy do
+		local ddy=dy/44
+		local ddyst16 = 2*ddy%st16
+		local ddyt = flr(ddy-t)
+		for dx=ox-64,ox+bk-1-64,hx do
+			local c=abs(dx/15)
+			c = c + 1.7*ddyt - ddyst16 - t
+			pset(dx+64,dy+64,c%#cc+1)
+		end
+	end
 end
 
-goto ♥
+flip() goto ♥
 __gfx__
 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000

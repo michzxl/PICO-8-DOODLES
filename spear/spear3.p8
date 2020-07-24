@@ -16,10 +16,11 @@ for i=1,█ do
 	x=rnd(128)-64
 	y=rnd(128)-64
 	
-	c=abs(x/15)
-	c=c + 1.7*flr(y/44-t) 
-	c=c - y/44%sin(t/16)
-	c=(c-t) %#cc+1 --color
+	c=(
+	 flr(abs(x/15))
+		+ 1.7*abs(y/44-t)-y/44%sin(t/16)
+	)
+	c=(c-t) %#cc+1
 	
 	circ(x+64,y+64,1,c)
 end

@@ -1,7 +1,7 @@
 pico-8 cartridge // http://www.pico-8.com
 version 18
 __lua__
-cc={0,5+128,7,0,0,0,}
+cc={0,5+128,7,5+128}
 for i=1,#cc do
 	pal(i,cc[i],1)
 end
@@ -16,16 +16,10 @@ for i=1,█ do
 	x=rnd(128)-64
 	y=rnd(128)-64
 	
-	c=(
-	 abs(x/22*sin(x/64-y/(64+sin(t/8)*4))) 
-		+ y/22 * sin(sin(t/64))
-	)
-	
-	c=(c-t) %#cc+1
-	c=flr(c)
-	c=c+(abs(y/16)-x/22)%2
-	c=flr(c)
-	c=c-(abs(x/22)+y/22)%2
+	c=abs(x/15)
+	c=c + 1.7*flr(y/44-t) 
+	c=c - y/44%sin(t/16)
+	c=(c-t) %#cc+1 --color
 	
 	circ(x+64,y+64,1,c)
 end
