@@ -37,7 +37,7 @@ function _update()
 		ang=atan2(x,y,ox,oy)
 
 		c=(dist(x,y,0,0)%k
-		)/32 - t + flr(ang*8+t/3)*2
+		)/32 - t + flr(ang*8+t/3)*4 + ang*4+t/3
 
 		c=c%8+8
 		diff=c-flr(c)
