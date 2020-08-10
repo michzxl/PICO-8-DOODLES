@@ -31,7 +31,7 @@ for i=1,1000 do
 	 +0.75*flr(x/64+y/16-t)
 
 	c=c%8+8
-	if rnd(1)<diff*4-2 then
+	if diff<0.3 then
 		c-=8
 	end
 	
