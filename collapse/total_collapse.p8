@@ -133,7 +133,7 @@ function _update()
 	for cir = 1, #circs do
 		local circ = circs[cir]
 
-		-- 20 times, pick a random point in the circle:
+		-- 20 times, pick a random point in the circle ...
 		for i = 1, 20 do
 			ix = flr(rnd(#circ)) + 1
 			local p = circ[ix]
@@ -152,12 +152,11 @@ function _update()
 			end
 		end
 
-		-- draw the fucking circle.
+		-- draw the damn circle.
 		for i = 1, #circ do
 			if chn(0.75) then
 				p1 = circ[i]
 				p2 = circ[i % #circ + 1] 
-				-- trust me when i say this gets the point adjacent to p1.
 				
 				c = (8 - cir + t / 2) % 8 + 1 + 1*sin(t/16)
 				line(p1[1], p1[2], p2[1], p2[2], c)
