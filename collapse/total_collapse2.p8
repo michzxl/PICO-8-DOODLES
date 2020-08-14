@@ -32,6 +32,10 @@ function _init()
 
 	circs = {}
 
+	x_x,x_y = 32,32
+
+	weird = 3
+
 	dt=1/30
 	t=0
 
@@ -74,29 +78,35 @@ function _update()
 		rectfill(x, y, scrw - x, scrh - y, 0)
 	end
 
-	
 	local num = 8 + 2*sin(t/8)
 	for i=0,1,1/num do
 		local nr = 32
 
 		local ang = i + sin(t/16)/2 + t/4
-		local r = nr-2 + sin(t/8 + ang)*8
+		local r = nr-4 + sin(t/8 + ang)*8
+
+		local n = flr(i*(num))%num
+		local mod = n%2==0 and 1 or -1
 
 		local x,y = r*cos(ang),r*sin(ang)
 
-		local cr_ang = ang + sin(ang/4+t/8)
+		local cr_ang = ang + mod*sin(ang/4+t/8)
+		if n==weird%num then cr_ang = rnd(1) end
 		local cr_r = 4
 		local ca,sa = cr_r*cos(cr_ang), cr_r*sin(cr_ang)
 
 		line(64+x+ca,64+y+sa,64+x-ca,64+y-sa,10)
 
 		cr_ang = cr_ang + 0.25
+		if n==weird then cr_ang = rnd(1) end
 		local ca,sa = cr_r*cos(cr_ang), cr_r*sin(cr_ang)
 
-		line(64+x+ca,64+y+sa,64+x-ca,64+y-sa,10)
+		line(64+x+ca,64+y+sa,64+x-ca,64+y-sa,10)	
 	end
 
-	if chn(1) then
+	if chn(0.01) then weird = rnd(num*2)%num end
+
+	do
 		x,y = 0,rnd(scrh)
 		while x <= scrw do
 			nx = x + rnd(24) - 8
@@ -107,6 +117,13 @@ function _update()
 			x = nx
 			y = ny
 		end
+	end
+
+	do
+		x_x, x_y = (x_x+(rnd(3)-1))%64, (x_y+(rnd(3)-1))%64
+		local x,y = x_x,x_y
+		line(x,y,128-x,128-y,1)
+		line(182-x,y,x,128-y,1)
 	end
 
 	for i = 1, 500 do
@@ -134,123 +151,11 @@ function _update()
 		end
 	end
 
-	ra = (function()
-		local hh = (sin(sin(t / 16)) * 4 + 10)
-		return function(cir)
-			return cir * hh
-		end
-	end)()
-
 	-- draw a centered, randomly size circle sometimes
 	if chn(0.2) then
 		circ(scrw2, scrh2, rnd(64), rnd(10))
 	end
 
-end
-
-function fflr(a, unit)
-    return flr(a / unit) * unit
-end
-
-function polyf(tbl,c,cfunc)
-	c=c or 15
-	p1=tbl[1]
-	if #tbl==1 then
-		pset(p1[1],p1[2],c)
-	elseif #tbl==2 then
-		p2=tbl[2]
-		x1,y1=p1[1],p1[1]
-		x2,y2=p2[1],p2[2]
-		line(x1,y1,x2,y2,c)
-	else
-		for i=0,#tbl-2 do
-			ix=i+2
-			p2=tbl[ix]
-			p3=tbl[ix+1]
-			render_poly({p1,p2,p3},i+4)
-		end
-	end
-end
-
-function render_poly(v,col)
- vn = {}
- for vv in all(v) do
-	add(vn, vv[1])
-	add(vn, vv[2])
- end
- v = vn
-
- col=col or 7
-
- -- initialize scan extents
- -- with ludicrous values
- local x1,x2={},{}
- for y=0,127 do
-  x1[y],x2[y]=128,-1
- end
- local y1,y2=128,-1
-
- -- scan convert each pair
- -- of vertices
- for i=1, #v/2 do
-  local next=i+1
-  if (next>#v/2) next=1
-
-  -- alias verts from array
-  local vx1=flr(v[i*2-1])
-  local vy1=flr(v[i*2])
-  local vx2=flr(v[next*2-1])
-  local vy2=flr(v[next*2])
-
-  if vy1>vy2 then
-   -- swap verts
-   local tempx,tempy=vx1,vy1
-   vx1,vy1=vx2,vy2
-   vx2,vy2=tempx,tempy
-  end 
-
-  -- skip horizontal edges and
-  -- offscreen polys
-  if vy1~=vy2 and vy1<128 and
-   vy2>=0 then
-
-   -- clip edge to screen bounds
-   if vy1<0 then
-    vx1=(0-vy1)*(vx2-vx1)/(vy2-vy1)+vx1
-    vy1=0
-   end
-   if vy2>127 then
-    vx2=(127-vy1)*(vx2-vx1)/(vy2-vy1)+vx1
-    vy2=127
-   end
-
-   -- iterate horizontal scans
-   for y=vy1,vy2 do
-    if (y<y1) y1=y
-    if (y>y2) y2=y
-
-    -- calculate the x coord for
-    -- this y coord using math!
-    x=(y-vy1)*(vx2-vx1)/(vy2-vy1)+vx1
-
-    if (x<x1[y]) x1[y]=x
-    if (x>x2[y]) x2[y]=x
-   end 
-  end
- end
-
- -- render scans
- for y=y1,y2 do
-  local sx1=flr(max(0,x1[y]))
-  local sx2=flr(min(127,x2[y]))
-
-  local c=col*16+col
-  local ofs1=flr((sx1+1)/2)
-  local ofs2=flr((sx2+1)/2)
-  memset(0x6000+(y*64)+ofs1,c,ofs2-ofs1)
-  pset(sx1,y,c)
-  pset(sx2,y,c)
- end 
 end
 
 function chn(prob)
@@ -260,12 +165,3 @@ end
 function palettewave(x, palette, period)
 	return ctriwave(x, #palette/2+1.1, #palette-1.2, period)
 end
-
-__gfx__
-01000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-17100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-17710000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-17771000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-17777100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-17711100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-01171000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
