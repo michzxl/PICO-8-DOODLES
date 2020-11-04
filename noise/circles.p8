@@ -29,23 +29,23 @@ end
 
 foreach(cs,upd)
 
-for i=1,1000 do
+for i=1,1400 do
 	local x=rnd(128)
 	local y=rnd(128)
 
 	local num=0
 	for c in all(cs) do
-		if (x-c.x)*(x-c.x) + (y-c.y)*(y-c.y) < c.r*c.r then
-	 	num+=1
-	 end
- end
- 
- if num%2==0 and pget(x,y)==1 then
- 	circ(x,y,1,6)
- else
- 	circ(x,y,1,num%2)
- end
-end
+		local xcx,ycy,cr = x-c.x, y-c.y, c.r
+		if xcx*xcx + ycy*ycy < cr*cr then
+			num+=1
+		end
+	end
 
+	if pget(x,y)==1 and num%2==0  then
+		circ(x,y,1,6)
+	else
+		circ(x,y,1,num%2)
+	end
+end
 
 flip() goto ♥
