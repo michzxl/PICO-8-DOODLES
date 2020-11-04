@@ -1,6 +1,38 @@
 pico-8 cartridge // http://www.pico-8.com
-version 27
+version 29
 __lua__
+
+poke(0x5f5f, 0x10)
+
+---bits is a 8-bit field
+function palmix(bits, region, length)
+	if bits==nil then
+		memset(0x5f70, 0, 16)
+	else
+		memset(0x5f70 + region, bits, length)
+	end
+end
+
+function pow2(n)
+	local r = 1
+	for i=1,n do
+		r*=2
+	end
+	return r
+end
+
+pal({
+	2+128,
+	2,
+	8+128,
+	8,
+	9+128,
+	9,
+	10,
+	7+128,
+	7,
+},2)
+
 █=1000
 dt=0.0333
 t=0
@@ -10,10 +42,16 @@ function dist(x1,y1,x2,y2) return sqrt(sqr(x2-x1)+sqr(y2-y1)) end
 
 cls(1)
 
+local bb = 0b0100000010000000.1000000001000000
+
 ::♥::
 --cls()
 t+=dt
 
+if (rnd(1)<0.2) then 
+	bb = bb <<> 1 
+end
+palmix(bb, 0, 16)
 
 for i=1,50 do
 	x,y=rnd(128),rnd(128)
@@ -21,7 +59,6 @@ for i=1,50 do
 end
 
 if rnd(1)<0.1 then memcpy(0x6000+rnd(0x1fa0)-100,0x6000+rnd(0x1fff),128) end
-
 
 k=64
 j=17+sin(t/4)

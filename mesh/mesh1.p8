@@ -47,7 +47,9 @@ for xa=-k,128+k,j do
 		
 		c=(sin(x/512)*16+sin(y/128)*4)
 		c=c%15+1
-		circfill(x,y-h,(sin(t)+6)/2+sin(x/17),c)
+		circfill(x,y-h,(sin(t)+6)/2+sin(x/17),0)
+		circfill(x,y-h,(sin(t)+6)/2+sin(x/17)-2,0)
+		circ(x,y-h,(sin(t)+6)/2+sin(x/17),c)
 	end
 end
 

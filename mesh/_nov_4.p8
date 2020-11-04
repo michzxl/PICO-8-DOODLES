@@ -1,5 +1,5 @@
 pico-8 cartridge // http://www.pico-8.com
-version 29
+version 27
 __lua__
 
 poke(0x5f5f, 0x10)
