@@ -17,20 +17,18 @@ function _update()
 	t += 1/30
 	tf += 1
 
-	local octaves = 1
-	local freq = 0.01
+	local freq = 0.005
 	local amp = 1
 	local persistence = 0.2
 
-	local dd = 0.4
+	local dd = 0.0
 
-	noisedx += rnd(0.005)
-	noisedy += rnd(0.005)
+	noisedx += rnd(0.002)
+	noisedy += rnd(0.002)
 
 	for i=1,700 do
 		local x,y = rnd(128),rnd(128)
 		local max_amp = 0
-		local value = 0
 		local c = 0
 
 		local h = 
@@ -39,11 +37,8 @@ function _update()
 			- t/4
 		local h = flr(h)%2
 
-		for n=1,octaves do
-			value += Simplex2D((x)*freq+noisedx, (y)*freq+noisedx)
-			amp *= persistence
-		end
-		value = (value + 1 + t/4)/2 * 2
+		local value = Simplex2D(x*freq+noisedx, y*freq+noisedx)
+		value = (value + 1 + t/4)*2
 
 		local diff = value - flr(value)
 
@@ -55,7 +50,7 @@ function _update()
 				c = 5
 			end
 		else
-			if diff<0.5 + dd then
+			if diff>0.5 - dd then
 				c = 4
 			else
 				c = 3
