@@ -84,7 +84,7 @@ function do_it_two()
 
 	for pt in all(pts) do
 		pt.t = pt.t + 1/30
-		pt.y = pt.y + sin(time/8)*4
+		pt.y = pt.y + sin(time/8)*4+sin(time/16 + pt.x/64 + pt.y/32)
 
 		if pt.y<0then
 			del(pts,pt)
