@@ -2,23 +2,23 @@ pico-8 cartridge // http://www.pico-8.com
 version 29
 __lua__
 
-function sphere_point(height, ang)
-	local v = vec(sqrt(1 - height*height),height,0)
-	local roty = v:rot_y(ang)
-	return roty
+
+
+function _init()
+	cls()
+	t = 0
 end
 
-cls()
-t=0
 function _update()
 	cls()
-	t+=1/30
+
+	t += 1/30
 
 	for h=-0.99,0.99,0.025 do
-		local num = -abs(h)*8+12
+		local num = -abs(h)*8+8
 		for ang=0,1,1/num do
-			ang = ang-t/8-abs(h)*sin(t/16)
-			if abs((ang-t/6)%1-0.5)<0.25+0.2*sin(t/16) then
+			ang = ang-t/8-2*abs(h)/16
+			if abs(ang%1)<0.5 then
 				local p = sphere_point(h,ang)*32+vec(64,64)
 				pset(p.x,p.y,7)
 			end
@@ -26,12 +26,11 @@ function _update()
 	end
 end
 
-
-
-
-
-
-
+function sphere_point(height, ang)
+	local v = vec(sqrt(1 - height*height),height,0)
+	local roty = v:rot_y(ang)
+	return roty
+end
 
 _const_a = 1007/1024
 _const_b = 441/1024
