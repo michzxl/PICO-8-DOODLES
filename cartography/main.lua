@@ -58,7 +58,9 @@ function gen_map(cenx,ceny)
 
             pset(ox,oy,c)
         end
-        flip()
+        if flr(oy%2)==0 then
+            flip()
+        end
     end
 end
 
