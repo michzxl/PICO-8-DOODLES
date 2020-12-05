@@ -12,6 +12,19 @@ function ff(y)
 	return ay
 end
 
+function line2(x1,y1,x2,y2,c)
+	local num_steps=max(
+	 abs(flr(x2)-flr(x1)),
+	 abs(flr(y2)-flr(y1)))
+	local dx=(x2-x1)/num_steps
+	local dy=(y2-y1)/num_steps
+	for i=0,num_steps do
+	 pset(x1,y1,c)
+	 x1+=dx
+	 y1+=dy
+	end
+  end
+
 function fflr(a,unit)
 	return a\unit*unit
 end
@@ -83,21 +96,21 @@ end
 -- DRAW THE LINES
 for key,ln in ipairs(lines) do
 	-- ARROW SHAPE: /\
-	line(ln[1],ln[2],ln[3],ln[4],7)
-	line(ln[5],ln[6],ln[7],ln[8],7)
+	line2(ln[1],ln[2],ln[3],ln[4],7)
+	line2(ln[5],ln[6],ln[7],ln[8],7)
 
 	-- STRAIGHT HORIZONTAL LINES TO THE EDGES
 	if rnd(1)<0.02 then
-		line(ln[3],ln[4],128,ln[4],2)
-		line(ln[7],ln[8],0,ln[8],2)
+		line2(ln[3],ln[4],128,ln[4],2)
+		line2(ln[7],ln[8],0,ln[8],2)
 	end
 
 	-- CONNECTING LINES BETWEEN EACH ARROW
 	if key~=#lines then 
 		ln2 = lines[(key+1)]
-		line(ln[1],ln[2],ln2[1],ln2[2],7)
-		line(ln[3],ln[4],ln2[3],ln2[4],7)
-		line(ln[7],ln[8],ln2[7],ln2[8],7)
+		line2(ln[1],ln[2],ln2[1],ln2[2],7)
+		line2(ln[3],ln[4],ln2[3],ln2[4],7)
+		line2(ln[7],ln[8],ln2[7],ln2[8],7)
 	end
 end
 
@@ -132,7 +145,7 @@ for i=1,#pts-1 do
 		pt2 = {pt1[1]+vx, pt1[2]+vx}
 	end
 
-	line(pt1[1],pt1[2],pt2[1],pt2[2],8)
+	line2(pt1[1],pt1[2],pt2[1],pt2[2],8)
 end
 
 

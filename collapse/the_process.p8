@@ -369,6 +369,19 @@ function append(t1, t2)
 	return t1
 end
 
+function line2(x1,y1,x2,y2,c)
+	local num_steps=max(
+	 abs(flr(x2)-flr(x1)),
+	 abs(flr(y2)-flr(y1)))
+	local dx=(x2-x1)/num_steps
+	local dy=(y2-y1)/num_steps
+	for i=0,num_steps do
+	 pset(x1,y1,c)
+	 x1+=dx
+	 y1+=dy
+	end
+  end
+
 -- TODO: add a "levels" parameter...
 function subdivide(vs, levels, is_path)
 	if (levels<=0) return vs
@@ -410,7 +423,7 @@ function polydraw(vecs,cen,col)
 	for i=1,#vecs do
 		local p1 = vecs[i] + cen
 		local p2 = vecs[i%#vecs+1] + cen
-		line(p1.x,p1.y,p2.x,p2.y,col)
+		line2(p1.x,p1.y,p2.x,p2.y,col)
 	end
 end
 
@@ -439,7 +452,7 @@ function polypath(vecs,cen,col)
 	for i=1,#vecs-1 do
 		local p1 = vecs[i] + cen
 		local p2 = vecs[i+1] + cen
-		line(p1.x,p1.y,p2.x,p2.y,col)
+		line2(p1.x,p1.y,p2.x,p2.y,col)
 	end
 end
 

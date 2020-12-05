@@ -14,6 +14,19 @@ function _init()
 	cls()
 end
 
+function line2(x1,y1,x2,y2,c)
+	local num_steps=max(
+	 abs(flr(x2)-flr(x1)),
+	 abs(flr(y2)-flr(y1)))
+	local dx=(x2-x1)/num_steps
+	local dy=(y2-y1)/num_steps
+	for i=0,num_steps do
+	 pset(x1,y1,c)
+	 x1+=dx
+	 y1+=dy
+	end
+  end
+
 function _update()
 	--cls(0)
    t+=dt
@@ -57,7 +70,7 @@ function _update()
 		local p = pget(x1,y1)
 		if p==0 then
 			circ(x2,y2,1,2)
-			line(x1,y1,x2,y2,2)
+			line2(x1,y1,x2,y2,2)
 		end
  	end
 
@@ -406,7 +419,7 @@ function polydraw(vecs,cen,col)
 	for i=1,#vecs do
 		local p1 = vecs[i] + cen
 		local p2 = vecs[i%#vecs+1] + cen
-		line(p1.x,p1.y,p2.x,p2.y,col)
+		line2(p1.x,p1.y,p2.x,p2.y,col)
 	end
 end
 
@@ -435,7 +448,7 @@ function polypath(vecs,cen,col)
 	for i=1,#vecs-1 do
 		local p1 = vecs[i] + cen
 		local p2 = vecs[i+1] + cen
-		line(p1.x,p1.y,p2.x,p2.y,col)
+		line2(p1.x,p1.y,p2.x,p2.y,col)
 	end
 end
 

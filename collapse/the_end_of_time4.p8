@@ -12,6 +12,19 @@ function ff(y)
 	return ay
 end
 
+function line2(x1,y1,x2,y2,c)
+	local num_steps=max(
+	 abs(flr(x2)-flr(x1)),
+	 abs(flr(y2)-flr(y1)))
+	local dx=(x2-x1)/num_steps
+	local dy=(y2-y1)/num_steps
+	for i=0,num_steps do
+	 pset(x1,y1,c)
+	 x1+=dx
+	 y1+=dy
+	end
+  end
+
 function fflr(a,unit)
 	return a\unit*unit
 end
@@ -87,13 +100,13 @@ end
 -- DRAW THE LINES
 for key,ln in ipairs(lines) do
 
-	line(ln[1],ln[2],ln[1] - ln[3] + (ln[2]-64)/2+64,ln[4],7)
+	line2(ln[1],ln[2],ln[1] - ln[3] + (ln[2]-64)/2+64,ln[4],7)
 
 	-- CONNECTING LINES BETWEEN EACH ARROW
 	if key~=#lines then 
 		ln2 = lines[(key+1)]
-		line(ln[1],ln[2],ln2[1],ln2[2],7)
-		line(ln[1]+1.2*(-key+#lines/2),ln[2],ln2[1]+1.2*(-key+#lines/2),ln2[2],7)
+		line2(ln[1],ln[2],ln2[1],ln2[2],7)
+		line2(ln[1]+1.2*(-key+#lines/2),ln[2],ln2[1]+1.2*(-key+#lines/2),ln2[2],7)
 
 	end
 end

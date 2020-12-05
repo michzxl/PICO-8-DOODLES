@@ -87,7 +87,7 @@ function _update()
 			nx = x + 8
 			ny = y + rnd(16) - 8
 
-			line(x, y, nx, ny, rnd(10))
+			line2(x, y, nx, ny, rnd(10))
 
 			x = nx
 			y = ny
@@ -159,11 +159,24 @@ function _update()
 				p2 = circ[i % #circ + 1] 
 				
 				c = (8 - cir + t / 2) % 8 + 1 + 1*sin(t/16)
-				line(p1[1], p1[2], p2[1], p2[2], c)
+				line2(p1[1], p1[2], p2[1], p2[2], c)
 			end
 		end
 	end
 end
+
+function line2(x1,y1,x2,y2,c)
+	local num_steps=max(
+	 abs(flr(x2)-flr(x1)),
+	 abs(flr(y2)-flr(y1)))
+	local dx=(x2-x1)/num_steps
+	local dy=(y2-y1)/num_steps
+	for i=0,num_steps do
+	 pset(x1,y1,c)
+	 x1+=dx
+	 y1+=dy
+	end
+  end
 
 function fflr(a, unit)
     return flr(a / unit) * unit
@@ -178,7 +191,7 @@ function polyf(tbl,c,cfunc)
 		p2=tbl[2]
 		x1,y1=p1[1],p1[1]
 		x2,y2=p2[1],p2[2]
-		line(x1,y1,x2,y2,c)
+		line2(x1,y1,x2,y2,c)
 	else
 		for i=0,#tbl-2 do
 			ix=i+2
