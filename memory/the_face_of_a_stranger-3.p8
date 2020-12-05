@@ -2,11 +2,82 @@ pico-8 cartridge // http://www.pico-8.com
 version 29
 __lua__
 
-
-
 function _init()
 	cls()
 	t = 0
+
+	seg = 8
+	size = 8	
+	total_size = seg * size
+
+	base_ps = {}
+
+	for ty=0,seg do
+		base_ps[ty] = {}
+		local base_ps_ty = base_ps[ty]
+		for tx=0,seg do
+			local v = vec(tx*size - total_size/2, ty*size - total_size/2)
+			base_ps_ty[tx] = v
+		end
+	end
+end
+
+function draw_ps(ps)
+	local y_forward = angs.x%1 < 0.5
+	local x_forward = angs.y%1 < 0.5
+
+	local y_start, y_end, y_step
+	if y_forward then
+		y_start = 0
+		y_end = #ps
+		y_step = 1
+	else
+		y_start = #ps
+		y_end = 0
+		y_step = -1
+	end
+
+	local x_start, x_end, x_step
+	if x_forward then
+		x_start = 0
+		x_end = #ps
+		x_step = 1
+	else
+		x_start = #ps
+		x_end = 0
+		x_step = -1
+	end
+
+	for ty=y_start,y_end,y_step do
+		for tx=x_start,x_end,x_step do
+			local v = ps[ty][tx]
+			v = v + vec(64,64)
+
+			
+
+			if tx~=#ps and ty~=#ps then
+				local v_right = ps[ty][tx+1]
+				local v_down = ps[ty+1][tx]
+				local v_across = ps[ty+1][tx+1]
+				local f_color = (v-vec(64,64)).y>16*sin(t/24) and (t + v_right.x/32 + v_down.y/16 + v.z/32)%8+8 or 0
+				local v_color = (v-vec(64,64)).y>0 and (t + v_right.x/32 + v_down.y/16 + v.z/32)%8+8 or 7
+				polyf({v-vec(64,64), v_right, v_across, v_down}, vec(64,64), f_color)
+				polyv({v-vec(64,64), v_right, v_across, v_down}, vec(64,64), v_color)
+			end
+
+			-- if tx~=#ps then
+			-- 	local v_right = ps[ty][tx+1]
+			-- 	v_right = v_right + vec(64,64)
+			-- 	line2(v.x,v.y,v_right.x,v_right.y,7)
+			-- end
+
+			-- if ty~=#ps then
+			-- 	local v_down = ps[ty+1][tx]
+			-- 	v_down = v_down + vec(64,64)
+			-- 	line2(v.x,v.y,v_down.x,v_down.y,7)
+			-- end
+		end
+	end
 end
 
 function _update()
@@ -14,23 +85,57 @@ function _update()
 
 	t += 1/30
 
-	for h=-0.99,0.99,0.025 do
-		local num = -abs(h)*8+8
-		for ang=0,1,1/num do
-			ang = ang-t/8-2*abs(h)/16
-			if abs(ang%1)<0.5 then
-				local p = sphere_point(h,ang)*32+vec(64,64)
-				pset(p.x,p.y,7)
-			end
+	local plane_origin = vec(0,0,0)
+	local plane_normal = vec(1,0,0):norm()
+
+	angs = vec(t/16+0.05*sin(t/8),0.5-0.5*sin(t/24),t/12)
+	local ux,uy,uz = vec.u_rot_yxz(angs)
+
+	local rot_ps = {}
+	for ty=0,#base_ps do
+		local row = base_ps[ty]
+		rot_ps[ty] = {}
+		for tx=0,#base_ps do
+			local v = base_ps[ty][tx]
+
+			w = ux*v.x + uy*v.y + uz*v.z
+			w.y = ((w.y + t*16))%48-48/2
+
+			refl = refl_point_across_plane(w, plane_origin, plane_normal)
+
+			rot_ps[ty][tx] = refl
 		end
 	end
+
+	draw_ps(rot_ps)
 end
 
-function sphere_point(height, ang)
-	local v = vec(sqrt(1 - height*height),height,0)
-	local roty = v:rot_y(ang)
-	return roty
+function line2(x1,y1,x2,y2,c)
+ local num_steps=max(
+  abs(flr(x2)-flr(x1)),
+  abs(flr(y2)-flr(y1)))
+ local dx=(x2-x1)/num_steps
+ local dy=(y2-y1)/num_steps
+ for i=0,num_steps do
+  pset(x1,y1,c)
+  x1+=dx
+  y1+=dy
+ end
 end
+
+function proj_point_to_plane(point, plane_origin, plane_normal)
+	local v = point - plane_origin
+	local dist = vec.dot(v, plane_normal)
+	local proj = point - plane_normal*dist
+	return proj, proj - point
+end
+
+function refl_point_across_plane(point, plane_origin, plane_normal)
+	local proj,ref = proj_point_to_plane(point, plane_origin, plane_normal)
+	return proj + ref
+end
+
+function sqr(a) return a*a end
 
 _const_a = 1007/1024
 _const_b = 441/1024
@@ -298,6 +403,114 @@ setmetatable(vec, {
 			z=z or 0,
 		}, _vec)
 end})
+
+function polydraw(vecs,cen,col)
+	cen = cen or vec()
+	for i=1,#vecs do
+		local p1 = vecs[i] + cen
+		local p2 = vecs[i%#vecs+1] + cen
+		line2(p1.x,p1.y,p2.x,p2.y,col)
+	end
+end
+
+function polyfill(points,cen,col)
+	local xl,xr,ymin,ymax={},{},129,0xffff
+	for k,v in ipairs(points) do
+		local p1, p2 = v + cen, points[k%#points+1] + cen
+		local x1,y1,x2,y2,x_array=p1.x,flr(p1.y),p2.x,flr(p2.y),xr
+		if y1 == y2 then
+			xl[y1],xr[y1]=min(xl[y1] or 32767,min(x1,x2)),max(xr[y1] or 0x8001,max(x1,x2))
+		else
+			if (y1>y2) then x_array,y1,y2,x1,x2=xl,y2,y1,x2,x1 end
+			for y=y1,y2 do
+				x_array[y]=flr(x1+(x2-x1)*(y-y1)/(y2-y1))
+			end
+		end
+		ymin,ymax=min(y1,ymin),max(y2,ymax)
+	end
+	for y=ymin,ymax do
+		rectfill(xl[y],y,xr[y],y,col)
+	end
+end
+
+function polypath(vecs,cen,col)
+	cen = cen or vec()
+	for i=1,#vecs-1 do
+		local p1 = vecs[i] + cen
+		local p2 = vecs[i+1] + cen
+		line2(p1.x,p1.y,p2.x,p2.y,col)
+	end
+end
+
+function polycen(poly)
+	local v = vec()
+	for point in all(poly) do
+		v = v + point
+	end
+	return v / #poly
+end
+
+function poly_normal(poly)
+	local v1 = (poly[2] - poly[1]):norm()
+	local v2 = (poly[3] - poly[2]):norm()
+	return vec.cross(v1,v2)
+end
+
+	--[[
+				 4____________________1 (s2,s2,s2)
+			   / |                  /|
+			 /                    /  |
+		  /     |              /    |
+		3____________________2      |
+		|       |            |      |
+		|                    |      |
+		|       6_ _ _ _ _ _ | _ _ _5
+		|     /              |     /
+		|   /                |   /
+		| (-s2,-s2,-s2)      | /
+		7/___________________8
+
+	--]]
+function poly_cube(s)
+	local s2 = s/2
+	local v = {
+		vec(s2,s2,s2),
+		vec(s2,-s2,s2),
+		vec(-s2,-s2,s2),
+		vec(-s2,s2,s2),
+		vec(s2,s2,-s2),
+		vec(-s2,s2,-s2),
+		vec(-s2,-s2,-s2),
+		vec(s2,-s2,-s2),
+	}
+	local f = {
+		{ 1,2,3,4 },
+		{ 5,6,7,8 },
+		{ 1,4,6,5 },
+		{ 1,5,8,2 },
+		{ 2,8,7,3 },
+		{ 3,7,6,4 },
+	}
+	return f, v
+end
+
+function init_shapes() 
+	local cube_f, cube_v = poly_cube(1)
+	local cube = {
+		f = cube_f,
+		v = cube_v,
+	}
+
+	SHAPE = {
+		cube = cube,
+	}
+	return SHAPE
+end
+
+polyv = polydraw
+polyp = polypath
+polyf = polyfill
+
 
 __gfx__
 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
