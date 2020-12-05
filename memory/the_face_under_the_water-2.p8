@@ -42,11 +42,19 @@ function draw_ps(ps)
 					local v_right = ps[ty][tx+1]
 					local v_down = ps[ty+1][tx]
 					local v_across = ps[ty+1][tx+1]
+
+					if (t%12)>9 then
+						fillp(0b1111000011110000.1)
+					elseif (t%12)>6 then
+						fillp(0b1010010110100101.1)
+					end
 					
-					if (#(v_right - v)<120) then
+					if (#(v_right - v)<120)  then
 					polyf({v, v_right, v_across, v_down}, vec(64,64), 0)
 					end
 					polyv({v, v_right, v_across, v_down}, vec(64,64), 7)
+
+					fillp()
 				end
 			end
 		end
@@ -58,13 +66,20 @@ function _update()
 
 	t += 1/30
 
-	bk = 16
-	for i=1,10 do
+	for i=1,500 do
+		local x,y = rnd(128),rnd(128)
+		local c = pget(x,y)
+		circ(x-1,y-2,1,c)
+	end
+
+	bk = 8
+	for i=1,50 do
 		ox=rnd(128+bk)-8
 		oy=rnd(128+bk)-8
 		local color = 0
 		
-		rectfill(ox,oy,ox+bk-1,oy+bk-1,color)
+		--rectfill(ox,oy,ox+bk-1,oy+bk-1,color)
+		line(ox,oy,ox+10,oy-5,color)
 	end
 
 	

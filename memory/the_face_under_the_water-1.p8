@@ -51,10 +51,6 @@ function draw_ps(ps)
 	for ty=y_start,y_end,y_step do
 		for tx=x_start,x_end,x_step do
 			local v = ps[ty][tx]
-			v = v + vec(64,64)
-
-			
-
 			if tx~=#ps and ty~=#ps then
 				local v_right = ps[ty][tx+1]
 				local v_down = ps[ty+1][tx]
@@ -63,22 +59,10 @@ function draw_ps(ps)
 				local v_color = (v-vec(64,64)).y>0 and 7 or 7
 				
 				if rnd(1)>0.01 then
-					polyf({v-vec(64,64), v_right, v_across, v_down}, vec(64,64), f_color)
+					polyf({v, v_right, v_across, v_down}, vec(64,64), f_color)
 				end
-				polyv({v-vec(64,64), v_right, v_across, v_down}, vec(64,64), v_color)
+				polyv({v, v_right, v_across, v_down}, vec(64,64), v_color)
 			end
-
-			-- if tx~=#ps then
-			-- 	local v_right = ps[ty][tx+1]
-			-- 	v_right = v_right + vec(64,64)
-			-- 	line2(v.x,v.y,v_right.x,v_right.y,7)
-			-- end
-
-			-- if ty~=#ps then
-			-- 	local v_down = ps[ty+1][tx]
-			-- 	v_down = v_down + vec(64,64)
-			-- 	line2(v.x,v.y,v_down.x,v_down.y,7)
-			-- end
 		end
 	end
 end
@@ -88,22 +72,20 @@ function _update()
 
 	t += 1/30
 
-	for i=1,50 do
+	for i=1,500 do
 		local x,y = rnd(128),rnd(128)
-		local c = pget(x,y)==7 and 7 or 0
-		circ(x+rnd(2)-1,y+rnd(2)-1,1,c)
+		local c = pget(x,y)
+		circ(x-1,y-2,1,c)
 	end
 
-	bk = 16
-	for i=1,10 do
+	bk = 8
+	for i=1,5 do
 		ox=rnd(128+bk)-8
 		oy=rnd(128+bk)-8
 		local color = 0
 		
 		rectfill(ox,oy,ox+bk-1,oy+bk-1,color)
 	end
-
-	
 
 	seg = 3
 	size = 64/seg	

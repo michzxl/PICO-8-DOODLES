@@ -20,10 +20,14 @@ function _update()
 			ang = ang-t/8-2*abs(h)/16
 			if abs(ang%1)<0.5 then
 				local p = sphere_point(h,ang)*32+vec(64,64)
-				pset(p.x,p.y,7)
+				pset2(p.x,p.y,7)
 			end
 		end
 	end
+end
+
+function pset2(x,y,c)
+	pset(x+0.5,y+0.5,c)
 end
 
 function sphere_point(height, ang)
