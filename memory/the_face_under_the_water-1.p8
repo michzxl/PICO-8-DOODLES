@@ -61,7 +61,14 @@ function draw_ps(ps)
 				if rnd(1)>0.01 then
 					polyf({v, v_right, v_across, v_down}, vec(64,64), f_color)
 				end
+
+				if (t%16<8) then
+					fillp(0b1010010110100101)
+				else
+					fillp(0b1010000000000101)
+				end
 				polyv({v, v_right, v_across, v_down}, vec(64,64), v_color)
+				fillp()
 			end
 		end
 	end
