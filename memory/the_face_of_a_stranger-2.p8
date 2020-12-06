@@ -102,7 +102,7 @@ function _update()
 	local plane_origin = vec(0,0,0)
 	local plane_normal = vec(1,0,0):norm()
 
-	angs = vec(t/16+0.05*sin(t/8),0.5-0.5*sin(t/24),t/12)
+	angs = vec(t/16+0.1*sin(t/8),0.5-0.5*sin(t/24),-t/16)
 	local ux,uy,uz = vec.u_rot_yxz(angs)
 
 	local rot_ps = {}

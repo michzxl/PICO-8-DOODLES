@@ -20,6 +20,20 @@ function _init()
 			base_ps_ty[tx] = v
 		end
 	end
+
+	reds={
+		2+128,
+		2,
+		8+128,
+		8,
+		9+128,
+		9,
+		10,
+		7+128,
+		7,
+	}
+	pal(reds, 1)
+
 end
 
 function draw_ps(ps)
@@ -59,8 +73,10 @@ function draw_ps(ps)
 				local v_right = ps[ty][tx+1]
 				local v_down = ps[ty+1][tx]
 				local v_across = ps[ty+1][tx+1]
-				local f_color = (v-vec(64,64)).y>16*sin(t/24) and (t + v_right.x/32 + v_down.y/16 + v.z/32)%8+8 or 0
-				local v_color = (v-vec(64,64)).y>0 and (t + v_right.x/32 + v_down.y/16 + v.z/32)%8+8 or 7
+				local f_color = (v-vec(64,64)).y>16*sin(t/24) 
+										and ctriwave(t + v_right.x/32 + v_down.y/16 + v.z/32, 5.6, 8.8, 8)
+										or 0
+				local v_color = ctriwave(t + v_right.x/32 + v_down.y/16 + v.z/32, 5.6, 8.8, 8) or 1
 				polyf({v-vec(64,64), v_right, v_across, v_down}, vec(64,64), f_color)
 				polyv({v-vec(64,64), v_right, v_across, v_down}, vec(64,64), v_color)
 			end
@@ -108,6 +124,21 @@ function _update()
 	end
 
 	draw_ps(rot_ps)
+end
+
+-- "complex" triangle wave, range [center - amplitude/2, center + amplitude/2]
+-- to visualize -> https://www.desmos.com/calculator/lbicgo2khe
+function ctriwave(x, center, amplitude, period)
+    local a, b, p = amplitude or 1, center or 0, period or 1
+    local core = abs((x / p - 0.25) % 1 - 0.5)
+    return 2 * a * core - a / 2 + b
+end
+
+-- "range" triangle wave, range [y1,y2]
+function rtriwave(x, y1, y2, period)
+    local amplitude = (y2 - y1)
+    local center = (y1 + y2) / 2
+    return ctriwave(x, amplitude, center, period)
 end
 
 function line2(x1,y1,x2,y2,c)
