@@ -34,9 +34,6 @@ function _update()
 	end
 end
 
-
-
-
 _const_a = 1007/1024
 _const_b = 441/1024
 _const_c = 5/128
