@@ -5,17 +5,28 @@ __lua__
 --micheal
 
 █=500
-dt=0.0166
-
+dt=1/60
 t=0
 
-p={0,1,12+128,0,15+128,14+128}
-for i=1,#p do
-	pal(i,p[i],1)
-end
+p = {
+	0,
+	1,
+	12+128,
+	5+128,
+	15+128,
+	14+128,
+	7,
+	6,
+	0,
+	1+128,
+	1,
+	0+128,
+	4,
+	4+128,
+}
+pal(p,1)
 
 cls()
-
 ::♥::
 t+=dt
 
@@ -24,24 +35,50 @@ for i=1,█ do
 	d=rnd(62)
 	x=cos(ang)*d
 	y=sin(ang)*d
-	--x,y=rnd(128),rnd(128)
+
+	local fill = nil
 	
 	if d<8 then
-		c=7
-	elseif d<45+sin(t/5)*10+sin(sin(t)*8)*8 then
-
-		c=(atan2(y/8,x))*4
+		c = 0x87
+		if d<6 then
+		fill = flr(t*6%2)==0 and 0b1010010110100101 or 0b0101101001011010
+		end
+	elseif d>55 then
+		c = 0x87
+		if d>57 then
+		fill = flr(t*2%2)==1 and 0b1010010110100101 or 0b0101101001011010
+		end
+	elseif d<8+4 or d>55-4 then
+		
+		c=(atan2(y/2,x) - t/4)*5
 		--c=c%((sin(t/10))*7)
 		c=c+2*t
 		
-		c=c+flr(x/12)+flr(y/(16))
+		c=c+9*flr(x/12)+9*flr(y/(16))
 		
-		c=c%#p+1
+
+		c=c%6+1
+
+		c = c + 8
+	elseif d<60+sin(t/10)*10 then
+
+		c=(atan2(y/2,x) - t)*5
+		--c=c%((sin(t/10))*7)
+		c=c+2*t
+		
+		c=c+9*flr(x/12)+9*flr(y/(16))
+		
+		c=c%6+1
+
+		local diff = c - flr(c)
+		if diff<0.2 then c+=8 end
 	else
 		c=0
 	end
 
+	fillp(fill)
 	circ(x+64,y+64,1,c)
+	fillp()
 end
 
 flip()goto ♥
