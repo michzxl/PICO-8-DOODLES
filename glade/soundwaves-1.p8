@@ -1,13 +1,43 @@
 pico-8 cartridge // http://www.pico-8.com
 version 29
 __lua__
-dt=0.0333
+function sqr(a) return a*a end
+function dist(x1,y1,x2,y2) return sqrt(sqr(x2-x1)+sqr(y2-y1)) end
+function nsin(a) return (sin(a)+1)/2 end
+function ncos(a) return (cos(a)+1)/2 end
+function tan(a) return sin(a)/cos(a) end
+function drw_mouse(x,y) spr(0,x,y) end
+poke(0x5f2d, 1)--enable mouse
+p={
+	7,
+	7+128,
+	10,
+	10+128,
+	11,
+	11+128,
+	3,
+	3+128,
+	1,
+	1+128,
+	1,
+	3+128,
+	3,
+	11+128,
+	11,
+	10+128,
+	10,
+	7+128
+}
+for i=1,#p do
+	pal(i,p[i],1)
+end
+
 t=0
 
 cls()
 ::♥::
 --cls()
-t+=dt
+t+=1/30
 mx,my=stat(32),stat(33)
 
 for i=1,1000 do
@@ -15,22 +45,15 @@ for i=1,1000 do
 	x=rnd(128)-64
 	
 	c=
-		 sin(y/600 + sin(t/20) + 1)
-		+flr((x-t*6)/40)
+		 sin(y/600 + sin(t/10) + 1)
+		+flr(x/10) + flr(y/13)%4*8
 		+sin(x/80)
 		+cos(y/56)
-		+t*2
+		+t*1.5
 
-	c=flr(c%4)*3.5 -- [1,14]
-	local fill = nil
-	if c==3.5 or c==7+3.5 then
-		fill = 0b1010010110100101.1
-		c = 0x0
-	end
+	c=c%#p+1 -- [1,14]
 	
-	fillp(fill)
 	circ(x+64,y+64,1,c)
-	fillp()
 end
 
 flip() goto ♥

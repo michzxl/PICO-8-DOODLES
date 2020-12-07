@@ -32,24 +32,26 @@ for i=1,#p do
 	pal(i,p[i],1)
 end
 
+░=1000
+dt=0.0333
 t=0
 
 cls()
 ::♥::
 --cls()
-t+=1/30
+t+=dt
 mx,my=stat(32),stat(33)
 
-for i=1,1000 do
+for i=1,░ do
 	y=rnd(128)-64
 	x=rnd(128)-64
 	
 	c=
 		 sin(y/600 + sin(t/10) + 1)
-		+flr(x/10) + flr(y/13)%4*8
-		+sin(x/80)
-		+cos(y/56)
-		+t*1.5
+		+flr(x/10) + flr(y/13)
+		+6*flr(sin(x/80))
+		+6*flr(cos(y/56))
+		+t*3
 
 	c=c%#p+1 -- [1,14]
 	
