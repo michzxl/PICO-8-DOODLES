@@ -26,8 +26,8 @@ end
 for i=1,█ do
 	x,y=rnd(128)-64,rnd(128)-64
 
-	c=(sin(x/36)/9) / cos(1.3*y/36)
-	c=c+(flr(1.7*x/(sin(t)+a))+flr(y/(sin(t)+a)))
+	c=(sin(x/100)/16) / cos(1.3*y/86)
+	c=c+(cos(t/16)*flr(1.7*(x+32*sin(t/8))/(sin(t)+a))+flr(y/(sin(t)+a)))
 
 	c=c%8+8
 	circ(x+64,y+64,1,c)

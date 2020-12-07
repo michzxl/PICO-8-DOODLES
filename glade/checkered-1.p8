@@ -1,5 +1,5 @@
 pico-8 cartridge // http://www.pico-8.com
-version 18
+version 29
 __lua__
 --doodle template
 --micheal
@@ -19,18 +19,44 @@ a=16
 
 ::♥::
 t+=dt
-if t%1<0.3 then
-	a=rnd(10)+13
+if t%1<0.1 then
+	a=rnd(25)+30
+	t = flr(rnd(10000)) + t%1
 end
 
 for i=1,█ do
 	x,y=rnd(128)-64,rnd(128)-64
 
-	c=(sin(x/36)/9) / cos(y/36)
-	c=c+(flr(1.7*x/(sin(t)+a))+flr(y/(sin(t)+a)))
+	c=(sin(((x-y/8)+t*45)/(64+a))/9) / cos((y-t*64)/(100+a/2))
+	c=c+(3*flr(1.7*(x+a)/(sin(sin(t+a))-a))+flr((y + x/6)/(sin(t/8+a)-a)))
 
-	c=flr(c%2)==0 and 7 or 0
+	local fill = nil
+
+	c=flr(c%8)
+	if c==1 then
+		c = 0x70
+		fill = 0b1010000010100000
+	elseif c==2 then
+		c = 0x70
+		fill = 0b1010010110100101
+	elseif c==3 then
+		c = 0x70
+		fill = 0b1010111110101111
+	elseif c==4 then
+		c = 7
+	elseif c==5 then
+		c = 0x70
+		fill = 0b1010111110101111
+	elseif c==6 then
+		c = 0x70
+		fill = 0b1010010110100101
+	elseif c==7 then
+		c = 0x70
+		fill = 0b1010000010100000
+	end
+	fillp(fill)
 	circ(x+64,y+64,1,c)
+	fillp()
 end
 
 flip()goto ♥
