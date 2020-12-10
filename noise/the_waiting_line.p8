@@ -8,7 +8,7 @@ cls()
 ::♥::
 t+=0.0333
 
-for i=1,█ do
+for i=1,1500 do
 	local y=rnd(128)-64
 	local x=rnd(128)-64
 
