@@ -9,6 +9,10 @@ function _init()
 	tf=0
 	bk=8
 	cls()
+
+	for i=0,7 do
+		pal(i,i+8+128,1)
+	end
 end
 
 function _update()
@@ -29,23 +33,30 @@ function _update()
 		end
 	end
 	
-	for i=1,40 do
+	for i=1,45 do
 		ox,oy=get_oxy()
-		for y=oy,oy+bk-1 do
-			for x=ox,ox+bk-1 do
-				pset(x,y,pix(x,y))
+		for y=oy,oy+bk-1,1 do
+			for x=ox,ox+bk-1,1 do
+				local q = sqrdist(x,y,act,ast)/4000
+				local diff = q - flr(q)
+
+				local c = (x/16 + y/16) 
+				+ sin(x/(64 + 16*st8))
+				+ flr(q)
+				+ t
+				
+				c = c%8+8
+				
+				if diff < 0.1 + y/250 then
+					c -= 8
+				end
+
+				pset(x+0.5,y+0.5,c)
 			end
 		end
 	end
 end
 
-function pix(x,y)
-	c = (x/16 + y/16) 
-	  + sin(x/(64 + 16*st8))
-	  + flr(sqrdist(x,y,act,ast)/4000)
-	  + t
-	return c%8+8
-end
 -->8
 function sqr(a) 
 	return a*a 
