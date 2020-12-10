@@ -9,18 +9,29 @@ cls()
 t+=0.0333
 
 for i=1,█ do
-	y=rnd(128)-64
-	x=rnd(128)-64
+	local y=rnd(128)-64
+	local x=rnd(128)-64
+
+	local fill = nil
 	
-	c=x/16+sin((y)/200)
+	local c=x/16+sin((y)/200)
 	c=c+abs(sin(t/16))*flr(x/60+y/64)
 	c=c+sin(x/128)
 	c=c+t
 	
 	c=c%8+8
-	c=flr(c)%2==0 and 0 or 7
+	c=c%2
+
+	local diff = c - flr(c)
+	c = flr(c) * 7
+	if diff<0.2 then
+		fill = 0b1111000011110000
+		c = 0x67
+	end
 	
+	fillp(fill)
 	circ(x+64,y+64,1,c)
+	fillp()
 end
 
 flip() goto ♥
