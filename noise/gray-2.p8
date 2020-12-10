@@ -1,7 +1,7 @@
 pico-8 cartridge // http://www.pico-8.com
-version 27
+version 29
 __lua__
-t=.1
+t=0
 
 pl={
 	2+128,
@@ -22,45 +22,54 @@ b=30
 cc=1
 dd=1
 
-cls()
 ::♥::
 t+=0.01
-
-
 if t%1.5<0.2 then
 	a=rnd(30)+40
 	b=rnd(30)+40
 	cc=rnd(1)<.5 and 1 or -1
-	dd=rnd(1)<.5 and 1 or -1
-	
-	ti=t%1.5
-	y=ti/0.2*128
-	line(0,y,128,y,7)
-	line(0+y,y+1,128-y,y+1,7)
-	line(0+y,128-y,128-y,0-y,7)
+	cc=rnd(1)<.5 and 1 or -1
+	cond = rnd(1)<0.5
 end
 
 for i=1,1000 do
-	ox=rnd(128)
-	oy=rnd(128)
+	local fill = nil
+	local x=rnd(128)
+	local y=rnd(128)
 	
-	x=ox-4*sin(t/8-t%4*2-64+abs(oy-64)/32)
-	y=oy%(ox/2+sin(t/8)*32)
-	
-	c=0.5+1/2*
-		sin(
-			  (cc*x+100)%a/80
-			+ (dd*y%b/100) 
-			+ t*1.5*(b/45)
-			- t
-		)
-	
-	
-	c=c*(#pl+1)
+	local c=(sin((cc*x+100)%(a)/250-t + ((dd*y+y/128)%b/400) + t*1*(b/45))/2+0.5)
+	local ca = c*(#pl+1)
+	local diff = ca - flr(ca)
+
+	if cond then
+		if diff>0.75 then
+			fill = 0b1111000011110000.1
+			c = mid(0,#pl+1,(ca+1)%16)%(#pl+1)
+		else
+			c = ca
+		end
+	else
+		if diff<0.25 then
+			fill = 0b1111000011110000.1
+			c = mid(0,#pl+1,(ca+1)%16)%(#pl+1)
+		else
+			c = ca
+		end
+	end
 	
 	if c~=0 then
-		circ(ox,oy,1,c)
+		fillp(fill)
+		circ(x,y,1,c)
+		fillp()
 	end
+end
+
+if t%1.5<0.2 then
+	local ti = t%1.5/0.2
+	local r = ti*48 + rnd(16)-8
+	fillp(rnd(36000))
+	circfill(64,64,r,0)
+	fillp()
 end
 
 flip() goto ♥
