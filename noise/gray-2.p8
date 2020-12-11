@@ -21,6 +21,12 @@ a=30
 b=30
 cc=1
 dd=1
+_fill = 0b1111000011110000.1
+fills = {
+	0b1111000011110000.1,
+	0b1010101010101010.1,
+	0b1010010110100101.1,
+}
 
 ::♥::
 t+=0.01
@@ -30,6 +36,8 @@ if t%1.5<0.2 then
 	cc=rnd(1)<.5 and 1 or -1
 	cc=rnd(1)<.5 and 1 or -1
 	cond = rnd(1)<0.5
+
+	_fill = fills[flr(rnd(#fills)) + 1]
 end
 
 for i=1,1000 do
@@ -43,14 +51,14 @@ for i=1,1000 do
 
 	if cond then
 		if diff>0.75 then
-			fill = 0b1111000011110000.1
+			fill = _fill
 			c = mid(0,#pl+1,(ca+1)%16)%(#pl+1)
 		else
 			c = ca
 		end
 	else
 		if diff<0.25 then
-			fill = 0b1111000011110000.1
+			fill = _fill
 			c = mid(0,#pl+1,(ca+1)%16)%(#pl+1)
 		else
 			c = ca
