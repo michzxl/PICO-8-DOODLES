@@ -19,12 +19,14 @@ cls()
 ::♥::
 t+=dt tf+=1
 
-local diff
-for i=1,30 do
-    ox=rnd(128+bk)-8
-	oy=rnd(128+bk)-8
-    for y=oy,oy+bk-1,hy do
-        for x=ox,ox+bk-1,hx do
+-- local diff
+-- for i=1,30 do
+--     ox=rnd(128+bk)-8
+-- 	oy=rnd(128+bk)-8
+--     for y=oy,oy+bk-1,hy do
+--         for x=ox,ox+bk-1,hx do
+        for x=0,127,2.75 do
+        for y=0,127,2.75 do
             local c=(sin(x/32 + (y-64)/(256+16*sin(t/16))-t/16))
             local diff = c-flr(c)
             c=flr(c) -8*flr(y/16*7 + x/64 - t)+t
@@ -34,9 +36,10 @@ for i=1,30 do
                 c-=8
             end
             
-            pset(x,y,c)
+            rectfill(x,y,x+1.75,y+1.75,c)
         end
-    end
-end
+        end
+--     end
+-- end
 
 flip() goto ♥
