@@ -3,7 +3,7 @@ function polydraw(vecs,cen,col)
 	for i=1,#vecs do
 		local p1 = vecs[i] + cen
 		local p2 = vecs[i%#vecs+1] + cen
-		line2(p1.x,p1.y,p2.x,p2.y,col)
+		line(p1.x,p1.y,p2.x,p2.y,col)
 	end
 end
 
@@ -32,7 +32,7 @@ function polypath(vecs,cen,col)
 	for i=1,#vecs-1 do
 		local p1 = vecs[i] + cen
 		local p2 = vecs[i+1] + cen
-		line2(p1.x,p1.y,p2.x,p2.y,col)
+		line(p1.x,p1.y,p2.x,p2.y,col)
 	end
 end
 
