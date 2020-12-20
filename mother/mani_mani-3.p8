@@ -59,51 +59,9 @@ function _init()
 		dr(rnd(128),rnd(128),rnd(2)+8)
 	end
 
-	for j=1,30 do
-		for i=1,600 do
-			x,y = rnd(128),rnd(128)
-
-			-- if btn(4) then
-			-- 	dr(x,y,1)
-			-- elseif btn(5) then
-			-- 	dr(x,y,7)
-			-- else
-			do
-				--edges may create navy/white
-				if ((x<=1 or flr(y)>=126) and rnd(1)<0.01) then
-					sset(x,y,rnd(1)<0.5 and 1 or 7)
-				end
-
-				--if nearby pixels are same,
-				--maybe change color.
-				--will break down large areas
-				local p=sget(x,y)
-				if sget(x+1,y)==p
-							and sget(x,y-1)==p
-							and rnd(1)<0.005 then
-					dr(x,y,rnd(2) + 8)
-				end
-
-				--propel the color.
-				if rnd(1)<0.75 then
-					dr(x+1,y-1,p)
-				else
-					dr(x,y,p)
-				end
-			end
-			
-		end
-		sspr(0,0,128,128)
-		if (j%2==0) flip()
-	end
-
 	for i=1,30 do
 		local x1,y1,x2,y2 = rnd(128),rnd(128),rnd(128),rnd(128)
-		fillp(rnd(36000))
-		circfill(x1,y1,rnd(48),0)
-		fillp()
-		local x1,y1,x2,y2 = rnd(128),rnd(128),rnd(128),rnd(128)
-		fillp(rnd(36000))
+		fillp(flr(rnd(36000)) + 0b0.1)
 		circfill(x1,y1,rnd(48),0)
 		fillp()
 		flip()
@@ -121,58 +79,18 @@ function _update()
 	--	cls(7)
 	t+=1/30
 
-	if rnd(1)<0.01 then
 	
-		for j=1,30 do
-		for i=1,600 do
-			x,y = rnd(128),rnd(128)
 
-			-- if btn(4) then
-			-- 	dr(x,y,1)
-			-- elseif btn(5) then
-			-- 	dr(x,y,7)
-			-- else
-			do
-				--edges may create navy/white
-				if ((x<=1 or flr(y)>=126) and rnd(1)<0.01) then
-					sset(x,y,rnd(1)<0.5 and 1 or 7)
-				end
-
-				--if nearby pixels are same,
-				--maybe change color.
-				--will break down large areas
-				local p=sget(x,y)
-				if sget(x+1,y)==p
-							and sget(x,y-1)==p
-							and rnd(1)<0.005 then
-					dr(x,y,rnd(2) + 8)
-				end
-
-				--propel the color.
-				if rnd(1)<0.75 then
-					dr(x+1,y-1,p)
-				else
-					dr(x,y,p)
-				end
-			end
-			
-		end
-		sspr(0,0,128,128)
-		if (j%2==0) flip()
-	end
-
+	if rnd(1)<0.005 then
 	for i=1,30 do
 		local x1,y1,x2,y2 = rnd(128),rnd(128),rnd(128),rnd(128)
-		fillp(rnd(36000))
-		circfill(x1,y1,rnd(48),0)
-		fillp()
-		local x1,y1,x2,y2 = rnd(128),rnd(128),rnd(128),rnd(128)
-		fillp(rnd(36000))
+		fillp(flr(rnd(36000)) + 0b0.1)
 		circfill(x1,y1,rnd(48),0)
 		fillp()
 		flip()
 	end
 	end
+	
 
 	for i=1,600 do
 		x,y = rnd(128),rnd(128)
