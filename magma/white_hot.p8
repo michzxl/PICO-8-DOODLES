@@ -2,33 +2,20 @@ pico-8 cartridge // http://www.pico-8.com
 version 29
 __lua__
 t=0
-█fade=300
+█fade=800
 █spread=500
 █starter=200
 b={
-	x=20,y=50,
+	x=20,y=-50,
 	dx=5,dy=1,
-	ax=0.1,ay=0.1,
-	r=11
+	ax=0,ay=0.5,
+	r=9
 }
 
-pal({
-	7,
-	10,
-	9,
-	14+128,
-	9+128,
-	8,
-	8+128,
-	2,
-	2+128,
-	5+128,
-	5+128,
-	5,
-	6+128,
-	0+128,
-	0+128
-}, 1)
+pal(1, 7,1)
+pal(2, 10,1)
+pal(3,9,1)
+pal(4, 8,1)
 
 function sqr(z) return z*z end
 
@@ -39,9 +26,7 @@ end
 ::♥::
 rectfill(0,0,127,127,0)
 
-t+=1/30
-
-b.ax = 0.2*cos(t/2)
+t+=0.01
 
 b.dx+=b.ax
 b.dy+=b.ay
@@ -49,26 +34,23 @@ b.x+=b.dx
 b.y+=b.dy
 
 if (b.x-b.r<=0) b.dx=5*rnd(1)+1
-if (b.x+b.r>=127) b.x = b.x%128 b.dx = -b.dx
+if (b.x+b.r>=127) b.dx=-5*rnd(1)+1
 if (b.y-b.r<=0) b.dy=5 
-if (b.y+b.r>=127+b.r*1.2) then b.dy=0 b.y = b.y%(128+2) end
+if (b.y+b.r>=127) then b.dy=-1*(rnd(4)+7) b.dx+=sgn(b.dx) end
 
 for i=1,█fade do
 	x,y=rnd(128),rnd(128)
-	
 	c=sget(x,y)
-	if c>=1 and c<=13 then
-		c=c%14+1.5
+	if c>=1 and c<=4 then
+		c=c%5+1
 	else
 		c=0
 	end
-	if c<13 or flr(x)+flr(y)%2==0 then
 
-		sset(x-1,y,c)
-		sset(x+1,y,c)
-		sset(x,y-1,c)
-		sset(x,y+1,c)
-	end
+	sset(x-1,y,c)
+	sset(x+1,y,c)
+	sset(x,y-1,c)
+	sset(x,y+1,c)
 end
 
 a={1,0,-1}
@@ -78,15 +60,15 @@ for i=1,█spread do
 	kx,ky=a[flr(rnd(3))+1],a[flr(rnd(3))+1]
 	c=sget(x+kx,y+ky)
 	c2=sget(x,y+1)
-	if c2>=1 and c2<=8 then
-		c=c%14+1
+	if c2>=1 and c2<=4 then
+		c=c%5+1
 		
 		sset(x-1,y,c)
 		sset(x+1,y,c)
 		sset(x,y-1,c)
 		--sset(x,y+1,c)
-	elseif c2>=1 and c2<=13 and rnd(1)<0.25 then
-		c2=c2%14+1
+	elseif c2>=1 and c2<=4 then
+		c2=c2%5+1
 		sset(x-1,y,c2)
 		sset(x+1,y,c2)
 		sset(x,y-1,c2)
