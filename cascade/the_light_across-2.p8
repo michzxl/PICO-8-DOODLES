@@ -1,13 +1,6 @@
 pico-8 cartridge // http://www.pico-8.com
 version 29
 __lua__
-function sqr(a) return a*a end
-function dist(x1,y1,x2,y2) return sqrt(sqr(x2-x1)+sqr(y2-y1)) end
-function nsin(a) return (sin(a)+1)/2 end
-function ncos(a) return (cos(a)+1)/2 end
-function tan(a) return sin(a)/cos(a) end
-function drw_mouse(x,y) spr(0,x,y) end
-poke(0x5f2d, 1)--enable mouse
 p={
 	7,
 	7+128,
@@ -31,34 +24,35 @@ p={
 for i=1,#p do
 	pal(i,p[i],1)
 end
+local lp = #p
 
-░=1000
 dt=0.0333
 t=0
-
 cls()
 ::♥::
---cls()
 t+=dt
-mx,my=stat(32),stat(33)
+local st10 = sin(t/10)
 
-for i=1,░ do
-	y=rnd(128)-64
-	x=rnd(128)-64
+for i=1,1000 do
+	local y=rnd(128)-64
+	local x=rnd(128)-64
 	
-	c=
-		 sin(y/600 + sin(t/10) + 1)
-		+flr(x/10) + flr(y/13)
-		+6*flr(sin(x/80))
-		+6*flr(cos(y/56))
+	local c=
+		 sin(y/600+st10)
+		+x\10+y\13
+		+6*(
+			 flr(sin(x/80))
+			+flr(cos(y/56))
+		)
 		+t*3
 
-	c=c%#p+1 -- [1,14]
+	c=c%lp+1
 	
 	circ(x+64,y+64,1,c)
 end
 
 flip() goto ♥
+
 __gfx__
 01000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 17100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
