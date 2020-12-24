@@ -51,12 +51,18 @@ function _update()
 	if t>30 then
 		t=rnd(17)-8
 	end
+
+	for i=1,25 do
+		local x,y = rnd(128),rnd(128)
+		local c = (boxblur(x,y,1)+0.5)
+		circ(x,y,1,c)
+	end
 	
 	for i=1,60 do
 		ox,oy=get_oxy()
 		for y=oy,oy+bk-1,2 do
 			for x=ox,ox+bk-1,1.2 do
-				c = 6*flr(-sin((-x*8)/(y+16)/16 + t/4))
+				c = 6*flr(-sin((-x*8)/(y+16)/16 + t/4)*0x0.ffff)
 					+ t
 					+ (x+t*4)\32*ct8*st8
 				c = flr(c) + flr(y/64-t/2) + 2*flr(y/90+t/2)
