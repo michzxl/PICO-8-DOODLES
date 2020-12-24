@@ -11,6 +11,7 @@ count=(2*w+1)*(2*w+1)
 cls()
 ::♥::
 t+=dt
+mx,my = stat(32),stat(33)
 
 for i=1,10 do
 	x,y=rnd(128),rnd(128)
@@ -18,7 +19,7 @@ for i=1,10 do
 	circ(x,y,1,c)
 end
 
-for i=1,400 do
+for i=1,300 do
 	x,y=rnd(128),rnd(128)
 	sum=0
 	for ox=x-w,x+w do
@@ -29,13 +30,15 @@ for i=1,400 do
 	circ(x,y,1,sum/count)
 end
 
-for i=1,300 do
+for i=1,500 do
 	x,y=rnd(128),rnd(128)
 	ang=atan2(x-mx,y-my)
 	ang=ang+t/8
-	d=3
+	d=4
 	c=pget(x-cos(ang)*d,y-sin(ang)*d)
 	circ(x,y,1,c)
 end
+
+circfill(mx,my,1,7)
 
 flip() goto ♥
