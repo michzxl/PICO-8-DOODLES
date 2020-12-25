@@ -41,6 +41,27 @@ function _init()
 		7
 	}
 	pal(medium_rare, 1)
+
+	pal({
+		0,
+		0,
+		1+128,
+		1,
+		2+128,
+		8+128,
+		8,
+		14+128,
+		15+128,
+		15
+	},2)
+
+	poke(0x5f5f,0x10)
+	memset(0x5f70, 0b11001100, 16)
+
+	mode = -1
+	next_mode()
+
+	show = true
 end
 
 function _update()
@@ -50,23 +71,100 @@ function _update()
 	st8=sin(t/8)
 	ct8=cos(t/8)
 
+	if btnp(5) then
+		next_mode()
+	end
+
+	if btnp(4) then
+		show = not show
+		rectfill(0,121,128,127,0)
+	end
+
 	if t>30 then
 		t=rnd(17)-8
 	end
-	
-	for i=1,75 do
-		ox,oy=get_oxy()
-		for y=oy,oy+bk-1,2 do
-			for x=ox,ox+bk-1,2 do
-				c = 6*flr(sin((x*8)/(y+16)/16 + t/3))
-					+ t
-					+ (x+t*4)\32*ct8*st8
-				c = flr(c) + flr(y/64-t/2) + 2*flr(y/90+t/2)
-				c=_color(c)
 
-				pset(x,y,c)
+	if mode==0 then
+		for i=1,75 do
+			ox,oy=get_oxy()
+			for y=oy,oy+bk-1,2 do
+				for x=ox,ox+bk-1,2 do
+					c = 6*flr(sin((x*8)/(y+16)/16 + t/3))
+						+ t
+						+ (x+t*4)\32*ct8*st8
+					c = flr(c) + flr(y/64-t/2) + 2*flr(y/90+t/2)
+					c=_color(c)
+
+					pset(x,y,c)
+				end
 			end
 		end
+	elseif mode==1 then
+		for i=1,25 do
+			local x,y = rnd(128),rnd(128)
+			local c = (boxblur(x,y,1)+0.5)
+			circ(x,y,1,c)
+		end
+		
+		for i=1,60 do
+			ox,oy=get_oxy()
+			for y=oy,oy+bk-1,2 do
+				for x=ox,ox+bk-1,1.2 do
+					c = 6*flr(-sin((-x*8)/(y+16)/16 + t/4)*0x0.ffff)
+						+ t
+						+ (x+t*4)\32*ct8*st8
+					c = flr(c) + flr(y/64-t/2) + 2*flr(y/90+t/2)
+					c=_color(c)
+
+					pset(x,y,c)
+				end
+			end
+		end
+	elseif mode==2 then
+		for i=1,75 do
+			ox,oy=get_oxy()
+			for y=oy,oy+bk-1,2 do
+				for x=ox,ox+bk-1,2 do
+					c = 6*flr(sin((x*8)/(y+16)/16 + t/3))
+						+ t
+						+ (x+t*4)\32*ct8*st8
+					c = flr(c) + flr(y/64-t/2) + 2*flr(y/90+t/2)
+						- flr(sin(x/32 + y/32 - t/2))
+						+ (sin(x/128) + cos(y/128) + t)
+					c = _color(c)
+
+					pset(x,y,c)
+				end
+			end
+		end
+	elseif mode==3 then
+		for i=1,70 do
+			ox,oy=get_oxy()
+			for y=oy,oy+bk-1,2 do
+				for x=ox,ox+bk-1,2 do
+					c = 6*flr(sin(((x*8) - t)/(y+16)/16 + t/3))
+						+ t
+						+ (x+t*4)\32*ct8*st8
+					c = flr(c) + flr(y/64-t/2) + 2*flr(y/90+t/2)
+						- flr(sin(x/128 + y/64 - t/2))
+						+ 2*flr(sin(x/128) + cos(y/128) + t)
+					c = _color(c)
+
+					pset(x,y,c)
+				end
+			end
+		end
+	end
+
+	if show then
+		rectfill(0,122,128,127,0)
+		rect(-1,121,128,128,0)
+		print(
+			"press x. (" .. (mode+1) .. "/4). press z to hide.",
+			0,
+			123,
+			7
+		)
 	end
 end
 
@@ -83,6 +181,15 @@ function boxblur(x,y,width)
     return sum/count
 end
 
+function next_mode()
+	mode = (mode+1)%4
+
+	if mode==0 then
+		poke(0x5f5f,0x0)
+	else
+		poke(0x5f5f,0x10)
+	end
+end
 
 -->8
 function sqr(a) 
