@@ -1,0 +1,846 @@
+﻿<html><head>
+<title>PICO-8 Cartridge</title>
+<meta name="viewport" content="width=device-width, user-scalable=no">
+<script type="text/javascript">
+
+	// Default shell for PICO-8 0.2.1
+
+	// options
+
+	// fullscreen, sound, close button at top when playing on touchscreen
+	// defaults to false because takes up precious screen space on smaller mobile devices
+	var p8_allow_mobile_menu = false;
+
+	// p8_autoplay true to boot the cartridge automatically after page load when possible
+	// if the browser can not create an audio context outside of a user gesture (e.g. on iOS), p8_autoplay has no effect
+	var p8_autoplay = false;
+
+	// When pico8_state is defined, PICO-8 will set .is_paused, .sound_volume and .frame_number each frame 
+	// (used for determining button icons)
+	var pico8_state = [];
+
+	// When pico8_buttons is defined, PICO-8 reads each int as a bitfield holding that player's button states
+	// 0x1 left, 0x2 right, 0x4 up, 0x8 right, 0x10 O, 0x20 X, 0x40 menu
+	// (used by p8_update_gamepads)
+	var pico8_buttons = [0, 0, 0, 0, 0, 0, 0, 0]; // max 8 players
+
+	// When pico8_mouse is defined, PICO-8 reads the 3 integers as X, Y and a bitfield for buttons: 0x1 LMB, 0x2 RMB
+	var pico8_mouse = [];
+
+	// used to display number of detected joysticks
+	var pico8_gamepads = {};
+	pico8_gamepads.count = 0;
+
+	// When pico8_gpio is defined, reading and writing to gpio pins will read and write to these values
+	var pico8_gpio = new Array(128);
+
+	// When pico8_audio_context context is defined, the html shell (this file) is responsible for creating and managing it.
+	// This makes satisfying browser requirements easier -- e.g. initialising audio from a short script in response to a user action.
+	// Otherwise PICO-8 will try to create and use its own context.
+
+	var pico8_audio_context;
+
+
+	// menu button and controller graphics
+	p8_gfx_dat={
+			"p8b_pause1": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAOUlEQVRIx2NgGPbg/8cX/0F46FtAM4vobgHVLRowC6hm0YBbQLFFoxaM4FQ0dHPy0C1Nh26NNugBAAnizNiMfvbGAAAAAElFTkSuQmCC",
+"p8b_controls":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAQ0lEQVRIx2NgGAXEgP8fX/ynBaap4XBLhqcF1IyfYWQBrZLz0LEAlzqqxQFVLcAmT3MLqJqTaW7B4CqLaF4fjIIBBwBL/B2vqtPVIwAAAABJRU5ErkJggg==",
+"p8b_full":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAN0lEQVRIx2NgGPLg/8cX/2mJ6WcBrUJm4CwgOSgGrQVEB8WoBaMWDGMLhm5OHnql6dCt0YY8AAA9oZm+9Z9xQAAAAABJRU5ErkJggg==",
+"p8b_pause0":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAKUlEQVRIx2NgGHbg/8cX/7FhctWNWjBqwagFoxaMWjBqwagF5Fkw5AAAPaGZvsIUtXUAAAAASUVORK5CYII=",
+"p8b_sound0":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAANklEQVRIx2NgGDHg/8cX/5Hx0LEA3cChYwEugwavBcRG4qgFoxYMZwuGfk4efqXp8KnRBj0AAMz7cLDnG4FeAAAAAElFTkSuQmCC",
+"p8b_sound1":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAPUlEQVRIx2NgGDHg/8cX/5Hx0LEA3cChYwEugwhZQLQDqG4BsZFIKMhGLRi1YChbMPRz8vArTYdPjTboAQCSVgpXUWQAMAAAAABJRU5ErkJggg==",
+"p8b_close":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAU0lEQVRIx2NkoDFgpJsF/z+++I8iwS9BkuW49A+cBcRaREgf/Swg1SJi1dHfAkIG4EyOOIJy4Cwg1iJCiWDUAvItGLqpaOjm5KFfmg79Gm3ItioAl+mAGVYIZUUAAAAASUVORK5CYII=",
+
+"controls_left_panel":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAAEsCAYAAAB5fY51AAAEI0lEQVR42u3dMU7DQBCG0Tjam9DTcP8jpEmfswS5iHBhAsLxev/hvQY6pGXyZRTQ+nQCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHqbHEEtl+vt7hS+fLy/mXHBQqxEi/6aI/AiFW9SnB2BWDkDBAtAsADBAhAsAMECBAtAsAAECxAsAMECECxAsAAEC0CwONJ8tYvrXRAsImK19j0IFsPGSrQQLCJiNV+et7xAT7QQLIaN1dr3ooVgMWysRAvBIipWooVgERUr0UKwiIqVaCFYRMVKtBAsomIlWggWUbESLQSLqFiJFoJFVKxEC8EiKlaihWARFSvRQrDYJSSVfhaCBSBYAIIFCBbAHpoj4Bl/scOGBWDD4lX8iwE2LADBAgQLQLAABAsQLADBAhAsQLAABAtAsADBAhAsAMECBAtAsAAECxAsAMECECxAsAAECxAsAMECECxAsMh1ud7uTsHZVDcZyFo8Yt5sVJ6NyUAaSNEyIymaXwZepIKd4mwoQbAFC0CwAMECECwAwQIEC0CwAAQLECwAwQIQLECwAAQLQLAAwQI4UHME2/10QZq7usyBObBhRQwpmBUb1nADuPbuaUD/p2ezMH+1admwhosVfBcxb2SCJVaIlmAhVoiWYIkVoiVagiVWiJZgiZVYIVqCJVaIlmgJllghWoIlViBagiVWiJZoCZZYIVqCJVYgWoIlViBaggUIlnc0sPELlmghVmIlWKKFWAmWaIFYCZZoIVYIlmghVoIlWiBWgiVaiJVgIVqIlWCJFoiVYIkWYiVYiBZiJViihViJ1XbNEWyL1mMQRYvfvIGJlQ1rmE0LzIoNyyBiDrBhAYIFIFiAYAEIFoBgAYIFIFgAggUIFoBgAQgWIFgAggUgWIBgDc+Nn1D/tdH8YupwgZy5qG4ykKIlVmZDsDjshSlazqQqH7p793Q2CBaAYAGCBSBYAIIFCBaAYAEIFiBYAIIFIFiAYAEIFoBgAYIFIFgAggUIFoBgAQgWIFgAggUgWIBgAQgWwENzBKxZPub9CJ7WjA0LsGFRV+9N5+jNDhsWgGABggUgWACCxW56fgjuA3cEiz9Z/nWwR0iWP8P/YCFYDBstsUKwiIiWWCFYRERLrBAsIqIlVggWEdESKwSLiGiJFYJFRLTECsEiIlpihWARES2xQrCIiJZYIVhEREusECwioiVWCBYx0RIrBIuoaIkVr+YhFHTZtMCGBQgWgGABCBYgWACCBSBYgGABCBaAYAGCBSBYAIIFCBbj2uOR8s6AEbhexgsWYri3SKhKczcXAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMA2n+e0UMDzh3yTAAAAAElFTkSuQmCC",
+
+
+"controls_right_panel":"data:image/png;base64,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",
+
+	};
+
+
+	// added 0.2.1: work-around for iOS/Safari running from an iFrame (e.g. from itch.io page):
+	// touch events only register after adding dummy listeners on document.
+
+	document.addEventListener('touchstart', {});
+	document.addEventListener('touchmove', {});
+	document.addEventListener('touchend', {});
+
+
+
+	var p8_buttons_hash = -1;
+	function p8_update_button_icons()
+	{
+		// buttons only appear when running
+		if (!p8_is_running)
+		{
+			requestAnimationFrame(p8_update_button_icons);
+			return;
+		}
+		var is_fullscreen=(document.fullscreenElement || document.mozFullScreenElement || document.webkitIsFullScreen || document.msFullscreenElement);
+		
+		// hash based on: pico8_state.sound_volume  pico8_state.is_paused bottom_margin left is_fullscreen p8_touch_detected
+		var hash = 0;
+		hash = pico8_state.sound_volume;
+		if (pico8_state.is_paused) hash += 0x100;
+		if (p8_touch_detected)     hash += 0x200;
+		if (is_fullscreen)         hash += 0x400;
+
+		if (p8_buttons_hash == hash)
+		{
+			requestAnimationFrame(p8_update_button_icons);
+			return;
+		}
+		
+		p8_buttons_hash = hash;
+		// console.log("@@ updating button icons");
+
+		els = document.getElementsByClassName('p8_menu_button');
+		for (i = 0; i < els.length; i++)
+		{
+			el = els[i];
+			index = el.id;			
+			if (index == 'p8b_sound') index += (pico8_state.sound_volume == 0 ? "0" : "1"); // 1 if undefined
+			if (index == 'p8b_pause') index += (pico8_state.is_paused > 0 ? "1" : "0");     // 0 if undefined
+
+			new_str = '<img width=24 height=24 style="pointer-events:none" src="'+p8_gfx_dat[index]+'">';
+			if (el.innerHTML != new_str)
+				el.innerHTML = new_str;
+
+
+
+
+			// hide all buttons for touch mode (can pause with menu buttons)
+			
+			var is_visible = p8_is_running;
+
+			if ((!p8_touch_detected || !p8_allow_mobile_menu) && el.parentElement.id == "p8_menu_buttons_touch")
+				is_visible = false;
+
+			if (p8_touch_detected && el.parentElement.id == "p8_menu_buttons")
+				is_visible = false;
+
+			if (is_fullscreen) 
+				is_visible = false;
+
+			if (is_visible)
+				el.style.display="";
+			else
+				el.style.display="none";
+		}
+		requestAnimationFrame(p8_update_button_icons);
+	}
+
+
+
+	function abs(x)
+	{
+		return x < 0 ? -x : x;
+	}
+	
+	// step 0 down 1 drag 2 up (not used)
+	function pico8_buttons_event(e, step)
+	{
+		if (!p8_is_running) return;
+	
+		pico8_buttons[0] = 0;
+
+		if (step == 2 && typeof(pico8_mouse) !== 'undefined')
+		{
+			pico8_mouse[2] = 0;
+		}
+		
+		var num = 0;
+		if (e.touches) num = e.touches.length;
+
+		if (num == 0 && typeof(pico8_mouse) !== 'undefined')
+		{
+			//  no active touches: release mouse button from anywhere on page. (maybe redundant? but just in case)
+			pico8_mouse[2] = 0;
+		}
+
+		
+		for (var i = 0; i < num; i++)
+		{
+			var touch = e.touches[i];
+			var x = touch.clientX;
+			var y = touch.clientY;
+			var w = window.innerWidth;
+			var h = window.innerHeight;
+
+			var r = Math.min(w,h) / 12;
+			if (r > 40) r = 40;
+
+			// mouse (0.1.12d)
+
+			let canvas = document.getElementById("canvas");
+			if (p8_touch_detected)
+			if (typeof(pico8_mouse) !== 'undefined')
+			if (canvas)
+			{
+				var rect = canvas.getBoundingClientRect();
+				//console.log(rect.top, rect.right, rect.bottom, rect.left, x, y);
+
+				if (x >= rect.left && x < rect.right && y >= rect.top && y < rect.bottom)
+				{
+					pico8_mouse = [
+						Math.floor((x - rect.left) * 128 / (rect.right - rect.left)),
+						Math.floor((y - rect.top) * 128 / (rect.bottom - rect.top)),
+						step < 2 ? 1 : 0
+					];
+					// return; // commented -- blocks overlapping buttons
+				}else
+				{
+					pico8_mouse[2] = 0;
+				}
+			}
+
+
+			// buttons
+			
+			b = 0;
+
+			if (y < h - r*8)
+			{
+				// no controller buttons up here; includes canvas and menu buttons at top in touch mode
+			}
+			else
+			{
+				e.preventDefault();
+
+				if ((y < h - r*6) && y > (h - r*8))
+				{
+					// menu button: half as high as X O button
+					// stretch across right-hand half above X O buttons
+					if (x > w - r*3) 
+						b |= 0x40;
+				}
+				else if (x < w/2 && x < r*6)
+				{
+					// stick
+
+					mask = 0xf; // dpad
+					var cx = 0 + r*3;
+					var cy = h - r*3;
+
+					deadzone = r/3;
+					var dx = x - cx;
+					var dy = y - cy;
+
+					if (abs(dx) > abs(dy) * 0.6) // horizontal 
+					{
+						if (dx < -deadzone) b |= 0x1;
+						if (dx > deadzone) b |= 0x2;
+					}
+					if (abs(dy) > abs(dx) * 0.6) // vertical
+					{
+						if (dy < -deadzone) b |= 0x4;
+						if (dy > deadzone) b |= 0x8;
+					}
+				}
+				else if (x > w - r*6)
+				{
+					// button; diagonal split from bottom right corner
+				
+					mask = 0x30;
+					
+					// one or both of [X], [O]
+					if ( (h-y) > (w-x) * 0.8) b |= 0x10;
+					if ( (w-x) > (h-y) * 0.8) b |= 0x20;
+				}
+			}
+
+			pico8_buttons[0] |= b;
+		
+		}
+	}
+
+	// p8_update_layout_hash is used to decide when to update layout (expensive especially when part of a heavy page)
+	var p8_update_layout_hash = -1;
+	var last_windowed_container_height = 512;
+	var p8_layout_frames = 0;
+
+	function p8_update_layout()
+	{
+		var canvas = document.getElementById("canvas");
+		var p8_playarea = document.getElementById("p8_playarea");
+		var p8_container = document.getElementById("p8_container");
+		var p8_frame = document.getElementById("p8_frame");
+		var csize = 512;
+		var margin_top = 0;
+		var margin_left = 0;
+
+		// page didn't load yet? first call should be after p8_frame is created so that layout doesn't jump around.
+		if (!canvas || !p8_playarea || !p8_container || !p8_frame)
+		{
+			p8_update_layout_hash = -1;
+			requestAnimationFrame(p8_update_layout);
+			return;
+		}
+
+		p8_layout_frames ++;
+
+		// assumes frame doesn't have padding
+		
+		var is_fullscreen=(document.fullscreenElement || document.mozFullScreenElement || document.webkitIsFullScreen || document.msFullscreenElement);
+		var frame_width = p8_frame.offsetWidth;
+		var frame_height = p8_frame.offsetHeight;
+
+		if (is_fullscreen)
+		{
+			// same as window
+			frame_width = window.innerWidth;
+			frame_height = window.innerHeight;
+		}
+		else{
+			// never larger than window  // (happens when address bar is down in portraight mode on phone)
+			frame_width  = Math.min(frame_width, window.innerWidth);
+			frame_height = Math.min(frame_height, window.innerHeight);
+		}
+
+		// as big as will fit in a frame..
+		csize =  Math.min(frame_width,frame_height);
+
+		// .. but never more than 2/3 of longest side for touch (e.g. leave space for controls on iPad)
+		if (p8_touch_detected && p8_is_running)
+		{
+			var longest_side = Math.max(window.innerWidth,window.innerHeight);
+			csize = Math.min(csize, longest_side * 2/3);
+		}
+
+		// pixel perfect: quantize to closest multiple of 128
+		// only when large display (desktop)
+		if (frame_width >= 512 && frame_height >= 512)
+		{
+			csize = (csize+1) & ~0x7f;
+		}
+
+		// csize should never be higher than parent frame
+		// (otherwise stretched large when fullscreen and then return)
+		if (!is_fullscreen && p8_frame) 
+			csize = Math.min(csize, last_windowed_container_height); // p8_frame_0 parent
+		
+
+		if (is_fullscreen)
+		{
+			// always center horizontally
+			margin_left = (frame_width - csize)/2;
+
+			if (p8_touch_detected)
+			{
+				if (window.innerWidth < window.innerHeight)
+				{
+					// portrait: keep at y=40 (avoid rounded top corners / camera nub thing etc.)
+					margin_top = Math.min(40, frame_height - csize);
+				}
+				else
+				{
+					// landscape: put a little above vertical center
+					margin_top = (frame_height - csize)/4;
+				}
+			}
+			else{
+				// non-touch: center vertically
+				margin_top = (frame_height - csize)/2;
+			}
+		}
+
+		// skip if relevant state has not changed
+
+		var update_hash = csize + margin_top * 1000.3 + margin_left * 0.001 + frame_width * 333.33 + frame_height * 772.15134;
+		if (is_fullscreen) update_hash += 0.1237;
+
+		// unexpected things can happen in the first few seconds, so just keep re-calculating layout. wasm version breaks layout otherwise.
+		// also: bonus refresh at 5, 8 seconds just in case ._.
+		if (p8_layout_frames < 180 || p8_layout_frames == 60*5 || p8_layout_frames == 60*8 )
+			update_hash = p8_layout_frames;
+
+		if (!is_fullscreen) // fullscreen: update every frame for safety. should be cheap!
+		if (!p8_touch_detected) // mobile: update every frame because nothing can be trusted
+		if (p8_update_layout_hash == update_hash)
+		{
+			//console.log("p8_update_layout(): skipping");
+			requestAnimationFrame(p8_update_layout);
+			return;
+		}
+		p8_update_layout_hash = update_hash;
+
+		// record this for returning to original size after fullscreen pushes out container height (argh)
+		if (!is_fullscreen && p8_frame)
+			last_windowed_container_height = p8_frame.parentNode.parentNode.offsetHeight;
+		
+
+		// mobile in portrait mode: put screen at top (w / a little extra space for fullscreen button if needed)
+		// (don't cart too about buttons overlapping screen)
+		if (p8_touch_detected && p8_is_running && document.body.clientWidth < document.body.clientHeight)
+			p8_playarea.style.marginTop = p8_allow_mobile_menu ? 32 : 8;
+		else if (p8_touch_detected && p8_is_running) // landscape: slightly above vertical center (only relevant for iPad / highres devices)
+			p8_playarea.style.marginTop = (document.body.clientHeight - csize) / 4;
+		else
+			p8_playarea.style.marginTop = "";
+
+		canvas.style.width = csize;
+		canvas.style.height = csize;
+
+		// to do: this should just happen from css layout
+		canvas.style.marginLeft = margin_left;
+		canvas.style.marginTop = margin_top;
+
+		p8_container.style.width = csize;
+		p8_container.style.height = csize;
+
+		// set menu buttons position to bottom right
+		el = document.getElementById("p8_menu_buttons");
+		el.style.marginTop = csize - el.offsetHeight;
+
+		if (p8_touch_detected && p8_is_running)
+		{
+			// turn off pointer events to prevent double-tap zoom etc (works on Android)
+			// don't want this for desktop because breaks mouse input & click-to-focus when using codo_textarea
+			canvas.style.pointerEvents = "none";
+
+			p8_container.style.marginTop = "0px";
+
+			// buttons
+			
+			// same as touch event handling
+			var w = window.innerWidth;
+			var h = window.innerHeight;
+			var r = Math.min(w,h) / 12;
+
+			if (r > 40) r = 40;
+
+			el = document.getElementById("controls_right_panel");
+			el.style.left = w-r*6;
+			el.style.top = h-r*7;
+			el.style.width = r*6;
+			el.style.height = r*7;
+			if (el.getAttribute("src") != p8_gfx_dat["controls_right_panel"]) // optimisation: avoid reload? (browser should handle though)
+				el.setAttribute("src", p8_gfx_dat["controls_right_panel"]);
+
+			el = document.getElementById("controls_left_panel");
+			el.style.left = 0;
+			el.style.top = h-r*6;
+			el.style.width = r*6;
+			el.style.height = r*6;
+			if (el.getAttribute("src") != p8_gfx_dat["controls_left_panel"]) // optimisation: avoid reload? (browser should handle though)
+				el.setAttribute("src", p8_gfx_dat["controls_left_panel"]);
+			
+			// scroll to cart (need to stop running with X)
+			p8_frame.scrollIntoView(true);
+
+			document.getElementById("touch_controls_gfx").style.display="table";
+			document.getElementById("touch_controls_background").style.display="table";
+
+		}
+		else{
+			document.getElementById("touch_controls_gfx").style.display="none";
+			document.getElementById("touch_controls_background").style.display="none";
+		}
+
+		if (!p8_is_running)
+		{
+			p8_playarea.style.display="none";
+			p8_container.style.display="flex";
+			p8_container.style.marginTop="auto";
+
+			el = document.getElementById("p8_start_button");
+			if (el) el.style.display="flex";
+		}
+		requestAnimationFrame(p8_update_layout);
+	}
+
+
+	var p8_touch_detected = false;
+	addEventListener("touchstart", function(event)
+	{
+		p8_touch_detected = true;
+
+		// hide codo_textarea -- clipboard support on mobile is not feasible
+		el = document.getElementById("codo_textarea");
+		if (el && el.style.display != "none"){
+			el.style.display="none";
+		}
+
+	},  {passive: true});
+
+	function p8_create_audio_context()
+	{
+		if (pico8_audio_context) 
+		{
+			try {
+				pico8_audio_context.resume();
+			}
+			catch(err) {
+				console.log("** pico8_audio_context.resume() failed");
+			}	
+			return;
+		}
+
+		var webAudioAPI = window.AudioContext || window.webkitAudioContext || window.mozAudioContext || window.oAudioContext || window.msAudioContext;			
+		if (webAudioAPI)
+		{
+			pico8_audio_context = new webAudioAPI;
+
+			// wake up iOS
+			if (pico8_audio_context)
+			{
+				try {
+					var dummy_source_sfx = pico8_audio_context.createBufferSource();
+					dummy_source_sfx.buffer = pico8_audio_context.createBuffer(1, 1, 22050); // dummy
+					dummy_source_sfx.connect(pico8_audio_context.destination);
+					dummy_source_sfx.start(1, 0.25); // gives InvalidStateError -- why? hasn't been played before 
+					//dummy_source_sfx.noteOn(0); // deleteme
+				}
+				catch(err) {
+					console.log("** dummy_source_sfx.start(1, 0.25) failed");
+				}
+			}
+		}
+	}
+
+	function p8_close_cart()
+	{
+		// just reload page! used for touch buttons -- hard to roll back state 
+		window.location.hash = ""; // triggers reload
+	}
+
+	var p8_is_running = false;
+	var p8_script = null;
+	var Module = null;
+	function p8_run_cart()
+	{
+		if (p8_is_running) return;
+		p8_is_running = true;
+
+		// touch: hide everything except p8_frame_0
+		if (p8_touch_detected)
+		{
+			el = document.getElementById("body_0");
+			el2 = document.getElementById("p8_frame_0");
+			if (el && el2)
+			{
+				el.style.display="none";
+				el.parentNode.appendChild(el2);
+			}
+		}
+
+		// create audio context and wake it up (for iOS -- needs happen inside touch event)		
+		p8_create_audio_context();
+
+		// show touch elements
+		els = document.getElementsByClassName('p8_controller_area');
+		for (i = 0; i < els.length; i++)
+			els[i].style.display="";
+
+
+		// install touch events. These also serve to block scrolling / pinching / zooming on phones when p8_is_running
+			// moved event.preventDefault(); calls into pico8_buttons_event() (want to let top buttons pass through)
+		addEventListener("touchstart", function(event){ pico8_buttons_event(event, 0); }, {passive: false});
+		addEventListener("touchmove",  function(event){ pico8_buttons_event(event, 1); }, {passive: false});
+		addEventListener("touchend",   function(event){ pico8_buttons_event(event, 2); }, {passive: false});
+
+
+		// load and run script
+		e = document.createElement("script");
+		p8_script = e;
+		e.onload = function(){
+			
+			// show canvas / menu buttons only after loading
+			el = document.getElementById("p8_playarea");
+			if (el) el.style.display="table";
+
+			if (typeof(p8_update_layout_hash) !== 'undefined')
+				p8_update_layout_hash = -77;
+			if (typeof(p8_buttons_hash) !== 'undefined')
+				p8_buttons_hash = -33;
+
+
+		}
+		e.type = "application/javascript";
+		e.src = "rainbow-9.js";
+		e.id = "e_script";
+		
+		document.body.appendChild(e); // load and run
+
+		// hide start button and show canvas / menu buttons. hide start button
+		el = document.getElementById("p8_start_button");
+		if (el) el.style.display="none";
+
+		// add #playing for touchscreen devices (allows back button to close)
+		// X button can also be used to trigger this 
+		if (p8_touch_detected)
+		{
+			window.location.hash = "#playing";
+			window.onhashchange = function()
+			{
+				if (window.location.hash.search("playing") < 0)
+					window.location.reload();
+			}
+		}
+	}
+
+	
+	// gamepad  https://developer.mozilla.org/en-US/docs/Web/API/Gamepad_API/Using_the_Gamepad_API
+	// (sets bits in pico8_buttons[])
+	function p8_update_gamepads() {
+		var threshold = 0.3;
+		var max_players = 8;
+		var gps = navigator.getGamepads() || navigator.webkitGetGamepads();
+
+		if (!gps) return;
+
+		pico8_gamepads.count = gps.length;
+
+		for (var i = 0; i < gps.length && i < max_players; i++) {
+  			var gp = gps[i];
+			if (gp && gp.axes && gp.buttons)
+			{
+				pico8_buttons[i] = 0;
+
+				if (gp.axes[0] && gp.axes[0] < -threshold) pico8_buttons[i] |= 0x1;
+				if (gp.axes[0] && gp.axes[0] > threshold) pico8_buttons[i] |= 0x2;
+				if (gp.axes[1] && gp.axes[1] < -threshold) pico8_buttons[i] |= 0x4;
+				if (gp.axes[1] && gp.axes[1] > threshold) pico8_buttons[i] |= 0x8;
+
+				// buttons: first 4 are O/X; (almost) everything else taken to be menu button
+				// ref: https://w3c.github.io/gamepad/#remapping (er.. that mapping doesn't agree with xbox, buffalo snes)
+				for (j = 0; j < gp.buttons.length; j++)
+				if (gp.buttons[j].value > 0 || gp.buttons[j].pressed)
+				{
+					if (j < 4)
+						pico8_buttons[i] |= (0x10 << (((j+1)/2)&1)); // 0 1 1 0 0 1 -- A,X are O,X on xbox controller
+					else
+					{
+						if (j >= 6 && j <= 8) // PICO-8 0.2.0g: seems usually 6,7,8 are menu buttons (?) // others might be easy to accidentally bump
+							pico8_buttons[0] |= 0x40; // menu button
+					}
+				}
+			}
+		}
+
+		requestAnimationFrame(p8_update_gamepads);
+	}
+	requestAnimationFrame(p8_update_gamepads);
+
+	// key blocker. prevent cursor keys from scrolling page while playing cart.
+	// also don't act on M, R so that can mute / reset cart
+	document.addEventListener('keydown',
+	function (event) {
+		event = event || window.event;
+		if (!p8_is_running) return;
+		if (pico8_state.has_focus == 1)
+			if ([32, 37, 38, 39, 40, 77, 82, 80, 9].indexOf(event.keyCode) > -1)       // block cursors, M R P, tab
+				if (event.preventDefault) event.preventDefault();
+	},{passive: false});
+
+	// when using codo_textarea to determine focus, need to explicitly hand focus back when clicking a p8_menu_button
+	function p8_give_focus()
+	{
+		el = (typeof codo_textarea === 'undefined') ? document.getElementById("codo_textarea") : codo_textarea;
+		if (el)
+		{
+			el.focus();
+			el.select();
+		}
+	}
+
+	function p8_request_fullscreen() {
+
+		var is_fullscreen=(document.fullscreenElement || document.mozFullScreenElement || document.webkitIsFullScreen || document.msFullscreenElement);
+
+		if (is_fullscreen)
+		{
+			 if (document.exitFullscreen) {
+		        document.exitFullscreen();
+		    } else if (document.webkitExitFullscreen) {
+		        document.webkitExitFullscreen();
+		    } else if (document.mozCancelFullScreen) {
+		        document.mozCancelFullScreen();
+		    } else if (document.msExitFullscreen) {
+		        document.msExitFullscreen();
+		    }
+			return;
+		}
+		
+		var el = document.getElementById("p8_playarea");
+
+		if ( el.requestFullscreen ) {
+			el.requestFullscreen();
+		} else if ( el.mozRequestFullScreen ) {
+			el.mozRequestFullScreen();
+		} else if ( el.webkitRequestFullScreen ) {
+			el.webkitRequestFullScreen( Element.ALLOW_KEYBOARD_INPUT );
+		}
+	}
+
+</script>
+
+<STYLE TYPE="text/css">
+<!--
+.p8_menu_button{
+	opacity:0.3;
+	padding:4px;
+	display:table;
+	width:24px;
+	height:24px;
+	float:right;
+}
+
+@media screen and (min-width:512px) {
+	.p8_menu_button{
+		width:24px; margin-left:12px; margin-bottom:8px;
+	}
+}
+.p8_menu_button:hover{
+	opacity:1.0;
+	cursor:pointer;
+}
+
+canvas{
+    image-rendering: optimizeSpeed;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: optimize-contrast;
+    image-rendering: pixelated;
+    -ms-interpolation-mode: nearest-neighbor;
+	border: 0px;
+	cursor: none;
+}
+
+
+.p8_start_button{
+	cursor:pointer;
+	background:url("data:image/png;base64,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");
+	-repeat center;
+	-webkit-background-size:cover; -moz-background-size:cover; -o-background-size:cover; background-size:cover;
+}
+
+.button_gfx{
+	stroke-width:2;
+	stroke: #ffffff;
+	stroke-opacity:0.4;
+	fill-opacity:0.2;
+	fill:black;
+}
+
+.button_gfx_icon{
+	stroke-width:3;
+	stroke: #909090;
+	stroke-opacity:0.7;
+	fill:none;
+}
+
+-->
+</STYLE>
+
+</head>
+
+<body style="padding:0px; margin:0px; background-color:#222; color:#ccc">
+<div id="body_0"> <!-- hide this when playing in mobile (p8_touch_detected) so that elements don't affect layout -->
+
+
+<!-- Add any content above the cart here -->
+
+
+<div id="p8_desktop" style="display:block; position:absolute; top:10px; left:10px"></div> <!-- desktop for saving gifs / screenshots -->
+<div id="p8_frame_0" style="max-width:800px; max-height:800px; margin:auto;"> <!-- double function: limit size, and display only this div for touch devices -->
+<div id="p8_frame" style="display:flex; width:100%; max-width:95vw; height:100vw; max-height:95vh; margin:auto;">
+
+	<div id="p8_menu_buttons_touch" style="position:absolute; width:100%; z-index:10; left:0px;">
+		<div class="p8_menu_button" id="p8b_full"  style="float:left;margin-left:10px" onClick="p8_give_focus(); p8_request_fullscreen();"></div>
+		<div class="p8_menu_button" id="p8b_sound" style="float:left;margin-left:10px" onClick="p8_give_focus(); p8_create_audio_context(); Module.pico8ToggleSound();"></div>
+		<div class="p8_menu_button" id="p8b_close" style="float:right; margin-right:10px" onClick="p8_close_cart();"></div>
+	</div>
+
+	<div id="p8_container"
+		style="margin:auto; display:table;"
+		onclick="p8_create_audio_context(); p8_run_cart();">
+
+		<div id="p8_start_button" class="p8_start_button" style="width:100%; height:100%; display:flex;">
+			<img width=80 height=80 style="margin:auto;"
+		src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFAAAABQCAYAAACOEfKtAAABpklEQVR42u3au23DQBCEYUXOXIGKcujQXUgFuA0XIKgW90Q9oEAg+Ljd27vd2RsCf058gEDqhofPj+OB6SMCAQlIQAIyAhKQgARkBAQDnM6XSRsB7/2e/tSA0//12fCAKsQX3ntDA4oRFwBRIc0AixE38BAhTQGLEAsBUSDNAXcRhYDRIZsAPlp99VECRoXsDpgN0g0wC6Q7IDpkGEBUyG6A0+vKBtkdMBukG2AWSHdAdMgwgKiQ4QDRIMMCokCGB4wOCQPYFVKw2cABNocUjl6wgE0gFashPKAZpHJ2TQNYBVmxW6cDFENWDv9pAUshCVgJScBKSAISkD9hPkT4GkNAMdzepyj8Kye852EBLe51CZHHWQK4JcThD1SlcHPEYY/0a+A0n6SkGZV6w6WZNb3g4Id1b7hwgGhwYQBR4dwB0eHcALPAdQfMBhcOEA0uDCAqnDsgOpwbYBa4poA/31+rZYFrBriFpwGMCtcEcA9PAhgdzhywBK8EEQXOFFCCtwaIBmcGKMWbI6LCmQBq8R6hw5kAMgISkIAEJCAjIAEJSEBGQI9ukV7lRn9nD+gAAAAASUVORK5CYII="/>
+		</div>
+
+		<div id="p8_playarea" style="display:none; margin:auto;
+				-webkit-user-select:none; -moz-user-select: none; user-select: none; -webkit-touch-callout:none;
+		">
+
+			<div  id="touch_controls_background"
+				  style=" pointer-events:none; display:none; background-color:#000;
+						 position:fixed; top:0px; left:0px; border:0; width:100vw; height:100vh">
+				&nbsp
+			</div>
+
+			<div style="display:flex; position:relative">
+				<!-- pointer-events turned off for mobile in p8_update_layout because need for desktop mouse -->
+				<canvas class="emscripten" id="canvas" oncontextmenu="event.preventDefault();" >
+				</canvas>
+				<div class=p8_menu_buttons id="p8_menu_buttons" style="margin-left:10px;">
+					<div class="p8_menu_button" style="position:absolute; bottom:125px" id="p8b_controls" onClick="p8_give_focus(); Module.pico8ToggleControlMenu();"></div>					
+					<div class="p8_menu_button" style="position:absolute; bottom:90px" id="p8b_pause" onClick="p8_give_focus(); Module.pico8TogglePaused(); p8_update_layout_hash = -22;"></div>
+					<div class="p8_menu_button" style="position:absolute; bottom:55px" id="p8b_sound" onClick="p8_give_focus(); p8_create_audio_context(); Module.pico8ToggleSound();"></div>
+					<div class="p8_menu_button" style="position:absolute; bottom:20px" id="p8b_full" onClick="p8_give_focus(); p8_request_fullscreen();"></div>
+				</div>
+			</div>
+
+
+			<!-- display after first layout update -->
+			<div  id="touch_controls_gfx"
+				  style=" pointer-events:none; display:table; 
+						 position:fixed; top:0px; left:0px; border:0; width:100vw; height:100vh">
+
+					<img src="" id="controls_right_panel" style="position:absolute; opacity:0.5;">
+					<img src="" id="controls_left_panel" style="position:absolute;  opacity:0.5;">
+						
+			
+			</div> <!-- touch_controls_gfx -->
+
+			<!-- used for clipboard access & keyboard input; displayed and used by PICO-8 only once needed. can be safely removed if clipboard / key presses not needed. -->
+			<!-- (needs to be inside p8_playarea so that it still works under Chrome when fullscreened) -->
+			<textarea id="codo_textarea" class="emscripten" style="display:none; position:absolute; left:-9999px; height:0px; overflow:hidden"></textarea>
+
+		</div> <!--p8_playarea -->
+
+	</div> <!-- p8_container -->
+
+</div> <!-- p8_frame -->
+</div> <!-- p8_frame_0 size limit -->
+
+<script type="text/javascript">
+
+	p8_update_layout();
+	p8_update_button_icons();
+
+	var canvas = document.getElementById("canvas");
+	Module = {};
+	Module.canvas = canvas;
+
+	// from @ultrabrite's shell: test if an AudioContext can be created outside of an event callback.
+	// If it can't be created, then require pressing the start button to run the cartridge
+
+	if (p8_autoplay)
+	{
+		var temp_context = new AudioContext();
+		temp_context.onstatechange = function ()
+		{
+			if (temp_context.state=='running')
+			{
+				p8_run_cart();
+				temp_context.close();
+			}
+		};
+	}
+	
+</script>
+
+
+
+<!-- Add content below the cart here -->
+
+
+
+
+</div> <!-- body_0 -->
+</body></html>
+
