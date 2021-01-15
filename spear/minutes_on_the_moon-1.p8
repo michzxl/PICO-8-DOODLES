@@ -55,11 +55,10 @@ function _init()
 		15
 	},2)
 
-	poke(0x5f5f,0x10)
+	--poke(0x5f5f,0x10)
 	memset(0x5f70, 0b11001100, 16)
 
-	mode = -1
-	next_mode()
+	mode = 0
 
 	show = true
 end
@@ -70,10 +69,6 @@ function _update()
 	tf+=1
 	st8=sin(t/8)
 	ct8=cos(t/8)
-
-	if btnp(5) then
-		next_mode()
-	end
 
 	if btnp(4) then
 		show = not show
@@ -154,17 +149,6 @@ function _update()
 				end
 			end
 		end
-	end
-
-	if show then
-		rectfill(0,122,128,127,0)
-		rect(-1,121,128,128,0)
-		print(
-			"press x. (" .. (mode+1) .. "/4). press z to hide.",
-			0,
-			123,
-			7
-		)
 	end
 end
 
