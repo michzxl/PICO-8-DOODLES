@@ -1,2 +1,5 @@
 *.p8.png
 .lite_workspace.lua
+*.zip
+export.py
+export-doodles.py
