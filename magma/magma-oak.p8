@@ -1,7 +1,7 @@
 pico-8 cartridge // http://www.pico-8.com
 version 29
 __lua__
-t=0
+t=-rnd(5)
 dt=0.016
 █=1020
 kill=0
@@ -9,37 +9,48 @@ function sqr(a) return a*a end
 cls()
 ::♥::
 t+=dt
+t = t%24
+
 
 if btn(3) then t-=dt*2 end
 
 if btn(0) then kill-=.001 end
 if btn(1) then kill+=.001 end
 
-st=sin(t)
-st2=sin(t/4)
+local st=sin(t)
+local st2=sin(t/4)
+local st8
 
-for i=1,█ do
+
+for i=1,1000 do
 	--ang=rnd(1)
 	--d=rnd(50)
 	--x=cos(ang)*d
 	--y=sin(ang)*d
-	y=rnd(128)-64
-	x=rnd(128)-64
+	local y=rnd(128)-64
+	local x=rnd(128)-64
 
  --x=rnd(128)-64
 	--y=rnd(128)-64
- c=0
+ 	local c=0
 	c=c + sin((x-st*10)*(y-t*5-st*10)/10000)
 	
 	c=c + sin(sin(x/32)) * sin((y+t*10%100)/32)
 	
 	c=c+sin(x/64)
 	
-	p={10,9,8}
-	c=c+cos(sin(t/2)/2)
+	local p={10,9,8}
+	c=c+cos(st2/2)
 	c=p[flr(c)%3+1]
-	c=c*2
+	c=c*2 + t/4 + y*kill + y*sin(t/8)*0.01
+
+		+ (sin(t/8+0.1)*0.5+0.51)*1.4*(cos((x+y)/256 + 0.5) + cos((y-x) /256+ 0.5))
 	
+	c = c%16%7
+
+	if c-flr(c)<0.5*sin(t/8) then
+		c=0
+	end
 	
 	circ(x+64,y+64,1,c)
 end

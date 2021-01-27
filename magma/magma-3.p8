@@ -79,47 +79,43 @@ end
 
 pal(palettes.reds, 1)
 
-t=2
-dt=0.016
+local t=2
+local dt=0.016
 █=1000
-kill=0
+local kill=0
+local hh = 5000
 function sqr(a) return a*a end
 cls()
 ::♥::
 t+=dt
-t8=t%12
+t8=t%24
 
 if t8<1/30 then t=rnd(1) end
 
-st=sin(t)
-st4=sin(t/4)
-st2=sin(t/2)
+local st=sin(t)
+local st4=sin(t/4)
+local st2=sin(t/2)
 
 for i=1,1000 do
-	y=rnd(128)-64
-	ox=rnd(128)-64
-	x=ox
+	local y=rnd(128)-64
+	local ox=rnd(128)-64
+	local x = ox
 
- 	c=0
+ 	local c = 
+	 	(0 - 2*sin(y/(50+10*st) + t - 2*st2) - t) / 8
+		+ sin((ox-st*10)*(y-t*5-st*10)/hh)
+		+ sin(ox/32) * sin((y+t*10%100)/32)
+	local dd = flr(((ox - t/2)*2 / abs(y + 12*sgn(y))+t)/1.2)
+	local diff = dd - flr(dd)
+	c = c + (cos(t/16))*1.2*dd - t
 
-	c = (0 - 2*sin(y/(50+10*st) + t - 2*st2) - t) / 8
-
-	if t8>4 then c+=x/8 end
-	if t8>8 then c+=y/8 end
-	
-	hh = 5000
-	c=c + sin((x-st*10)*(y-t*5-st*10)/hh)
-	
-	c=c + sin(x/32) * sin((y+t*10%100)/32)
-
-	--p={10,9,8}
 	c = ctriwave(c+t*2, 5.6, 8.8, 6+st4*1)
-	--c=c%#palettes.reds+1
 	
 	circ(ox+64,y+64,1,c)
 end
 
 flip() goto ♥
+
 __gfx__
 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000

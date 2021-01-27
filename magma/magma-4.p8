@@ -54,7 +54,7 @@ palettes={
 	}
 }
 
-curr_pal=-1
+curr_pal=2
 function next_palette()
 	curr_pal = (curr_pal + 1)%5
 	pal(palettes[curr_pal], 1)

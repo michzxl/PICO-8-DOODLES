@@ -2,7 +2,66 @@ pico-8 cartridge // http://www.pico-8.com
 version 29
 __lua__
 
-#include palettes.lua
+palettes={
+	[0]={
+		0,
+		1+128,
+		1,
+		12+128,
+		12,
+		7,
+	},{
+		1+128,
+		1,
+		3+128,
+		3,
+		11+128,
+		11,
+		10+128,
+		10,
+		7+128,
+		7,
+	},{
+		0,
+		0,
+		0,
+		1+128,
+		1,
+		2+128,
+		8+128,
+		8,
+		14+128,
+		15+128,
+		15,
+		7,
+		7,
+		7,
+	},{
+		2+128,
+		2,
+		8+128,
+		8,
+		9+128,
+		9,
+		10,
+		7+128,
+		7,
+	},{
+		0+128,
+		2+128,
+		13+128,
+		5,
+		6+128,
+		6,
+		7,
+	}
+}
+curr_pal=1
+function next_palette()
+	curr_pal = (curr_pal + 1)%5
+	pal(palettes[curr_pal], 1)
+end
+next_palette()
 
 -- "complex" triangle wave, range [center - amplitude/2, center + amplitude/2]
 -- to visualize -> https://www.desmos.com/calculator/lbicgo2khe
@@ -19,8 +78,8 @@ function rtriwave(x, y1, y2, period)
     return ctriwave(x, amplitude, center, period)
 end
 
-function palettewave(x, palette, period)
-	return ctriwave(x, #palette/2+1.1, #palette-1.2, period)
+function palettewave(x, p, period)
+	return ctriwave(x, #p/2+1.1, #p-1.2, period)
 end
 
 function sqr(a) return a*a end
@@ -49,16 +108,19 @@ if btnp(5) then
 	next_palette()
 end
 
-for i=1,1000 do
-	x,y=rnd(128),rnd(128)
+local st16 = sin(t/16)
 
-	c = 0
+for i=1,1000 do
+	local x,y=rnd(128),rnd(128)
+
+	local c = 0
 	c=4*sin((x+t*8)/128)
-		 +4*sin((y+sin(t/16)*64)/64)
+		 +4*sin((y+st16*64)/64)
 		 +t*6
-	c = c/2
-	c = flr(c)
-	  + 8*flr(16*(atan2(4,(x-64)/(y/32)/16)) - t/2)
+	c = flr(c/2)
+	  + 5*flr(16*(atan2(4,(x-64)/(y/32)/16)) - t/2)
+	  + 5*flr(x/48 + y/100 - t/2)
+	  + flr(sin((y/8 + x/8+st16*2))/16)
 	c = palettewave(c, palettes[curr_pal], 16)
 	
 	circ(x,y,1,c)
@@ -68,6 +130,8 @@ if t<2 then
 	rectfill(0,120,128,128,0)
 	print("press x press x",0,120,7)
 end
+
+print(curr_pal,0,0,7)
 
 flip() goto ♥
 __label__
