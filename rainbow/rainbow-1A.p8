@@ -5,28 +5,50 @@ for i=0,7 do
 	pal(i,i+8+128,1)
 end
 
-t=0
+-- https://www.lexaloffle.com/bbs/?pid=46131
+pat={
+  0b1111111111111111,
+  0b0111111111111111,
+  0b0111111111011111,
+  0b0101111111011111,
+  0b0101111101011111,
+  0b0101101101011111,
+  0b0101101101011110,
+  0b0101101001011110,
+  0b0101101001011010,
+  0b0001101001011010,
+  0b0001101001001010,
+  0b0000101001001010,
+  0b0000101000001010,
+  0b0000001000001010,
+  0b0000001000001000
+}
+
+local t=0
 ::★::
 
 t+=0.01
-st3=sin(t/3)
-st5=sin(t/5)
+local st3=sin(t/3)
+local st5=sin(t/5)
+local ct3 = cos(t/3)
+local st8 = sin(t/8)
+local gg = 1.25*((sin(t/3+1.5))/2+0.5) + 0.05*st8
 
-for i=1,1700 do
-	x,y=rnd(128),rnd(128)
+for i=1,1500 do
+	local x,y=rnd(128),rnd(128)
 	
-	c=flr(
+	local c=flr(
 		     (x+sin(y/30+st5*5)*6*st3)/(24 * (st3-1.8)) 
 		    +y/(48 * (st3-1.8))
-		    +8*t
+		    +3*t
 	  )
 	c=c%8+8
 
-	if rnd(1)<1.25*st3 then
-		c-=8
-	end
+	fillp(pat[flr((
+		gg + x/128/32 + y/64/128
+	)*#pat)+1])
 	
-	circ(x,y,1,c)
+	circ(x,y,1,flr(c) + 16*flr(c - 8))
 end
 
 flip() goto ★

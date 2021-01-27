@@ -19,7 +19,10 @@ cls()
 ::♥::
 t+=dt tf+=1
 
-local r=30+sin(t/16)*12
+local st256 = sin(t/256)
+local st16 = sin(t/16)
+
+local r=35+sin(t/16)*12
 for i=1,r do
     ox=rnd(128+bk)-8
 	oy=rnd(128+bk)-8
