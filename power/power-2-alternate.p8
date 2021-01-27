@@ -117,10 +117,15 @@ function palmix(bits, region, length)
 end
 
 function draw_frame()
-	local rat = mid(0,128,t/ITS_TIME*128)
+	local rat = mid(0,150,t/ITS_TIME*128)
 	local col = 3
 	local col2 = 2
 	local mod = 16
+
+	line(1,1,1,126,0)
+	line(1,1,126,1,0)
+	line(1,126,126,126,0)
+	line(126,126,126,1,0)
 
 	line(0,3,rat-mod,3,col2)
 	
@@ -176,7 +181,7 @@ function particle_garbage()
 
 		local x,y = prt.pos:xy()
 		local vx,vy = prt.vel:xy()
-		line2(x,y,x+vx*4,y+vy*4,3)
+		line2(x,y,x+vx*4,y+vy*4,4)
 
 		if prt.vel:magn()<0.2 then 
 			del(prts,prt)

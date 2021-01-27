@@ -37,11 +37,16 @@ function _update()
 	local w = 100+16*sin(t/8)
 	local b = 1.9+0.5*sin(t/4)
 	local p = 16+1*cos(t/5)
-	for y=0,mid(0,127,t/ITS_TIME*128-16-2),1 do
+	local max = mid(0,150,t/ITS_TIME*128-16-2)
+	for y=0,max,1 do
 		local x = g(y,a,w,b,p)
 		x = x
+		if (max-y<4) then
+			fillp(0b0101101001011010.1)
+		end
 		line(2,y,x+2,y,3)
 		line(125,128-y,125-x,128-y,3)
+		fillp()
 	end
 	--fillp()
 
@@ -96,10 +101,15 @@ function boxblur(x,y,width)
 end
 
 function draw_frame()
-	local rat = mid(0,128,t/ITS_TIME*128)
+	local rat = mid(0,150,t/ITS_TIME*128)
 	local col = 3
 	local col2 = 2
 	local mod = 16
+
+	line(1,1,1,126,0)
+	line(1,1,126,1,0)
+	line(1,126,126,126,0)
+	line(126,126,126,1,0)
 
 	line(0,3,rat-mod,3,col2)
 	
@@ -122,6 +132,8 @@ function draw_frame()
 
 	pset(125,1,0)
 	pset(2,126,0)
+
+	
 end
 
 function particle_garbage()
@@ -155,7 +167,7 @@ function particle_garbage()
 
 		local x,y = prt.pos:xy()
 		local vx,vy = prt.vel:xy()
-		line2(x,y,x+vx*4,y+vy*4,3)
+		line2(x,y,x+vx*4,y+vy*4,4)
 
 		if prt.vel:magn()<0.2 then 
 			del(prts,prt)
