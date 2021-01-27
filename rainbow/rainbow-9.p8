@@ -20,25 +20,46 @@ local st16=sin(t/16)
 
 for i=1,1000 do
 	local x,y=rnd(128),rnd(128)
-	local c=16 
-	 + x / (32 + 16*st16) 
-	 + sin((y+200)/8/(x+32)) 
-	 + t/3
 
-	local diff=c-flr(c)
+	if x<64+32*sin(t/8) then
+		local c=16 
+		+ x / (32 + 16*st16) 
+		+ sin((y+200)/8/(x+32)) 
+		+ t/3
 
-	c=flr(c)
-	 +0.75*flr(x/64+y/16-t)
+		local diff=c-flr(c)
 
-	c=c%8+8
-	if diff<0.3 then
-		c-=8
+		c=flr(c)
+		+0.75*flr(x/64+y/16-t)
+
+		c=c%8+8
+		if diff<0.3 then
+			c-=8
+		end
+		
+		circ(x,y,1,c)
+	else
+		local c=16
+		
+		+ (x) / (32 + 16*st16) 
+		+ sin((y+200)/4/(x+32))/4
+		+ t/3
+
+		local diff=c-flr(c)
+
+		c=flr(c)
+		+0.75*flr(x/64+y/16-t)
+
+		c=c%8+8
+		if diff>0.5+0.2*sin(t/8) then
+			c-=8
+		end
+		
+		circ(x,y,1,c)
 	end
-	
-	circ(x,y,1,c)
-end
 
-print(smpl,0,0,0)
+	
+end
 
 flip() goto ♥
 __label__
