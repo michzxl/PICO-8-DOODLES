@@ -12,7 +12,6 @@ end
 
 function _update()
 	t += 1/30
-	//cls()
 
 	for i=1,1000 do
 		local x = rnd(128)
