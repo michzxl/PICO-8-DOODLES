@@ -7,17 +7,19 @@ __lua__
 #include _vec.lua
 
 function render_background()
-	for i=1,50 do
+	for i=1,100 do
 		ox,oy = rnd(128+bk)-8,rnd(128+bk)-8
 		for y=oy,oy+bk-1,2 do
 			for x=ox,ox+bk-1,1.8 do
 
-				c=sin(x/64)+sin(y/64)
+				c=flr(x/32 + flr(y/32) + 8*flr(t/4))*3+sin(y/64)
+					+ flr(y/32 + t*4)
 				c=c%(t*2) 
 				c=c+2*t --move it
 
-				c=c+cos((x+32)/(y+32) + sin(t/8))
-				 -sin(-(128-x+32)/(128-y+32) - sin(t/8))
+				c=c + 
+					cos((x/8+32) / (y+32) + sin(t/16)) + x/32
+				 	- sin(-(128-x+32) / (128-y+32) - sin(t/8))
 
 				c=2*13*abs((c/16%1)-1/2)-13/2+7.5
 				c=flr(c)%14+1 -- [1,14]
@@ -100,15 +102,7 @@ o.opos = o.pos
 o.pos = o.pos + o.vel
 o.pos.y = (o.pos.y+8)%(128+16) - 8
 
-for i=0,o.num-1 do
-	local pt = o.pos + o.vel:perp():norm(16-i*5)
 
-	c=t*8+i
-	c=2*13*abs((c/16%1)-1/2)-13/2+7.5
-	c=flr(c)
-	c=c%9+2 -- [1,14]
-	circfill(pt.x,pt.y,1,c)
-end
 
 render_background()
 
