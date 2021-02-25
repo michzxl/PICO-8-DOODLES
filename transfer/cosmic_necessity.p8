@@ -59,10 +59,10 @@ if t%20<16 then
 end
 
 for i=1,1500 do
-	x=rnd(128)
-	y=rnd(128)
+	local x=rnd(128)
+	local y=rnd(128)
 
-	c=sin((x-t*50)/40) 
+	local c=(sin((x-t*50)/40) 
 		/ cos((
 				y 
 				+ 5*sin(x/30)
@@ -71,8 +71,8 @@ for i=1,1500 do
 			/ 500) 
 		/ 20
 		* x/32 
-		- t*1.5
-	c=c%8+8
+		- t*1.5)
+	c = c%8+8
 
 	local diff = c - flr(c)
 	local fill = false
