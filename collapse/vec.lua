@@ -266,3 +266,5 @@ setmetatable(vec, {
 			z=z or 0,
 		}, _vec)
 end})
+
+function sqr(a) return a*a end

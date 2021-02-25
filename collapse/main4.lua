@@ -82,7 +82,7 @@ function _init()
 		"a presence\n..",
 		"in a perfect row\nof trees.",
 		"an absence\nof desire.",
-		" [////////////] \n [\\\\\\\\\\\\\\\\\\\\\\\\] "
+		""
 
 	---"jgjgjgjgjgjgjgjg\njgjgjgjgjgjgjgjg",
 	}
@@ -103,11 +103,7 @@ function _update()
 
 	t+=1/30
 	ti += 1
-
-	if t>1 and t%4<=1/30 then
-		istr = (istr+1)%(#strs+1)
-		cstr = strs[istr]
-	end
+	t8 = t - 8
 
 	local aaf = mid(0.4,0.7,(st16+1)/2*0.7+0.2)
 	aaf = 0.7
@@ -161,14 +157,21 @@ function _update()
 	end
 	clip()
 
-	if rnd(1)<0.02 then cstr = replace_char(cstr,"-",flr(rnd(#cstr))+1) end
+	if t8>0 then
+		if t8>1 and t8%4<=1/30 then
+			istr = (istr+1)%(#strs+1)
+			cstr = strs[istr]
+		end
 
-	local s = cstr
-	rprint(s,0,112,0,1,{
-		ang=fang,
-		pos=fpos,
-		trans=0,
-	})
+		if rnd(1)<0.02 then cstr = replace_char(cstr,"-",flr(rnd(#cstr))+1) end
+
+		local s = cstr
+		rprint(s,0,112,0,1,{
+			ang=fang,
+			pos=fpos,
+			trans=0,
+		})
+	end
 end
 
 fang=function(char,i,x,y)
