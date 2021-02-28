@@ -8,27 +8,43 @@ function nsin(a) return (sin(a)+1)/2 end
 function ncos(a) return (cos(a)+1)/2 end
 function tan(a) return sin(a)/cos(a) end
 function drw_mouse(x,y) spr(255,x,y) end
+function _f(x,a,p)
+	local x = x % (4*p)
+	if x<p then
+		return a/p*x
+	elseif x<2*p then
+		return a
+	elseif x<3*p then
+		return -a/p*x + 3*a
+	else
+		return 0
+	end
+end
 poke(0x5f2d, 1)--enable mouse
-p={}
+local p={}
 for i=1,#p do
 	if p[i]~='' then
 		pal(i,p[i],1)
 	end
 end
 
+local cx,cy = 0,0
+
 ░=1000
-dt=0.0333
-t=0
+local dt=0.0333
+local t=0
 
 cls()
 ::♥::
-t+=dt
-mx,my=stat(32),stat(33)
+local st8 = sin(t/8)
+
+t+=1/30
+local mx,my=stat(32),stat(33)
 
 for x=0,128,8 do
 	for y=0,128,8 do
-		n=4*sin((x+t*16)/128)
-		 +4*sin((y+sin(t/8)*64)/64)
+		local n=4*sin((x+t*16)/128)
+		 +4*sin((y+st8*64)/64)
 		 +t*6
 		
 		n=n%26
@@ -37,18 +53,26 @@ for x=0,128,8 do
 	end
 end
 
-for i=1,1000 do
-	x,y=rnd(128),rnd(128)
+
+for i=1,2500 do
+	local x,y=rnd(128),rnd(128)
 	
-	ms=mget(x/8,y/8)
+	if (x+t*32)%100>(100-24) then
+		local c = (x/32+y/32)%2\1*7
+		if c>-1 then
+			fillp(0b0101111110101111.1)
+			circ(x,y,1,c)
+			fillp()
+		end
+	else
+		local ms=mget(x/8,y/8)
+		local c=sget(8*flr(ms%16)+x%8,8*flr(ms/16)+y%8)
+		pset(x,y,c)
+	end
 	
-	sx=8*flr(ms%16)+x%8
-	sy=8*flr(ms/16)+y%8
-	c=sget(sx,sy)
-	
-	circ(x,y,1,c)
 end
 
+clip()
 flip() goto ♥
 __gfx__
 777777770000000000000000000000000007000000000000000000000000000070060076077777707d7d7d7d0777770007770777777777777777777700000000

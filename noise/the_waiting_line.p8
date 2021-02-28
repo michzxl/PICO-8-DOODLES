@@ -17,6 +17,7 @@ for i=1,1500 do
 	local c=x/16+sin((y)/200)
 	c=c+abs(sin(t/16))*flr(x/60+y/64)
 	c=c+sin(x/128)
+		+ (sqrt((x*1.1)*(x*1.1)+(y)*(y))>60 and 1 or 0)
 	c=c+t
 	
 	c=c%8+8

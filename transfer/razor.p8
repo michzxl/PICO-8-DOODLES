@@ -21,11 +21,26 @@ for i=1,100 do
         for x=ox,ox+bk-1,hx do
             c=5/4*flr(x/16+y/16+t)
             c=c + flr(x/64+y/86+t/2)
+
+            local diff = c - flr(c)
+
             c=flr(c%2)*7
+
+            if diff<0.2 then
+                c += 2 + 0.5*sin(t/16)
+            end
+
             pset(x,y,c)
         end
     end
 end
+
+local x = 64 + 3*sin(t/16)
+local y = 64 + 3*cos(t/16)
+fillp(0b1010111101011111.1)
+circ(x,y,32,15)
+circ(x,y,30,15)
+fillp()
 
 flip() goto ♥
 __label__

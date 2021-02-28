@@ -9,9 +9,9 @@ t+=dt
 ti+=1
 
 for i=1,1500 do
-	a,r=rnd(1),sqrt(rnd(64*64*s2*s2))
-	x,y=64+r*c(a),64+r*s(a)
-	p=sin(a * (cos(t/24) + 1))
+	local a,r=rnd(1),sqrt(rnd(64*64*s2*s2))
+	local x,y=64+r*c(a),64+r*s(a)
+	local p=sin(a * (cos(t/24) + 1))
 	  / cos(a+sin(x/1000)-t/16)*2
 	circ(x,y,1,p)
 end

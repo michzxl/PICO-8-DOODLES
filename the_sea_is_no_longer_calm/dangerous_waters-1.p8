@@ -2,6 +2,9 @@ pico-8 cartridge // http://www.pico-8.com
 version 29
 __lua__
 
+pal(0,12,1)
+pal(7,12+128,1)
+
 dt=1/30
 t=0
 tf=0

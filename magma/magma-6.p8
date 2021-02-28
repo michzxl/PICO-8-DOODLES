@@ -95,10 +95,10 @@ st2=sin(t/4)
 st1=sin(t/2)
 
 for i=1,1100 do
-	y=rnd(128)-64
-	x=rnd(128)-64
+	local y=rnd(128)-64
+	local x=rnd(128)-64
 
-	c= (x - 2*sin(y/(50+10*st) + t - 2*st1) - t) / 8
+	local c= (x - 2*sin(y/(50+10*st) + t - 2*st1) - t) / 8
 		+ sin((x-st*10)*(y-t*5-st*10)/10000)
 		+ sin(x/32) + sin((y+t*10%100)/32)
 	

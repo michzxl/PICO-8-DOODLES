@@ -80,7 +80,7 @@ function palettewave(x, palette, period)
 	return ctriwave(x, #palette/2+1.1, #palette-1.2, period)
 end
 
-t=0
+local t=0
 dt=0.016
 █=1020
 kill=0
@@ -100,9 +100,9 @@ st2=sin(t/8)
 st1=sin(t/4)
 
 for i=1,1000 do
-	x=rnd(128)-64
-	y = rnd(128)-64
-	c= (x - 2*(y/(50+10*st) + t/2 - 2*st1) - t/2) / 8
+	local x=rnd(128)-64
+	local y = rnd(128)-64
+	local c= (x - 2*(y/(50+10*st) + t/2 - 2*st1) - t/2) / 8
 
 		+ sin((x-st*10)*(y-t*5-st2*10)/500)
 		+ sin(x/32) * sin((y+t*10%100)/32)
