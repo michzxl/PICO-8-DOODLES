@@ -82,6 +82,9 @@ vec = {
 	perp = function(self, len)
 		return vec(-self.y, self.x):norm(len)
 	end,
+	perpl=function(self)
+		return vec(-self.y,self.x)
+	end,
 	cross = function(A, B)
 		return vec(
 			A.y*B.z - A.z*B.y,

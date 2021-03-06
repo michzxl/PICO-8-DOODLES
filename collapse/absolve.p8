@@ -1,12 +1,33 @@
 pico-8 cartridge // http://www.pico-8.com
-version 29
+version 30
 __lua__
 #include palettes.lua
 #include vec.lua
 #include poly.lua
 #include util.lua
+#include subpixel.lua
+
+local parts = {}
 
 function _init()
+    pal({
+		3+128,
+		1+128,
+		1,
+		2+128,
+		8+128,
+		8,
+		14+128,
+		15+128,
+		15,
+		7,
+        0+128,
+        2+128,
+        5+128,
+        5,
+        6+128,
+	},1)
+
 	dt=1/30
 	t=0
     tf=0
@@ -21,9 +42,10 @@ function _update()
     tf+=1
 
     local st4 = sin(t/4)
+    local ct4 = cos(t/4)
 
     if rnd(1)<0.5 then
-        local x,y = rnd(128), rnd(128)
+        local x,y = rnd(124)+2, rnd(124)+2
         local p = rnd(#palettes[curr_pal])+1
         line(x-4,y-4,x+4,y+4,p)
         line(x-4,y-3,x+3,y+4,p)
@@ -34,7 +56,7 @@ function _update()
     end
 
     for i=1,25 do
-        local x,y = rnd(128), rnd(128)
+        local x,y = rnd(124)+2, rnd(124)+2
         local p = pget(x,y)
         if p~=0 then
             if rnd(1)<0.5 then
@@ -51,7 +73,7 @@ function _update()
     end
 
     if rnd(1)<0.1 then
-		x,y = 0,rnd(128)
+		x,y = 0,rnd(124)+2
 		while x <= 128 do
 			nx = x + 8
 			ny = y + rnd(16) - 8
@@ -78,7 +100,7 @@ function _update()
     end
 
     for i=1,175 do
-        local x,y = rnd(128),rnd(128)
+        local x,y = rnd(124)+2,rnd(124)+2
         local p = flr(boxblur(x,y,2) + 0.5)
         circ(x,y,1,p)
     end
@@ -87,7 +109,7 @@ function _update()
     polyv(circle,vec(64,64),palettewave(t-4, palettes[curr_pal], 16))
 
     for i=1,1200 do
-        local ang1,r1 = rnd(1),sqrt(rnd(64*64*2))
+        local ang1,r1 = rnd(1),sqrt(rnd(60*60*2))+2
         local ang2,r2 = ang1, r1 + 1.2
 
         local x1,y1 = r1*cos(ang1),r1*sin(ang1)
@@ -96,7 +118,75 @@ function _update()
         local smpl = pget(x1+64,y1+64)
 
         if smpl~=0 then
-            circ(x2+64,y2+64,1,smpl)
+
+            circ(x2+64,y2+64,1,smpl\1)
+        end
+    end
+
+    if rnd(1)<0.4 then
+        local x,y
+        if rnd(1)<0.5 then
+            x = -1
+            y = rnd(128)
+        else
+            x = rnd(128)
+            y = -1
+        end
+        local pos = vec(x,y)
+
+        local ang = -1/6 -1/32 + rnd(1/32)-1/64
+        local spd = 4
+        local vel = vec.frompolar(ang,spd)
+
+        add(parts,{
+            pos = pos,
+            vel = vel,
+            life = 180
+        })
+    end
+
+    for part in all(parts) do
+        local pos,vel = part.pos,part.vel
+
+        part.life -= 1
+
+        pos:set(pos + vel)
+
+        local p1 = pos
+        local p2 = pos + vel*4
+        local c = pget(p1.x,p1.y)
+        local p = c~=0 and c or 2
+        line2(p1.x,p1.y,p2.x,p2.y,p)
+
+        if pos.x>150 or pos.y>150 or part.life<0 then
+            del(parts,part)
+        end
+    end
+
+    if t%8>7 then
+        local ox,oy = rnd(16)-8,rnd(16)-8
+        fillp(rnd(36000))
+        rectfill(64-12-ox,64-12-oy,64+12+ox,64+12+oy,12)
+        fillp()
+
+        local ang = t
+        local r = 12
+        local dir = vec.frompolar(ang,r)
+        local pdir = vec.frompolar(ang+0.25+0.25*sin(t/2),r + sin(t/8)*2)
+        local ori = vec(64,64)
+        
+        local p1 = ori + dir
+        local p2 = ori - dir
+
+        local p3 = ori + pdir
+        local p4 = ori - pdir
+
+        line(p1.x,p1.y,p2.x,p2.y,10)
+        line(p3.x,p3.y,p4.x,p4.y,10)
+
+        for part in all(parts) do
+            part.vel = (part.pos - vec(64,64)):norm(rnd(2)+2)
+            part.pos = vec(64,64)
         end
     end
 end

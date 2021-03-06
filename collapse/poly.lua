@@ -151,3 +151,23 @@ function ngon_maker(n, use_min)
         return top / bot
     end
 end
+
+function polyfill(points,cen,col)
+	local xl,xr,ymin,ymax={},{},129,0xffff
+	for k,v in ipairs(points) do
+		local p1, p2 = v + cen, points[k%#points+1] + cen
+		local x1,y1,x2,y2,x_array=p1.x,flr(p1.y),p2.x,flr(p2.y),xr
+		if y1 == y2 then
+			xl[y1],xr[y1]=min(xl[y1] or 32767,min(x1,x2)),max(xr[y1] or 0x8001,max(x1,x2))
+		else
+			if (y1>y2) then x_array,y1,y2,x1,x2=xl,y2,y1,x2,x1 end
+			for y=y1,y2 do
+				x_array[y]=flr(x1+(x2-x1)*(y-y1)/(y2-y1))
+			end
+		end
+		ymin,ymax=min(y1,ymin),max(y2,ymax)
+	end
+	for y=ymin,ymax do
+		rectfill(xl[y],y,xr[y],y,col)
+	end
+end
