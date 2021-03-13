@@ -1,5 +1,5 @@
 pico-8 cartridge // http://www.pico-8.com
-version 29
+version 30
 __lua__
 level=64
 box={
@@ -9,7 +9,21 @@ box={
 	vy=0
 }
 
-pal(1,12+128,1)
+pal(1,1,1)
+pal(2,1+128,1)
+pal(7,6+128,1)
+
+ppp = {
+	1+128,
+	2+128,
+	4+128,
+	4,
+	4+128,
+	2+128
+}
+for i=1,#ppp,1 do
+	pal(i+8-1,ppp[i],1)
+end
 
 --fillp(0b1100110000110011)
 
@@ -48,35 +62,79 @@ function _update60()
 end
 
 function _draw()
-	cls()
+	--cls()
 	--fillp()
-	rectfill(0,0,128,128,12)
+	--cls(12)
+
+	for i=1,800 do
+		local x,y=rnd(128),rnd(128)
+		local c = flr(x/64 + y/32 + t)
+		c += (8*(x/2)/(y*2+40) - t)
+			+  ((y/2)/(x+16))/4
+		c = c%6+8
+
+		local fill = 0
+		if c - flr(c) > 0.5 then
+			fill = 0b1111000011110000.1
+		end
+
+		fillp(fill)
+		circ(x,y,1,flr(c%16) + 16*flr(mid(c%16-2,13,7)))
+		fillp()
+	end
 	
 	bb=4+sin(t/8)*1.2
 	for i=0-128,128,bb do
 		--line(i,w(i),i+bb,w(i+bb))
-		line(i,
-		w(i)+sin(t)*2,
-		i+128+(sin(t/16))*20+sin(i/64-t*0.7)*20,
-		128+64,7)
-		
-		fillp(0b1010010110100101.1)
-		line(i,
-		w(i)+sin(t)*2
-		 -(sin(t/4)+1)*.5*16,
-		i,0,1)
-		fillp()
+
+		rectfill(
+			i,
+			w(i)+sin(t)*2
+				- (sin(t/4)+1)*.5*16 
+				+ 8*sin(t/4+i/128) + 8,
+			i+bb-1,
+			128,
+			1
+		)
+	end
+
+	for i=0-128,128,bb do
+		--line(i,w(i),i+bb,w(i+bb))
+
+		tline(
+			i,
+			w(i)+sin(t)*2,
+			i+128+(sin(t/16))*20+sin(i/64-t*0.7)*20,
+			128+64,
+			0,
+			0,
+			1/8+1/16*sin(t/4+i/128),
+			0
+		)
 	end
 	
-	rectfill(box.x1,box.y1,box.x2,box.y2,7)
+	--rectfill(box.x1,box.y1,box.x2,box.y2,1)
 end
+
+function line2(x1,y1,x2,y2,c)
+	local num_steps=max(
+	 abs(flr(x2)-flr(x1)),
+	 abs(flr(y2)-flr(y1)))
+	local dx=(x2-x1)/num_steps
+	local dy=(y2-y1)/num_steps
+	for i=0,num_steps do
+	 pset(x1,y1,c)
+	 x1+=dx
+	 y1+=dy
+	end
+  end
+
+function pset2(x,y,c)
+	pset(x+0.5,y+0.5,c)
+end
+
 __gfx__
-00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-00700700000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-00077000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-00077000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-00700700000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+77777777777777777700007770077077770770770707077700000007770700070007000700070007000700070707070707070707070707070707070707070707
 __label__
 cccscccccscccccscccccscccccscccccscccccscccccscccccscccccscccccscccccscccccccscccccscccccscccccscccccscccccscccccscccccscccccscc
 scccccscccccscccccscccccscccccscccccscccccscccccscccccscccccscccccscccccscscccccscccccscccccscccccscccccscccccscccccscccccsccccc
@@ -207,3 +265,5 @@ c7cccc7ccccc7ccccc7cccc7cccc7cccc7ccc7ccc7cc77c777777ccc7cccc7cccc7ccccc7cccc7cc
 cc7cccc7cccc7ccccc7ccccc7cccc7cccc7ccc7ccc7ccc7cc77777ccc7ccc7ccccc7cccc7ccccc7cccc7cccc7ccccc7ccc7cccc77ccc7ccc7cc7c7777cc7cc7c
 ccc7cccc7cccc7ccccc7ccccc7cccc7cccc7ccc7ccc7ccc7cc77777ccc7ccc7ccccc7cccc7ccccc7cccc7cccc7ccccc7ccc7ccccc7ccc7ccc7cc7c77c7cc7cc7
 
+__map__
+010102030405060708090a0b0c0d0e0f00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
