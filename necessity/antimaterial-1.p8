@@ -2,7 +2,7 @@ pico-8 cartridge // http://www.pico-8.com
 version 29
 __lua__
 █=1350
-dt=0.0333
+dt=0.029
 t=0
 
 function sqr(a) return a*a end
@@ -21,7 +21,7 @@ cls()
 t+=dt
 k=8
 
-for i=1,█ do
+for i=1,1200 do
 	xa,ya=rnd(128)-64,rnd(128)-64
 	
 
