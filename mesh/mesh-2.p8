@@ -14,21 +14,24 @@ cls()
 cls()
 t+=dt
 
+local st8 = sin(t/8)
+local ct6 = cos(t/6)
+
 k=64
 j=10+sin(t/4)
 for xa=-k-sin(t/3)*8,128+k,j do
 	for ya=-2*k,128+2*k,j do
-		x,y=xa+cos(t/6)*8,ya+sin(t/8)*16
+		local x,y=xa+ct6*8,ya+st8*16
 	
-		h=3*(sin(cos(y/256-t/200)+1)+1)
+		local h=3*(sin(cos(y/256-t/200)+1)+1)
 			+4*(sin(x/128-t)+1)
 		
-		x2,y2=xa+j,ya
-		x2,y2=x2+cos(t/6)*8,y2+sin(t/8)*16
-		h2=3*(sin(sin(y2/256-t/8)+1)+1)+4*(sin(x2/256-t)+1)
+		local x2,y2=xa+j,ya
+		local x2,y2=x2+ct6*8,y2+st8*16
+		local h2=3*(sin(sin(y2/256-t/8)+1)+1)+4*(sin(x2/256-t)+1)
 		
 		--line(x,y-h-1,x2,y2-h2-1,5)
-		line(x,y-h,x2,y2-h2,7)
+		line(x,y-h,x2,y2-h2+xa/8*sin(t/8),7)
 		
 	end
 end

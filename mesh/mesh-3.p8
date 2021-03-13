@@ -14,6 +14,7 @@ cls()
 --cls()
 t+=dt
 
+fillp(0b0101101001011010.1)
 k=64
 j=17+sin(t/4)
 for xa=-k-sin(t/3)*8,128+k,j do
@@ -32,6 +33,7 @@ for xa=-k-sin(t/3)*8,128+k,j do
 		
 	end
 end
+fillp()
 
 for i=1,1300 do
 	x,y=rnd(128),rnd(128)

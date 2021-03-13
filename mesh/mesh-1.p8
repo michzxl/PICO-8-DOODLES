@@ -14,6 +14,9 @@ function ctriwave(x, center, amplitude, period)
     local core = abs((x / p - 0.25) % 1 - 0.5)
     return 2 * a * core - a / 2 + b
 end
+function fflr(a,u)
+	return a\u*u
+end
 function line2(x1,y1,x2,y2,c)
  local num_steps=max(
   abs(flr(x2)-flr(x1)),
@@ -42,38 +45,46 @@ pal({
 cls()
 
 ::♥::
-cls()
+--cls()
 t+=dt
 
-k=64
-j=20
+for i=1,60 do
+	local ox=fflr(rnd(128+16)-8,8)
+	local oy=fflr(rnd(128+16)-8,8)
+	rectfill(ox,oy,ox+7,oy+7,0)
+end
+
+k=32
+j=10
 for xa=-k,128+k,j do
-	for ya=-2*k,128+2*k,j do
-		x,y=xa+cos(t/6)*8,ya+sin(t/8)*16
-	
-		h=3*(sin(sin(y/256-t/8)+1)+1)
-			+4*(sin(x/256-t)+1)
+	if stat(1)<0.95 then
+		for ya=-2*k,128+2*k,j do
+			local x,y=xa+cos(t/6)*8,ya+sin(t/8)*16
 		
-		--circ(x,y,1,5)
-		fillp(0b1010010110100101)
-		line(x,y,x,y-h+1,1)
-		fillp()
-		
-		x2,y2=xa,ya
-		x2,y2=x2+cos(t/6)*8,y2+sin(t/8)*16
-		h2=3*(sin(sin(y2/256-t/8)+1)+1)+4*(sin(x2/256-t)+1)
-		line2(x,y-h,x2,y2-h2,5)
-		
-		x2,y2=xa+j,ya
-		x2,y2=x2+cos(t/6)*8,y2+sin(t/8)*16
-		h2=3*(sin(sin(y2/256-t/8)+1)+1)+4*(sin(x2/256-t)+1)
-		line2(x,y-h,x2,y2-h2,2)
-		
-		c=(sin(x/512)*16+sin(y/128)*4)
-		c = ctriwave(c, 5.6, 8.8, 16)
-		circfill(x,y-h,(sin(t)+6)/2+sin(x/17),0)
-		circfill(x,y-h,(sin(t)+6)/2+sin(x/17)-2,0)
-		circ(x,y-h,(sin(t)+6)/2+sin(x/17),c)
+			local h=3*(sin(sin(y/256-t/8)+1)+1)
+				+4*(sin(x/256-t)+1)
+			
+			--circ(x,y,1,5)
+			fillp(0b1010010110100101)
+			line(x,y,x,y-h+1,1)
+			fillp()
+			
+			local x2,y2=xa,ya
+			x2,y2=x2+cos(t/6)*8,y2+sin(t/8)*16
+			local h2=3*(sin(sin(y2/256-t/8)+1)+1)+4*(sin(x2/256-t)+1)
+			line(x,y-h,x2,y2-h2,5)
+			
+			x2,y2=xa+j,ya
+			x2,y2=x2+cos(t/6)*8,y2+sin(t/8)*16
+			h2=3*(sin(sin(y2/256-t/8)+1)+1)+4*(sin(x2/256-t)+1)
+			line(x,y-h,x2,y2-h2,2)
+			
+			c=(sin(x/512)*16+sin(y/128)*4)
+			c = ctriwave(c, 5.6, 8.8, 16)
+			circfill(x,y-h,(sin(t)+6)/2+sin(x/17),0)
+			--circfill(x,y-h,(sin(t)+6)/2+sin(x/17)-2,0)
+			rectfill(x-h/2,y-h/2,x+h/2-1,y+h/2-1,c)
+		end
 	end
 end
 
