@@ -70,18 +70,61 @@ function rprint(s,dx,dy,a,w,p)
 			
 			pal(7,1,0)
 			rspr(sx,sy,xf,yf+1,af,w,p_trans)
-			rspr(sx,sy,xf,yf-1,af,w,p_trans)
+			--rspr(sx,sy,xf,yf-1,af,w,p_trans)
 			rspr(sx,sy,xf+1,yf,af,w,p_trans)
 			rspr(sx,sy,xf-1,yf,af,w,p_trans)
 			rectfill(xf,yf,xf+7,yf+5,1)
 
-			local col = f_col(char,i,x,y,a,w,dx,dy,line)
-			pal(7,col,0)
+			
+			pal(7,7,0)
 			rspr(sx,sy,xf,yf,af,w,p_trans)
 
 			x+=w*8
 		end
 	end
+end
+
+-- TODO: add a "levels" parameter...
+function subdivide(vs, levels, is_path)
+	if (levels<=0) return vs
+	if (levels==nil) levels = 1
+	local res = {}
+
+	local length = is_path and (#vs-1) or #vs 
+	for i=1,length do
+		local v = vs[i]
+		local w = is_path and vs[i+1] or vs[i%length+1]
+
+		local line = subdivide_line(v,w,levels)
+		line[#line] = nil
+
+		append(res, line)
+	end
+
+	if is_path then
+		add(res, vs[#vs])
+	end
+
+	return res
+end
+
+function append(t1, t2)
+	for elem in all(t2) do
+		add(t1, elem)
+	end
+	return t1
+end
+
+function subdivide_line(a, b, levels)
+	if (levels<=0) return {a,b}
+
+	-- a --- avg --- b
+	local avg = (a + b)/2
+	local aa = subdivide_line(a,  avg,levels-1)
+	local bb = subdivide_line(avg,b,  levels-1)
+	aa[#aa] = nil
+	append(aa,bb)
+	return aa
 end
 
 function leftmargin_fromcenter(str,starti,dx)

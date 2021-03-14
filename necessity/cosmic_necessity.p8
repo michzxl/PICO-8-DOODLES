@@ -4,6 +4,7 @@ __lua__
 
 #include util_cosmic_necessity.lua
 #include poly3.lua
+#include vec.lua
 #include maths2.lua
 #include subpixel2.lua
 
@@ -37,6 +38,8 @@ pal({
 },2)
 
 interval = 2
+
+ITS_TIME = 8
 
 t=-1/60
 ti = t
@@ -85,7 +88,7 @@ if t%20<16 then
 	fillp()
 end
 
-for i=1,1450 do
+for i=1,1400 do
 	local x=rnd(128)
 	local y=rnd(128)
 
@@ -136,6 +139,38 @@ rprint(s,0,0,0,1,{
 	trans=0,
 })
 
+local ang = 1/8 - 1/64 + 1/64*sin(t/8)
+local len = 64
+local wid = 28
+
+local fwd = vec.frompolar(ang,len)
+local sid = fwd:perp():norm(wid)
+
+local o = vec(4,128-4)
+local col = pget(o.x,o.y)
+
+local p1 = o + sid/2
+local p2 = o + sid/2 + fwd
+local p3 = o - sid/2 + fwd
+local p4 = o - sid/2
+
+local cen = (p1 + p3)/2
+
+local vs = {p1,p2,p3,p4}
+vs = subdivide(vs, 2, false)
+
+for i,v in ipairs(vs) do
+	local mod = 32*sgn(v.x - cen.x)
+	local y = (v.y + t*64)
+	if y%164<10 then
+		v.x += mod
+		v.y += mod/4
+	end
+end
+
+fillp(0b1111111100000000.1)
+POLY.polyv(vs,vec(),col-1)
+fillp()
 
 flip() goto ♥
 __gfx__

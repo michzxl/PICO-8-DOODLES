@@ -47,16 +47,10 @@ function POLY.polyv(vecs,cen,col)
 	local p1,p2
 	for i=1,len-1 do
 		p1,p2 = vecs[i] + cen, vecs[i+1] + cen
-		p1,p2 = drown_line(p1,p2)
-		if p1~=false then
-			line(p1.x,p1.y,p2.x,p2.y,col)
-		end
-	end
-	p1,p2 = vecs[len]+cen,vecs[1]+cen
-	p1,p2 = drown_line(p1,p2)
-	if p1~=false then
 		line(p1.x,p1.y,p2.x,p2.y,col)
 	end
+	p1,p2 = vecs[len]+cen,vecs[1]+cen
+	line(p1.x,p1.y,p2.x,p2.y,col)
 end
 
 function POLY.path(vecs,cen,col)
