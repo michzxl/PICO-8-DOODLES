@@ -406,7 +406,7 @@ function POLY.objdraw(obj, trans, rot, scale, wire, col)
 		local vs,n = f.vs,f.n 
 		local ramp = #reds
 
-		local light = (-(n.y - n.z*0.5 + n.x*1 + 0.1*sin(t/8+vs[1].x/16))+2.5/2)/3
+		local light = max(0,(-(n.y - n.z*0.5 + n.x*1 + 0.1*sin(t/8+vs[1].x/16))+2.5/2)/3 - 0.3)
 		local col = light*(ramp)+0.5
 		local fcol = flr(col)
 		local fill = FILLS[flr((col-fcol)*lenFILLS+1)]
