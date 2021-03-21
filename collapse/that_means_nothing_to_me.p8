@@ -178,6 +178,8 @@ function _update()
 	})
 	end
 
+
+	local jj = (t>3+maxtimer*#sourcetexts)
 	for ln in all(lines) do
 		ln.x = ln.x + ln.vx
 		ln.y = ln.y + ln.vy
@@ -200,10 +202,10 @@ function _update()
 		local v2 = pos - t1
 		
 		local va1,va2 = pos + t1:norm(t1:magn() - ln.minorlen / 2), pos - t1:norm(t1:magn() - ln.minorlen / 2)
-		local wa1 = va1 + t2
-		local wa2 = va1 - t2
-		local wb1 = va2 + t2
-		local wb2 = va2 - t2
+		local wa1 = va1 + t2 + (jj and (t2*sin(t/8+ln.x/32)) or vec())
+		local wa2 = va1 - t2 - (jj and (t2*sin(t/8+ln.x/32)) or vec())
+		local wb1 = va2 + t2 + (jj and (t2*sin(t/8+ln.x/32)) or vec())
+		local wb2 = va2 - t2 - (jj and (t2*sin(t/8+ln.x/32)) or vec())
 
 		local c1,c2 = 7,3
 		local f1,f2 = 0b0000000000000000, 0b1000010000100001.1

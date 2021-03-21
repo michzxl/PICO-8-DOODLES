@@ -25,6 +25,8 @@ function _init()
 	}
 	pal(medium_rare, 1)
 
+	collapse = false
+
 	scrw = 128
 	scrh = 128
 
@@ -73,8 +75,10 @@ function _update()
 	-- true during the last 8 seconds of each 16-sec interval
 	mod = t % 16 > 8
 
+	if (rnd(1)<0.0025) and not collapse then collapse = 1 end
+
 	-- draw a centered rectangle with color 0
-	if chn(0.5) then
+	if chn(0.5) and not collapse then
 		local x, y = rnd(scrw2/4), rnd(32)+16
 		rectfill(x, y, scrw - x, scrh - y, 0)
 	end
@@ -161,6 +165,13 @@ function _update()
 	-- draw a centered, randomly size circle sometimes
 	if chn(0.2) then
 		circ(scrw2, scrh2, rnd(64), rnd(10))
+	end
+
+	if collapse and collapse>0 then
+		collapse += 1
+		if collapse > 60 then
+			collapse = false
+		end
 	end
 
 end
