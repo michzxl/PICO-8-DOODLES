@@ -173,9 +173,9 @@ function _update()
 	local spos = pos - vec(0,8)*(#texts-1)
 
 	if t>3 and not (t>3+maxtimer*#sourcetexts) then
-	rprint(text,spos.x,spos.y,0,1,{
-		trans=3,
-	})
+		rprint(text,spos.x,spos.y,0,1,{
+			trans=3,
+		})
 	end
 
 
