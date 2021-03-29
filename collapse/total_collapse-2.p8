@@ -75,16 +75,23 @@ function _update()
 	-- true during the last 8 seconds of each 16-sec interval
 	mod = t % 16 > 8
 
-	if (rnd(1)<0.0025) and not collapse then collapse = 1 end
+	local ct = 10
+	if t%ct>ct-1 and not collapse then collapse = 1 end
 
 	-- draw a centered rectangle with color 0
-	if chn(0.5) and not collapse then
+	if rnd(1)<0.5 and not collapse then
 		local x, y = rnd(scrw2/4), rnd(32)+16
 		rectfill(x, y, scrw - x, scrh - y, 0)
 	end
 
 	if rnd(1)<0.1 then
 		rprint("make me",32+sin(t/8)*8,rnd(64)+32,0,1,{
+			trans=3,
+		})
+	end
+
+	if collapse then
+		rprint("collapse",(t*100\2*2)%128,flr((t*64 + 86)\8*8)%128,0,1,{
 			trans=3,
 		})
 	end
@@ -115,7 +122,7 @@ function _update()
 		line(64+x+ca,64+y+sa,64+x-ca,64+y-sa,10)	
 	end
 
-	if chn(0.01) then weird = rnd(num*2)%num end
+	if chn(0.01) then weird = flr(rnd(num*2)%num) end
 
 	do
 		x,y = 0,rnd(scrh)
@@ -173,7 +180,6 @@ function _update()
 			collapse = false
 		end
 	end
-
 end
 
 function chn(prob)
