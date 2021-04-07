@@ -1,16 +1,71 @@
 pico-8 cartridge // http://www.pico-8.com
 version 29
 __lua__
+
+function qsort(a,c,l,r)
+	c,l,r=c or function(a,b) return a<b end,l or 1,r or #a
+	if l<r then
+		if c(a[r],a[l]) then
+			a[l],a[r]=a[r],a[l]
+		end
+		local lp,k,rp,p,q=l+1,l+1,r-1,a[l],a[r]
+		while k<=rp do
+			local swaplp=c(a[k],p)
+			-- "if a or b then else"
+			-- saves a token versus
+			-- "if not (a or b) then"
+			if swaplp or c(a[k],q) then
+			else
+				while c(q,a[rp]) and k<rp do
+					rp-=1
+				end
+				a[k],a[rp],swaplp=a[rp],a[k],c(a[rp],p)
+				rp-=1
+			end
+			if swaplp then
+				a[k],a[lp]=a[lp],a[k]
+				lp+=1
+			end
+			k+=1
+		end
+		lp-=1
+		rp+=1
+		-- sometimes lp==rp, so 
+		-- these two lines *must*
+		-- occur in sequence;
+		-- don't combine them to
+		-- save a token!
+		a[l],a[lp]=a[lp],a[l]
+		a[r],a[rp]=a[rp],a[r]
+		qsort(a,c,l,lp-1       )
+		qsort(a,c,  lp+1,rp-1  )
+		qsort(a,c,       rp+1,r)
+	end
+end
+
+function line2(x1,y1,x2,y2,c)
+ local num_steps=max(
+  abs(flr(x2)-flr(x1)),
+  abs(flr(y2)-flr(y1)))
+ local dx=(x2-x1)/num_steps
+ local dy=(y2-y1)/num_steps
+ for i=0,num_steps do
+  pset(x1,y1,c)
+  x1+=dx
+  y1+=dy
+ end
+end
+
 pal(1,7,1)
 
 cls()
 
 cs={}
-for i=1,3 do
+for i=1,6 do
 	r=rnd(16)+16
 	c={x=rnd(128-r*2)+r,y=rnd(128-r*2)+r,
 	   r=r,
-	   xv=0.5,yv=-.5}
+	   xv=rnd(2)-1,yv=rnd(2)-1}
 	add(cs,c)
 end
 
@@ -24,27 +79,47 @@ function upd(c)
 		c.yv*=-1
 	end
 end
+t=-1/30
 
 ::♥::
+cls()
+
+t+=1/30
 
 foreach(cs,upd)
 
-for i=1,1400 do
-	local x=rnd(128)
-	local y=rnd(128)
-
-	local num=0
+local skip = 1
+for h=0,127,skip do
+	local ps = {}
 	for c in all(cs) do
-		local xcx,ycy,cr = x-c.x, y-c.y, c.r
-		if xcx*xcx + ycy*ycy < cr*cr then
-			num+=1
+		local r = c.r
+		local d = abs(h - c.y)
+		if d==r then
+			add(ps, c.x)
+		elseif d>r then
+		else
+			local a = sqrt(r*r - d*d)
+			add(ps,(c.x+a))
+			add(ps,(c.x-a))
 		end
 	end
 
-	if pget(x,y)==1 and num%2==0  then
-		circ(x,y,1,6)
-	else
-		circ(x,y,1,num%2)
+	qsort(ps)
+
+	local x = 0
+	local color = 0
+	if #ps>0 then
+		if ps[1]<0 then
+			x = ps[1]-1
+		end
+
+		for x2 in all(ps) do
+			rectfill(x\skip*skip,h,x2\skip*skip,h+skip-1,color)
+			color = (color+1)%2
+			x = x2
+		end
+
+		rectfill(x\skip*skip,h,128\skip*skip,h+skip-1,color)
 	end
 end
 
