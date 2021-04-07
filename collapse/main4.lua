@@ -79,10 +79,10 @@ function _init()
 		"a kind of hatred\nthat speaks.",
 		"what else\nis there?",
 		"another way\nto cry.",
-		"a presence\n..",
-		"in a perfect row\nof trees.",
+		"a doubt",
+		"that lingers like smoke.",
 		"an absence\nof desire.",
-		""
+		"",
 
 	---"jgjgjgjgjgjgjgjg\njgjgjgjgjgjgjgjg",
 	}

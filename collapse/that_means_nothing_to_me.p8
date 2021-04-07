@@ -102,6 +102,8 @@ function _update()
 	t += 1/30
 	if t>3 then timer += 1/30 end
 
+	palmix(((0b0000111100001111.0000111100001111) >>< flr(t*2))%(0b100000000),0,16)
+
 	if t>3 and timer>maxtimer and texti<=#sourcetexts then
 		timer -= maxtimer
 		add(texts, sourcetexts[texti])

@@ -8,12 +8,12 @@ function POLY.triv(a,b,c,col)
 		line(u.x,u.y,v.x,v.y,col)
 	end
 
-	local u,v = drown_line(b,c)
+	u,v = drown_line(b,c)
 	if u~=false then
 		line(u.x,u.y,v.x,v.y,col)
 	end
 
-	local u,v = drown_line(c,a)
+	u,v = drown_line(c,a)
 	if u~=false then
 		line(u.x,u.y,v.x,v.y,col)
 	end
@@ -34,7 +34,54 @@ function drown_line(a,b)
 	end
 end
 
-function POLY.quadv(a,b,c,d,col)
+function drown_tri(tri)
+	local a,b,c = tri[1],tri[2],tri[3]
+
+	if a.z<water and b.z<water and c.z<water then
+		return false
+	elseif a.z>=water and b.z>=water and c.z>=water then
+		return tri
+	end
+
+	local a1,a2,b1,b2
+
+	local below,above = {},{}
+	for i,v in ipairs(tri) do
+		if v.z<water then
+			add(below, {v, i})
+		else
+			add(above, {v, i})
+		end
+	end
+
+	if #below==1 then
+		if above[1][2] > above[2][2] then
+			return drown_tri_1_below(above[2][1],above[1][1],below[1][1])
+		else
+			return drown_tri_1_below(above[1][1],above[2][1],below[1][1])
+		end
+	else
+		if below[1][2] > below[2][2] then
+			return drown_tri_2_below(above[1][1],below[2][1],below[1][1])
+		else
+			return drown_tri_2_below(above[1][1],below[1][1],below[2][1])
+		end
+	end
+end
+
+function drown_tri_1_below(a1,a2,b)
+	local _,d1 = drown_line(a1,b)
+	local _,d2 = drown_line(a2,b)
+	return {a1,a2,d2,d1}
+end
+
+function drown_tri_2_below(a,b1,b2)
+	local _,d1 = drown_line(a,b1)
+	local _,d2 = drown_line(a,b2)
+	return {a,d2,d1}
+end
+
+function quadv(a,b,c,d,col)
 	line(a.x,a.y,b.x,b.y,col)
 	line(b.x,b.y,c.x,c.y,col)
 	line(c.x,c.y,d.x,d.y,col)
