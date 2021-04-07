@@ -71,7 +71,7 @@ function _update()
 	--	cls(7)
 	t+=1/30
 
-	for i=1,650 do
+	for i=1,500 do
 		x,y = rnd(128),rnd(128)
 
 		-- if btn(4) then
@@ -91,7 +91,7 @@ function _update()
 			local p=sget(x,y)
 			if sget(x+1,y)==p
 						and sget(x,y-1)==p
-						and rnd(1)<0.005 then
+						and rnd(1)<0.003 then
 				dr(x,y,rnd(2) + 8)
 			end
 
@@ -104,7 +104,7 @@ function _update()
 		end
 	end
 
-	angs = vec(
+	local angs = vec(
 		-1/16,
 		1/16,
 		0
@@ -116,7 +116,7 @@ function _update()
 		local row = base_ps[ty]
 		rot_ps[ty] = {}
 		for tx=0,#base_ps do
-			local v = base_ps[ty][tx]
+			local v = row[tx]
 
 			local w = ux*v.x + uy*v.y + uz*v.z
 			local u = 16*mid(-1,1,sin(t/6 + v.y/128))
@@ -132,7 +132,7 @@ function _update()
 		end
 	end
 
-	draw_ps(rot_ps)
+	draw_ps(rot_ps,angs)
 end
 
 function rotate_ps(ps, angs)
@@ -154,7 +154,7 @@ function rotate_ps(ps, angs)
 	return rot_ps
 end
 
-function draw_ps(ps)
+function draw_ps(ps,angs)
 	local y_forward = angs.x%1 > 0.5
 	local x_forward = angs.y%1 > 0.5
 
@@ -182,25 +182,26 @@ function draw_ps(ps)
 
 	for ty=y_start,y_end,y_step do
 		for tx=x_start,x_end,x_step do
-			local v = ps[ty][tx][1]
-			local v_orig = ps[ty][tx][2]
+			local psty = ps[ty]
+			local psty1 = ps[ty+1]
+
+			local v = psty[tx][1] + vec(64,64)
+			local v_orig = psty[tx][2]
 			local w = v_orig + vec(total_size/2, total_size/2)
-			v = v + vec(64,64)
-			--v = v + vec(64,64)
 
 			if tx~=#ps and ty~=#ps then
-				local v_right = ps[ty][tx+1][1] + vec(64,64)
-				local v_down = ps[ty+1][tx][1] + vec(64,64)
-				local v_across = ps[ty+1][tx+1][1] + vec(64,64)
+				local v_right = psty[tx+1][1]
+				local v_down = psty1[tx][1]
+				local v_across = psty1[tx+1][1]
 				
 				--polyf({v-vec(64,64), v_right, v_across, v_down}, vec(64,64), 0)
 				--polyv({v-vec(64,64), v_right, v_across, v_down}, vec(64,64), 7)
 
 				tquad(
 					v.x,v.y,
-					v_right.x,v_right.y,
-					v_across.x,v_across.y,
-					v_down.x,v_down.y,
+					v_right.x+64,v_right.y+64,
+					v_across.x+64,v_across.y+64,
+					v_down.x+64,v_down.y+64,
 					w.x/8,w.y/8,
 					size/8,size/8
 				)
