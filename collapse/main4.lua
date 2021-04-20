@@ -80,7 +80,7 @@ function _init()
 		"what else\nis there?",
 		"another way\nto cry.",
 		"a doubt",
-		"that lingers like smoke.",
+		"that lingers\nlike smoke.",
 		"an absence\nof desire.",
 		"",
 
