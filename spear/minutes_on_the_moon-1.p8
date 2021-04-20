@@ -65,88 +65,33 @@ end
 
 function _update()
 	-- cls()
-	t+=dt
+	if tf%(30*10)<30*7 then t+=dt else t+=dt/6 end	
 	tf+=1
-	st8=sin(t/8)
-	ct8=cos(t/8)
-
-	if btnp(4) then
-		show = not show
-		rectfill(0,121,128,127,0)
-	end
+	local st8=sin(t/8)
+	local ct8=cos(t/8)
+	local ss = (st8*0.5+0.5)
 
 	if t>30 then
 		t=rnd(17)-8
 	end
 
-	if mode==0 then
-		for i=1,75 do
-			ox,oy=get_oxy()
-			for y=oy,oy+bk-1,2 do
-				for x=ox,ox+bk-1,2 do
-					c = 6*flr(sin((x*8)/(y+16)/16 + t/3))
-						+ t
-						+ (x+t*4)\32*ct8*st8
-					c = flr(c) + flr(y/64-t/2) + 2*flr(y/90+t/2)
-					c=_color(c)
+	for i=1,70 do
+		local ox=rnd(128-24+bk)-8+12
+		local oy=rnd(128-24+bk)-8+12
+		for y=oy,oy+bk-1,2 do
+			for x=ox,ox+bk-1,2 do
+				c = ((sin((-y*8)/(x+y+32)/16 + t/8))\1*6
+					+ t 
+					+ 4*ss * (((x+16)/32)\1)
+					- 4*ss/2 * ((x+16)/32)\1 
+					+ ( 
+						sin((x+1*sin(t/8+y/32+x/8))/64) 
+						+ cos(y/64 - t/8) 
+						+ (t\4)
+					)\1
+					)\1 + (y/64-t/2)\1 + (y/90+t/2)\1*2
 
-					pset(x,y,c)
-				end
-			end
-		end
-	elseif mode==1 then
-		for i=1,25 do
-			local x,y = rnd(128),rnd(128)
-			local c = (boxblur(x,y,1)+0.5)
-			circ(x,y,1,c)
-		end
-		
-		for i=1,60 do
-			ox,oy=get_oxy()
-			for y=oy,oy+bk-1,2 do
-				for x=ox,ox+bk-1,1.2 do
-					c = 6*flr(-sin((-x*8)/(y+16)/16 + t/4)*0x0.ffff)
-						+ t
-						+ (x+t*4)\32*ct8*st8
-					c = flr(c) + flr(y/64-t/2) + 2*flr(y/90+t/2)
-					c=_color(c)
-
-					pset(x,y,c)
-				end
-			end
-		end
-	elseif mode==2 then
-		for i=1,75 do
-			ox,oy=get_oxy()
-			for y=oy,oy+bk-1,2 do
-				for x=ox,ox+bk-1,2 do
-					c = 6*flr(sin((x*8)/(y+16)/16 + t/3))
-						+ t
-						+ (x+t*4)\32*ct8*st8
-					c = flr(c) + flr(y/64-t/2) + 2*flr(y/90+t/2)
-						- flr(sin(x/32 + y/32 - t/2))
-						+ (sin(x/128) + cos(y/128) + t)
-					c = _color(c)
-
-					pset(x,y,c)
-				end
-			end
-		end
-	elseif mode==3 then
-		for i=1,70 do
-			ox,oy=get_oxy()
-			for y=oy,oy+bk-1,2 do
-				for x=ox,ox+bk-1,2 do
-					c = 6*flr(sin(((x*8) - t)/(y+16)/16 + t/3))
-						+ t
-						+ (x+t*4)\32*ct8*st8
-					c = flr(c) + flr(y/64-t/2) + 2*flr(y/90+t/2)
-						- flr(sin(x/128 + y/64 - t/2))
-						+ 2*flr(sin(x/128) + cos(y/128) + t)
-					c = _color(c)
-
-					pset(x,y,c)
-				end
+				pset(x,y,17.6 * abs(((c)/16-0.25)%1-0.5) + 1.1)
 			end
 		end
 	end
