@@ -2,7 +2,20 @@ pico-8 cartridge // http://www.pico-8.com
 version 29
 __lua__
 
-
+pal({
+	3+128,
+	3,
+	11+128,
+	11,
+	10+128,
+	7+128,
+	9,
+	9+128,
+	8,
+	8+128,
+	2,
+	2+128
+},1)
 
 function _init()
 	cls()
@@ -20,7 +33,7 @@ function _update()
 			ang = ang-t/8-2*abs(h)/16
 			if abs(ang%1)<0.5 then
 				local p = sphere_point(h,ang)*32+vec(64,64)
-				pset2(p.x,p.y,7)
+				pset(p.x,p.y,mid(0,12,pget(p.x,p.y)+1.75+rnd(0.5)))
 			end
 		end
 	end

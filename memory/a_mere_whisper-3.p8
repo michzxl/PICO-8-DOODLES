@@ -8,6 +8,21 @@ function sphere_point(height, ang)
 	return roty
 end
 
+pal({
+	3+128,
+	3,
+	11+128,
+	11,
+	10+128,
+	7+128,
+	9,
+	9+128,
+	8,
+	8+128,
+	2,
+	2+128
+},1)
+
 cls()
 t=0
 function _update()
@@ -20,7 +35,7 @@ function _update()
 			ang = ang-t/8-abs(h)*sin(t/16)
 			if abs((ang-t/6)%1-0.5)<0.25+0.2*sin(t/16) then
 				local p = sphere_point(h,ang)*32+vec(64,64)
-				pset(p.x,p.y,7)
+				pset(p.x,p.y,mid(0,12,pget(p.x,p.y)+1.75+rnd(0.5)))
 			end
 		end
 	end
