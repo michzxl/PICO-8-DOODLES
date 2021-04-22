@@ -124,54 +124,7 @@ function _update()
 
 	
 
-	local n = abs( 12+5*sin(t/4) )
-	n = n
-	local ns = {}
-	local lo = 1
-	local hi = n
-	local uselo = true
-	local cen = vec(24,24)
-
-	circfill(cen.x,cen.y,16,1)
-	circ(cen.x,cen.y,17,0)
-	for r=1,17,rnd(0.5)+1 do
-		circ(cen.x,cen.y,r,3)
-	end
-
-	while abs(lo-hi)>1 do
-		if uselo then
-			add(ns, lo)
-			lo += 1
-		else
-			add(ns, hi)
-			hi -= 1
-		end
-		uselo = not uselo
-	end
-	for i1=1,#ns  do
-		local p1 = ns[i1]
-		local i2 = i1%#ns+1
-		local p2 = ns[i2]
-
-		local a1,a2
-		
-		-- try changing to -t/8 !!!!
-		if t%12<4 then
-			a1 = p1 / n + t/8
-			a2 = p2 / n + t/8
-		elseif t%12<8 then
-			a1 = p1 / n + t/8 + sin(i1/64)
-			a2 = p2 / n + t/8 + sin(i2/64)
-		else
-			a1 = p1 / n - t/8 - p2/8			
-			a2 = p2 / n + t/8
-		end
-		
-		local v1 = vec.frompolar(a1, 16) + cen
-		local v2 = vec.frompolar(a2, 16) + cen
-		
-		line(v1.x,v1.y,v2.x,v2.y,5 + (i1%2==0 and 2 or 0))
-	end
+	
 
 	currtimer += 1/30
 	if (currtimer-overtime-wait)*currspd>#currtext then
@@ -333,6 +286,55 @@ function _update()
 		if stn.vel:sqrmagn() < sqr(isover and 0.05 or 0.05) then
 			del(stones,stn)
 		end
+	end
+
+	local n = abs( 12+5*sin(t/4) )
+	n = n
+	local ns = {}
+	local lo = 1
+	local hi = n
+	local uselo = true
+	local cen = vec(24,24)
+
+	circfill(cen.x,cen.y,16,1)
+	circ(cen.x,cen.y,17,0)
+	for r=1,17,rnd(0.5)+1 do
+		circ(cen.x,cen.y,r,3)
+	end
+
+	while abs(lo-hi)>1 do
+		if uselo then
+			add(ns, lo)
+			lo += 1
+		else
+			add(ns, hi)
+			hi -= 1
+		end
+		uselo = not uselo
+	end
+	for i1=1,#ns  do
+		local p1 = ns[i1]
+		local i2 = i1%#ns+1
+		local p2 = ns[i2]
+
+		local a1,a2
+		
+		-- try changing to -t/8 !!!!
+		if t%12<4 then
+			a1 = p1 / n + t/8
+			a2 = p2 / n + t/8
+		elseif t%12<8 then
+			a1 = p1 / n + t/8 + sin(i1/64)
+			a2 = p2 / n + t/8 + sin(i2/64)
+		else
+			a1 = p1 / n - t/8 - p2/8			
+			a2 = p2 / n + t/8
+		end
+		
+		local v1 = vec.frompolar(a1, 16) + cen
+		local v2 = vec.frompolar(a2, 16) + cen
+		
+		line(v1.x,v1.y,v2.x,v2.y,5 + (i1%2==0 and 2 or 0))
 	end
 	
 	if (isover) then 
