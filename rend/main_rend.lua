@@ -103,6 +103,8 @@ function _update()
 		end
 	end
 
+	
+
 	---=========---
 
 	rad *= scaley
@@ -220,7 +222,9 @@ function _update()
 		w - split/8,1
 	)
 
-	
+	if isover\1==1 then
+		stop()
+	end
 end
 
 function fflr(a,u)

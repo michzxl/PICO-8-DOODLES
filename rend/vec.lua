@@ -12,6 +12,9 @@ vec = {
 			vec(0,1,0),
 			vec(0,0,1)
 	end,
+	one = function()
+		return vec(1,1,1)
+	end,
 
 	ZERO = 0.001,
 
@@ -53,6 +56,10 @@ vec = {
 	end,
 	setpolar = function(self, ang, r)
 		return self:setc(r*cos(ang), r*sin(ang))
+	end,
+	rot = function(self,ang)
+		local m = self:magn()
+		return vec(m*cos(ang),m*sin(ang))
 	end,
 
 	magn = function(self)
@@ -216,7 +223,7 @@ vec = {
 			sy*sz - cy*sx*cz,
 			cy*cx
 		)
-		return ux,uy,uz
+		return vec(ux,uy,uz)
 	end,
 
 	rrot = function(v, config, a)
