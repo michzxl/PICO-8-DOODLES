@@ -4,6 +4,8 @@ __lua__
 ⧗=0
 a1=50
 
+pal(1,3+128,1)
+
 ::♥::
 if ⧗>5 then
 	⧗=-5
@@ -17,9 +19,29 @@ end
 
 --partial screen clear
 -- = fade effect
-for i=1,500 do
-	x,y=rnd(128),rnd(128)
-	circ(x,y,1,0)
+local bk=8
+local hx=1
+local hy=1
+for i=1,50 do
+  local ox,oy=rnd(136-bk)\bk*bk,rnd(136-bk)\bk*bk
+  for x=ox,ox+bk-1,hx do
+    for y=oy,oy+bk-1,hy do
+      circ(x,y,1,0)
+    end
+  end
+end
+
+for x=0,128,16+sin(⧗/24)*8 do
+ for y=0,128,16+sin(⧗/8)*8 do
+ 	if y<=128 and x<=128 then
+		r=3.5 * sin(⧗)
+			+ 4.5 * sin((y+x)/17)
+			+ 2.0 * sin(sin(y/a1%⧗/4))
+			+ 1
+		dx=x-(sin(⧗-x/8)*10)
+	  circfill(x,y,r+1,1)
+ 	end
+ end
 end
 
 --draw circles

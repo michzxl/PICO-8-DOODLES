@@ -1,6 +1,9 @@
 pico-8 cartridge // http://www.pico-8.com
 version 29
 __lua__
+
+pal(1,3+128,1)
+
 ⧗=0
 a1=50
 
@@ -9,15 +12,51 @@ if ⧗>5 then
 	⧗=-5
 end
 ⧗+=1/60
+t=⧗
 
 --reset param every 1 sec-ish
 if ⧗%1<0.05 then
 	a1=rnd(50)+25
 end
 
-for i=1,1000 do
-	x,y=rnd(128),rnd(128)
-	circ(x,y,1,0)
+local bk=8
+local hx=1
+local hy=1
+for i=1,50 do
+  local ox,oy=rnd(128-bk),rnd(120-bk)
+  for x=ox,ox+bk-1,hx do
+    for y=oy,oy+bk-1,hy do
+      circ(x,y,1,0)
+    end
+  end
+end
+
+-- for i=1,1000 do
+-- 	x,y=rnd(128),rnd(128)
+-- 	circ(x,y,1,0)
+-- end
+
+local skip = flr(6+2*sin(t/8))
+for x=0,127,skip+1 do
+  local oy = 128-32
+  y = oy 
+    + 8*sin((x-64)/128 + t/8) 
+    + 3*cos(cos(x/256 + t/16))
+    + 4*sin(x/64)
+    fillp(0b1010010110100101)
+  rectfill(x,127,x+skip-1,y-3,1)
+  fillp()
+  rectfill(x,127,x+skip-1,y,1)
+end
+
+for x=0,128,16 do
+ for y=0,128,16 do
+  r=  3.5 * sin(⧗)
+    + 4.5 * sin(x/17)
+    + 3.0 * sin(sin(y/a1%⧗/4))
+    + 4.0
+  circfill(x,y,r+1,1)
+ end
 end
 
 --draw circles

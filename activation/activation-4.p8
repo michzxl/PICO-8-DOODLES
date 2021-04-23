@@ -11,6 +11,7 @@ if ⧗>5 then
 	⧗=-5
 end
 ⧗+=0.0167---rnd(⧗)*0.05
+t=⧗
 
 --reset param every 1 sec-ish
 if ⧗%1<0.05 then
@@ -30,6 +31,17 @@ for x=0,128,16 do
 		y=(y+⧗*16)%128
 		line(x,y,x,y+16,8)
 	end
+end
+
+for x=0,128,16 do
+ for y=0,128,16 do
+  r=  3.5 * sin(⧗) --cycle with time
+    + 4.5 * sin(x/17) --add variation with x
+    + 3.0 * sin(sin(y/a1%⧗/4)) -- uh clue, but looks good
+    + 4.0 -- base radius
+    + abs(x-64)/6
+  circfill(x,y+sin(⧗/x),r+2*sin(t/4+x/16),8)
+ end
 end
 
 --draw circles
