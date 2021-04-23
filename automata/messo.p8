@@ -3,25 +3,24 @@ version 29
 __lua__
 poke(0x5f2d, 1)--enable mouse
 
-dt=1/30
-t=0
-w=2
-count=(2*w+1)*(2*w+1)
+local dt=1/30
+local t=0
+local w=2
+local count=(2*w+1)*(2*w+1)
 
 cls()
 ::♥::
 t+=dt
-mx,my = stat(32),stat(33)
+local mx,my = stat(32),stat(33)
 
 for i=1,10 do
-	x,y=rnd(128),rnd(128)
-	c=rnd(24)
-	circ(x,y,1,c)
+	local x,y=rnd(128),rnd(128)
+	circ(x,y,1,rnd(24))
 end
 
 for i=1,300 do
-	x,y=rnd(128),rnd(128)
-	sum=0
+	local x,y=rnd(128),rnd(128)
+	local sum=0
 	for ox=x-w,x+w do
 		for oy=y-w,y+w do
 			sum+=pget(ox,oy)
@@ -31,15 +30,18 @@ for i=1,300 do
 end
 
 for i=1,500 do
-	x,y=rnd(128),rnd(128)
-	ang=atan2(x-mx,y-my)
-	ang=ang+t/8
-	d=4
-	c=pget(x-cos(ang)*d,y-sin(ang)*d)
+	local x,y=rnd(128),rnd(128)
+	local ang=atan2(x-mx,y-my) + t/8
+	local c=pget(x-cos(ang)*4,y-sin(ang)*4)
 	circ(x,y,1,c)
 end
 
 circfill(mx,my,1,7)
+
+if t<4 then
+	rectfill(0,121,127,127,0)
+	print("move mouse",0,123,7)
+end
 
 flip() goto ♥
 __label__

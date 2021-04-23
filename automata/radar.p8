@@ -70,7 +70,7 @@ function _update()
 		sset(x-x%6,y,0)
 	end
 	
-	for i=1,300 do
+	for i=1,400 do
 		x,y=xy()
 		c=boxblur(x,y,3)
 		circ(x,y,1,c)

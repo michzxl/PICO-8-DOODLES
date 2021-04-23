@@ -31,18 +31,19 @@ dt=1/60
 t+=dt
 tf+=1
 
-for i=1,1500 do
-	x,y = rnd(128), rnd(128)
+local b4,b5 = btn(4),btn(5)
 
-	if btn(4) then
-		dr(x,y,1)
-	elseif btn(5) then
-		dr(x,y,7)
+for i=1,1300 do
+	local x,y = rnd(128), rnd(128)
+
+	if b4 then
+		circfill(x,y,1,1)
+	elseif b5 then
+		circfill(x,y,1,7)
 	else
 		--edges may create navy/white
-		if (flr(x<=1 or flr(y)>=126) and rnd(1)<0.01) then
-			local c = rnd(1)<0.5 and 1 or 7
-			pset(x,y,c)
+		if (x\1<=1 or y\1>=126) and rnd(1)<0.01 then
+			pset(x,y,rnd(1)<0.5 and 1 or 7)
 		end
 
 		--if nearby pixels are same,
@@ -52,17 +53,21 @@ for i=1,1500 do
 		if pget(x+1,y)==p
 					and pget(x,y-1)==p
 					and rnd(1)<0.03 then
-			local c = rnd(2) + 8
-			dr(x,y,c)
+			circfill(x,y,1,rnd(2) + 8)
 		end
 
 		--propel the color.
 		if rnd(1)<0.75 then
-			dr(x+1,y-1,p)
+			circfill(x+1,y-1,1,p)
 		else
-			dr(x,y,p)
+			circfill(x,y,1,p)
 		end
 	end
+end
+
+if t<1 then
+	rectfill(0,118,127,127,0)
+	print("press x or z",8,120,7)
 end
 
 flip() goto OKAY

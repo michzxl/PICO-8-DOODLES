@@ -13,35 +13,40 @@ pal(10,15+128,1)
 pal(8,8+128,1)
 pal(13,13+128,1)
 
+cls()
+
 --drawing function
 function dr(x,y,p) 
 	circfill(x,y,1,p) 
 end
 
 --init screen space
-rectfill(0,0,128,128,1)
+rectfill(4,4,124,124,1)
 for i=1,4000 do
 	--navy & white
-	circfill(rnd(128),rnd(128),1,rnd(1)<0.5 and 1 or 7)
+	circfill(rnd(120)+4,rnd(120)+4,1,rnd(1)<0.5 and 1 or 7)
 end
 for i=1,1000 do
 	--full palette
-	circfill(rnd(128),rnd(128),1,rnd(8)+8)
+	circfill(rnd(120)+4,rnd(120)+4,1,rnd(8)+8)
 end
 
-t=0
-::control::
-t+=0.0166
 
-for i=1,1500 do
-	x=rnd(128)
-	y=rnd(128)
+local t=0
+::control::
+t+=1/60
+
+local b4,b5 = btn(4),btn(5)
+
+for i=1,1000 do
+	local x=rnd(120)+4
+	local y=rnd(120)+4
 
 	--clear map if press button
-	if btn(4) then
+	if b4 then
 		dr(x,y,1)
-	elseif btn(5) then
-		dr(x,y,7)
+	elseif b5 then
+		circfill(x,y,1,7)
 	else
 	
 		--edges may create navy/white
@@ -52,20 +57,25 @@ for i=1,1500 do
 		--if nearby pixels are same,
 		--maybe change color.
 		--will break down large areas
-		p=pget(x,y)
+		local p=pget(x,y)
 		if pget(x+1,y)==p 
 					and pget(x,y-1)==p 
 					and rnd(1)<0.05 then
-			dr(x,y,rnd(8)+8)
+			circfill(x,y,1,rnd(8)+8)
 		end
 		
 		--propel the color.
 		if rnd(1)<0.75 then
-			dr(x+1,y-1,p)
+			circfill(x+1,y-1,1,p)
 		else
-			dr(x,y,p)
+			circfill(x,y,1,p)
 		end
 	end
+end
+
+if t<1 then
+	rectfill(0,118,127,127,0)
+	print("press x or z",8,120,7)
 end
 
 flip() goto control
