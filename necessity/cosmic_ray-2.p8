@@ -1,6 +1,21 @@
 pico-8 cartridge // http://www.pico-8.com
 version 29
 __lua__
+function palmix(bits, region, length)
+	if bits==nil then
+		memset(0x5f70, 0, 16)
+	else
+		memset(0x5f70 + region, bits, length)
+	end
+end
+
+for i=0,7 do
+	pal(i+8,i+8+128,2)
+end
+
+poke(0x5f5f,0x10)
+palmix(0b00110011,0,16)
+
 t=0
 
 ::♥::
@@ -13,11 +28,15 @@ for i=1,1500 do
 	c=sin((x-t*50)/40) 
 			/ cos((y+0.3*sin(x/30-sin(y/120))*5+sin(x/87+y/86+t%1)*4+24)/50) 
 			/ 20*x/32 
-			- t*1.5
+			- t*1
 	c=c%8+8
-	--c=flr(c%2)==0 and 7 or 0
+
+	if c-flr(c)<0.5 then
+		fillp(0b1010010110100101)
+	end
 	
-	circ(x,y,1,c)
+	circ(x,y,1,c\1 + 16*(c\1-1))
+	fillp()
 end
 flip() goto ♥
 __gfx__

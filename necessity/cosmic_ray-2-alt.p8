@@ -3,6 +3,21 @@ version 29
 __lua__
 t=0
 
+function palmix(bits, region, length)
+	if bits==nil then
+		memset(0x5f70, 0, 16)
+	else
+		memset(0x5f70 + region, bits, length)
+	end
+end
+
+for i=0,7 do
+	pal(i+8,i+8+128,2)
+end
+
+poke(0x5f5f,0x10)
+palmix(0b00110011,0,16)
+
 ::♥::
 t+=0.016
 
@@ -18,7 +33,12 @@ for i=1,1500 do
 	c=c%8+8
 	--c=flr(c%2)==0 and 7 or 0
 	
-	circ(x,y,1,c)
+	if c-flr(c)<0.5 then
+		fillp(0b1010010110100101)
+	end
+	
+	circ(x,y,1,c\1 + 16*(c\1-1))
+	fillp()
 end
 flip() goto ♥
 __gfx__

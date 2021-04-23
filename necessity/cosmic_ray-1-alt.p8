@@ -8,20 +8,22 @@ t=0
 t+=0.016
 ct8=cos(t/8)
 st8=sin(t/8)
-hhx = 1.5
-hhy = 1.1
-bk=8
+hhx = 1
+hhy = 1
+bk=7
 
-for i=1,60+20*ct8 do
+for i=1,40 do
 	ox=rnd(128+bk)-8
 	oy=rnd(128+bk)-8
+	ox,oy = ox\8*8,oy\8*8
 
-	for y=oy,oy+bk-1,hhy do
-		for x=ox,ox+bk-1,hhx do
+	for y=oy,oy+bk,hhy do
+		for x=ox,ox+bk,hhx do
 			local c=sin((x-t*50)/40) 
 					/ cos((y+sin(x/30)*5+sin(x/87+t%1)*4+24)/500) 
 					/ 20*x/32 
-					- t*1.5
+					- t
+					+ flr(y/64 - t)%8
 			c=c%8+8
 			pset(x,y,c)
 		end

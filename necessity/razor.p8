@@ -11,12 +11,14 @@ cls()
 ::♥::
 t+=dt tf+=1
 
+--local c
+
 bk=8
-hx=1.8
+hx=2
 hy=1
-for i=1,100 do
-    ox=rnd(128+bk)-8
-    oy=rnd(128+bk)-8
+for i=1,59 do
+    local ox=rnd(128+bk)-8
+    local oy=rnd(128+bk)-8
     for y=oy,oy+bk-1,hy do
         for x=ox,ox+bk-1,hx do
             c=5/4*flr(x/16+y/16+t)
@@ -26,7 +28,14 @@ for i=1,100 do
 
             c=flr(c%2)*7
 
-            if diff<0.2 then
+            local tt
+            if (flr(x/128 - y/128 + t/3)%2==0) then
+                tt = (c - flr(c)<0.2)
+            else
+                tt = diff<0.2
+            end
+
+            if tt then
                 c += 2 + 0.5*sin(t/16)
             end
 
