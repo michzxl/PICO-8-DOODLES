@@ -49,6 +49,12 @@ function _init()
 
 	mod=false
 
+	strs = {
+		"make me",
+		"lose it",
+		"rushing",
+	}
+
 	for ang=0,1-1/k,1/k do
 		cosa[ang]=cos(ang)
 		sina[ang]=sin(ang)
@@ -75,7 +81,7 @@ function _update()
 	-- true during the last 8 seconds of each 16-sec interval
 	mod = t % 16 > 8
 
-	local ct = 10
+	local ct = 8
 	if t%ct>ct-1 and not collapse then collapse = 1 end
 
 	-- draw a centered rectangle with color 0
@@ -84,8 +90,9 @@ function _update()
 		rectfill(x, y, scrw - x, scrh - y, 0)
 	end
 
+	local i = (t\ct)%#strs+1
 	if rnd(1)<0.1 then
-		rprint("make me",32+sin(t/8)*8,rnd(64)+32,0,1,{
+		rprint(strs[i],32+sin(t/8)*8,rnd(64)+32,0,1,{
 			trans=3,
 		})
 	end
