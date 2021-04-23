@@ -15,51 +15,50 @@ vec = {
 	one = function()
 		return vec(1,1,1)
 	end,
-
-	ZERO = 0.001,
+	up = function()
+		return vec(0,-1,0)
+	end,
+	down = function()
+		return vec(0,1,0)
+	end,
+	left = function()
+		return vec(-1,0,0)
+	end,
+	right = function()
+		return vec(1,0,0)
+	end,
+	forward = function()
+		return vec(0,0,1)
+	end,
+	back = function()
+		return vec(0,0,-1)
+	end,
 
 	copy = function(self)
 		return vec(self.x,self.y,self.z)
 	end,
-
-	polar = function(self)
-		return self:ang(), #self
-	end,
 	ang = function(self)
 		return atan2(self.x,self.y)
 	end,
-	r = function(self)
-		return #self
-	end,
-	turn = function(self, ang)
-		local v = self:copy()
-		v:setang(self:ang() + ang)
-		return v
-	end,
-
-	setc=function(self, x, y, z)
-		self.x=x or 0
-		self.y=y or 0
-		self.z=z or 0
-		return self
-	end,
-	set=function(self,v)
-		self.x=v.x or 0
-		self.y=v.y or 0
-		self.z=v.z or 0
-	end,
 	setang = function(self,ang)
-		return self:setpolar(ang, #self)
-	end,
-	setr = function(self, r)
-		self:setpolar(self:ang(), r)
-	end,
-	setpolar = function(self, ang, r)
-		return self:setc(r*cos(ang), r*sin(ang))
+		local m = #self
+		return vec(m*cos(ang),m*sin(ang))
 	end,
 	rot = function(self,ang)
-		local m = self:magn()
-		return vec(m*cos(ang),m*sin(ang))
+		return self:setang(ang + self:ang())
+	end,
+
+	set=function(self,v)
+		self.x=v.x
+		self.y=v.y
+		self.z=v.z
+		return self
+	end,
+	setc=function(self, x, y, z)
+		self.x=x
+		self.y=y
+		self.z=z
+		return self
 	end,
 
 	magn = function(self)
@@ -68,29 +67,40 @@ vec = {
 	sqrmagn = function(v)
 		return v.x*v.x + v.y*v.y + v.z*v.z
 	end,
+	dist = function(a,b)
+		return (b-a):magn()
+	end,
+	sqrdist = function(a,b)
+		return (b-a):sqrmagn()
+	end,
 
-	-- https://www.flipcode.com/archives/Fast_Approximate_Distance_Functions.shtml
-	-- is only 2D
-	approx_magn = function(v)
-		local mmin = min(v.x,v.y)
-		local mmax = max(v.x,v.y)
-		return _const_a*mmax + _const_b*mmin
-			- (mmax < 16*mmin and _const_c*mmax or 0)
-	end, 
+	lerp = function(a,b,t)
+		return vec(
+			a.x+t*(b.x-a.x),
+			a.y+t*(b.y-a.y),
+			a.z+t*(b.z-a.z)
+		)
+	end,
+	approach = function(a,b,dist)
+		if a:sqrdist(b) <= dist*dist then 
+			return b
+		end
+		local ang = atan2(b.x-a.x, b.y-a.y)
+		return a + vec(
+			dist * cos(ang),
+			dist * sin(ang)
+		)
+	end,
+		
+	project = function(v,w)
+		return b * (v:dot(w) / b:sqrmagn())
+	end,
 
 	norm=function(self, len)
-		len = len or 1
-		if self:nearzero(vec.ZERO) then
-			return vec()
-		else 
-			return self/#self * len
-		end
+		return self/#self * (len or 1)
 	end,
-	perp = function(self, len)
-		return vec(-self.y, self.x):norm(len)
-	end,
-	perpl=function(self)
-		return vec(-self.y,self.x)
+	perp = function(self)
+		return vec(-self.y, self.x)
 	end,
 	cross = function(A, B)
 		return vec(
@@ -102,7 +112,7 @@ vec = {
 	dot = function(v,w)
 		return v.x*w.x + v.y*w.y + v.z*w.z
 	end,
-	cmult = function(a,b)
+	scale = function(a,b)
 		return vec(
 			a.x*b.x,
 			a.y*b.y,
@@ -112,34 +122,24 @@ vec = {
 	nonzero = function(self,unit)
 		return not (self.x==0 and self.y==0 and self.z==0)
 	end,
-	nearzero = function(self,dist)
-		return #self<dist
-	end,
 
 	constrain = function(self,anchor,dist)
 		return (self - anchor):norm(dist) + anchor
 	end,
 	constrain_min = function(self,anchor,dist)
-		local v = self - anchor
-		return #v<dist and self:constrain(anchor,dist) or self
+		return (self - anchor):sqrmagn()<dist*dist and self:constrain(anchor,dist) or self
 	end,
 	constrain_max = function(self,anchor,dist)
-		local v = self - anchor
-		return #v>dist and self:constrain(anchor,dist) or self
+		return (self - anchor):sqrmagn()>dist*dist and self:constrain(anchor,dist) or self
 	end,
 
 	xy = function(self)
 		return self.x,self.y
 	end,
-	-- yz = function(self)
-	-- 	return self.y,self.z
-	-- end,
-	-- xz = function(self)
-	-- 	return self.x,self.z
-	-- end,
 	xyz=function(self)
 		return self.x,self.y,self.z
 	end,
+
 	cx=function(self)
 		return vec(self and self.x or 1,0,0)
 	end,
@@ -149,6 +149,7 @@ vec = {
 	cz=function(self)
 		return vec(0,0,self and self.z or 1)
 	end,
+
 	distr = function(self,f)
 		return vec(
 			f(self.x),
@@ -163,16 +164,19 @@ vec = {
 			f(self.y,v.y)
 		)
 	end,
+
 	fflr = function(self, unit)
 		return self:distr(function(a) 
 			return fflr(a, unit or 1)
 		end)
 	end,
+
 	fflrz = function(self, unit)
 		local signs = self:distr(sgn)
 		local fv = self:distr(abs):fflr(unit)
 		return fv:cmult(signs)
 	end,
+
 	rot_x = function(v, ang)
 		return vec(
 			v.x, 
@@ -207,7 +211,6 @@ vec = {
 
 	u_rot_yxz = function(angs)
 		local cx,sx,cy,sy,cz,sz = angs:cache_trig()
-		local x,y,z = angs:xyz()
 		local ux = vec(
 			cy*cz - sy*sx*sz,
 			cy*sz + sy*sx*cz,
@@ -224,15 +227,6 @@ vec = {
 			cy*cx
 		)
 		return vec(ux,uy,uz)
-	end,
-
-	rrot = function(v, config, a)
-		local nv = v:copy()
-		for i=1,#config do
-			local func = self["rot_"..sub(config, i,i)]
-			nv = func(nv, a[i])
-		end
-		return nv
 	end,
 
 	cache_trig = function(angs)
@@ -261,10 +255,10 @@ _vec={
 		return vec(-p.x,-p.y,-p.z)
 	end,
 	__len=function(p)
-		return sqrt(sqr(p.x)+sqr(p.y)+sqr(p.z))
+		return sqrt(p.x*p.x+p.y*p.y+p.z*p.z)
 	end,
 	__tostring=function(self)
-		return "<"..flr(10*self.x)/10 ..","..flr(10*self.y)/10 ..","..flr(10*self.z)/10 ..">"
+		return "<"..(self.x\0.1*0.1)..","..(self.y\0.1*0.1)..","..(self.z\0.1*0.1)..">"
 	end,
 }
 

@@ -59,7 +59,7 @@ function _init()
 		"tear it out.",
 		"say something.",
 		"i feel it,",
-		"where i begin.",
+		"a way to begin.",
 		"may i? break",
 		"a last time,",
 		"loathing",
@@ -83,6 +83,8 @@ function _init()
 	next_line()
 
 	stones = {}
+
+	of = function() end
 end
 
 ---=========---
@@ -118,13 +120,33 @@ function _update()
 	--clip(128-32,128-48,128-8,128-8)
 	for i=1,50 do
 		local x,y = rnd(24)+128-32,rnd(40)+128-48
-		circ(x-1,y-1,1,pget(x,y))
+		circ(x-1,y-1,1,pget(x,y)-1)
 	end
 	--clip()
 
-	
+	if not isover then
+		local ti = currtimer
+		for x=0,ti*4 do
+			local x = x * 4
+			local y = 64 - x
+			local x2 = x+8+sin(t/4+x/16)
+			local y2 = y+8+sin(t/4+x/16)
+			line(x,y,x2,y2,8)
+			line(140-x,140-y,140-x2,140-y2,8)
+		end
+	end
 
-	
+	if not isover and rnd(1)<0.1 then
+		local ti = currtimer
+		local x = 8
+		local y = 128-10/2
+		for i=1,20 do
+			local x2 = x + rnd(8)
+			local y2 = mid(118, 128, y + rnd(16)-8)
+			line(x,y,x2,y2,2)
+			x,y=x2,y2
+		end
+	end
 
 	currtimer += 1/30
 	if (currtimer-overtime-wait)*currspd>#currtext then
@@ -278,8 +300,8 @@ function _update()
 
 		line(p1.x,p1.y,p2.x,p2.y,15)
 
-		p1 = stn.pos - dir:perpl()*stn.len/2
-		p2 = stn.pos + dir:perpl()*stn.len/2
+		p1 = stn.pos - dir:perp()*stn.len/2
+		p2 = stn.pos + dir:perp()*stn.len/2
 
 		line(p1.x,p1.y,p2.x,p2.y,15)
 
@@ -406,7 +428,11 @@ function _update()
 		8,
 	},1)
 
-	---=========---
+	---===---
+
+	if t%8<4 then of() end
+
+	---===---
 
 	orot += rnd(0.00) + (sin(t/8)+0.5>0 and sin(t/8)*0.025 or 0)
 	local us = vec(-t/8+orot,t/12 + t/4\0.01*0.01,-t/8):u_rot_yxz()
@@ -416,7 +442,7 @@ function _update()
 	local vs = {}
 	for v in all(tet.v) do
 		local v = v - avg
-		local nv = us:dot(v:cmult(scale)) + trans 
+		local nv = us:dot(v:scale(scale)) + trans 
 		if rnd(1)<0.02 then
 			local s = 32
 			nv += vec(rnd(s)-s/2,rnd(s)-s/2)
@@ -435,6 +461,20 @@ function _update()
 		--triv(buf[1],buf[2],buf[3],15)
 	end
 	fillp()
+
+	of = function()
+		fillp(0b1000000000000000.1)
+		local vs = vs
+		for f in all(tet.f) do
+			local buf = {}
+			for vi in all(f) do
+				add(buf, vs[vi])
+			end
+			trifill(buf[1]*(1 + 0.02*sin(t/8)),buf[2]*(1 + 0.02*sin(t/8)),buf[3]*(1 + 0.02*sin(t/8)),15)
+			--triv(buf[1],buf[2],buf[3],15)
+		end
+		fillp()
+	end
 
 	for f in all(tet.f) do
 
