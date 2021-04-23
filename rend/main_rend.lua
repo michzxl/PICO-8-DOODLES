@@ -9,7 +9,7 @@ function _init()
 
 	lines = {
 		"rend.",
-		"tear it open.",
+		"tear it down.",
 		"say something.",
 		"i feel it",
 		"please just",

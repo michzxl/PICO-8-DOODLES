@@ -56,7 +56,7 @@ function _init()
 
 	lines = {
 		"rend.    ",
-		"tear it out.",
+		"tear it down.",
 		"say something.",
 		"i feel it,",
 		"a way to begin.",
@@ -66,7 +66,7 @@ function _init()
 		"vessel, empty",
 		"promise.",
 		"rend.",
-		"                ",
+		"    ",
 	}
 	currline = 0
 	currtext = ""
