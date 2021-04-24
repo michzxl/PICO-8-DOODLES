@@ -19,12 +19,12 @@ cls()
 ::♥::
 t+=dt
 
-for i=1,1000 do
+for i=1,1500 do
 	x,y=rnd(128)-64,rnd(128)-64
 	
 	c=2*atan2(x,y)
 		+sin(t/8)*y/32+cos(t/8)*x/32
-		+t*2
+		+t
 	
 	c=flr(c%2)*7
 	

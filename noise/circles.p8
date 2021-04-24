@@ -88,7 +88,7 @@ t+=1/30
 
 foreach(cs,upd)
 
-local skip = 1
+local skip = 1+0.5*sin(t/8)
 for h=0,127,skip do
 	local ps = {}
 	for c in all(cs) do
