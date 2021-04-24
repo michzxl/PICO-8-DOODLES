@@ -1,5 +1,5 @@
 pico-8 cartridge // http://www.pico-8.com
-version 29
+version 30
 __lua__
 
 pal({
@@ -21,20 +21,47 @@ pal({
 		2+128,
 	}, 1)
 
-t,ti,dt=0,0,1/30
-c,s=cos,sin
-s2=sqrt(2)
+local t,ti,dt=0,0,1/30
+local c,s=cos,sin
+local s2=sqrt(2)
 ::♥::
 t+=dt
 ti+=1
 
-for i=1,1500 do
-	local a,r=rnd(1),sqrt(rnd(64*64*s2*s2))
-	local x,y=64+r*c(a),64+r*s(a)
-	local p=sin(a * (cos(t/24) + 1))
-	  / cos(a+sin(x/1000)-t/16)*2
-	circ(x,y,1,p)
+local j = t%8<4
+local jk = j and 12 or 2
+local sk = 64*64*s2*s2
+local ct24 = cos(t/24)
+
+local spr = sin(t/8)*0.5+0.5
+
+for i=1,1300 do
+	local a,r=rnd(1),sqrt(rnd(sk))
+	local x,y=64+r*c(a-t/32),64+r*s(a-t/32)
+
+	local okay = (r/32-t/8-x/64 + y/64)
+
+	local p=sin(a * r/128 * (ct24 + 1))
+	  / cos(a/16+sin((y)/1000)-t/16)
+	  * 2 
+
+	local diff = p&0x0.ffff
+	local fill
+	if diff<0.25 then
+		fill = 0b1111101011110101
+	elseif diff<0.5 then
+		fill = 0b1010010110100101
+	elseif diff<0.75 then
+		fill = 0b1010000001010000
+	else
+		fill = 0
+	end
+	fillp(fill)
+	circ(x,y,1,p\1+(p-1)\1*16)
+	
 end
+
+print("\#0"..t,0,0,7)
 
 flip() goto ♥
 __gfx__
