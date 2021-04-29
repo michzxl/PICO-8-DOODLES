@@ -1,5 +1,5 @@
 pico-8 cartridge // http://www.pico-8.com
-version 29
+version 30
 __lua__
 
 pal({
@@ -57,8 +57,6 @@ for i=1,1500 do
 	circ(x,y,1,p\1+(p-1)\1*16)
 	end
 end
-
-print("\#0"..t,0,0,7)
 
 flip() goto ♥
 __gfx__
