@@ -42,7 +42,7 @@ function _update()
 		c = (c
 			+ (c\1%2==0 and (x/32 - y/32 - t/16)\1 or 0) 
 			+ t/4
-			+ cos(x/128 + cos(t/8)/48) 
+			+ cos(ox/128 + cos(t/8)/48) 
 			+ sin(y/128 + sin(t/8)/48)
 		)\1%12
 

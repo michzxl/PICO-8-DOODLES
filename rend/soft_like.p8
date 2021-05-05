@@ -89,11 +89,19 @@ function _update()
 	local sx,sy = 0,64+(i-1)*8
 	local px,py = 0,112
 
-	for x=0,127 do
+	for x=0,127,2 do
 		local y = 1 + sin(x/200 + t/8)*4 + cos(x/32 - t/16)*1
 		local cy = py+10
 		if y>=0 then
-			line(x,-1,x,y,0)
+			rect(x,-1,x+1,y,0)
+		end
+	end
+
+	for x=0,127,2 do
+		local y = 1 + sin(x/150 + t/16 + 18)*3 + cos(x/64 - t/16)*1
+		local cy = py+10
+		if y>=0 then
+			rect(x,128,x+1,128-y,0)
 		end
 	end
 
