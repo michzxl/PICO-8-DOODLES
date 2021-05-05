@@ -2,7 +2,7 @@ pico-8 cartridge // http://www.pico-8.com
 version 30
 __lua__
 function _init()
-	t=rnd(100)
+	t_=rnd(100)
 	cls(9)
 
 	pal({
@@ -27,7 +27,7 @@ function _init()
 end
 
 function _update()
-	t = time()
+	t = time()+t_
 	
 	local ct8=cos(t/8)
 	local st8=sin(t/8)
@@ -100,7 +100,7 @@ function _update()
 	for x=0,8*strlen-1 do
 		for y=0,8-1 do
 			local s = sget(sx+x,sy+y)
-			if pget(px+x,py+y)%4>0 then
+			if pget(px+x,py+y)%4>1 then
 				pset(px+x,py+y,s)
 			end
 		end
