@@ -1,7 +1,7 @@
-# PICO-8 DOODLES
+# my pico-8 doodles
 
-I've made some doodles for the [PICO-8](https://www.lexaloffle.com/pico-8.php).
+i've made some doodles for the [PICO-8](https://www.lexaloffle.com/pico-8.php).
 
 234 and counting.
 
-LICENSE: [CC4 BY-NC-SA](https://creativecommons.org/licenses/by-nc-sa/4.0/)
+license / [CC4 BY-NC-SA](https://creativecommons.org/licenses/by-nc-sa/4.0/)
