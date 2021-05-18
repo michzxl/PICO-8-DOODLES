@@ -90,7 +90,7 @@ function xy()
 end
 
 function boxblur(x,y,w)
-	sum=0
+	local sum=0
 	for ox=x-w/2,x+w/2 do
 		for oy=y-w/2,y+w/2 do
 			sum+=sget(ox,oy)
