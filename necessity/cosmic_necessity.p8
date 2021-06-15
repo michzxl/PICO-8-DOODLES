@@ -55,9 +55,9 @@ local strs = {
 	{t=1,s="i speak"},
 	{t=1,s="but cannot hear."},
 	{t=1,s="it_s just this."},
-	{t=1,s="|||| just\nsilence, now."},
+	{t=1,s="|||| just ||||\nsilence, now."},
 	{t=1,s="please stay\nwith me."},
-	{t=1,s="|||||| stay\nwith me, here."},
+	{t=1,s="|||||| stay\nwith me| here."},
 	1,
 }
 local istr = 0
