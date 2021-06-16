@@ -38,39 +38,44 @@ rectfill(0,0,128,128,10)
 t+=dt
 mx,my=stat(32),stat(33)
 
-rr=61*k
+local rr=61*k
 
 for i=1,500 do
-	ang,ra=rnd(1),rnd(64*k)
+	local ang,ra=rnd(1),rnd(64*k)
 	if ra>rr*.2 then
-		ca=cos(ang)
-		sa=sin(ang)
-		x,y=ra*ca,ra*sa
+		local ca=cos(ang)
+		local sa=sin(ang)
+		local x,y=ra*ca,ra*sa
 		--circ(x+64,y+64,1,7)
-		r2=ra-1
-		smpl=pget(r2*ca+64,r2*sa+64)
+		local r2=ra-1
+		local smpl=pget(r2*ca+64,r2*sa+64)
 		circ(x+64,y+64,1,smpl)
 	end
 end
 
 for i=1,░ do
-	ang,r=rnd(1),rnd(rr)
-	r2=sqrt(r)*10*sin(rr)
-	
-	sa=sin(ang)+cos(t/2+sin(t/3))/2
-	ca=cos(ang)+sin(t/2+(cos(t/3)/2))/2
-	
-	x,y=r*ca,r*sa
-	x2,y2=r2*ca,r2*sa
-	
-	c=sin(x/64)+sin(y/64)
-	c=c%(t*2) 
+	local ang,r=rnd(1),rnd(rr)
+	local r2=sqrt(r)*10*sin(rr)
+
+	local sa=sin(ang)+cos(t/2+sin(t/3))/2
+	local ca=cos(ang)+sin(t/2+(cos(t/3)/2))/2
+
+	local x,y=r*ca,r*sa
+	local x2,y2=r2*ca,r2*sa
+
+	local c=sin(x/64)+sin(y/64)
+	c=c%(t*2)
 	c=c+2*t --move it
 	c=2*13*abs((c/16%1)-1/2)-13/2+7.5
 	c=flr(c)
 	c=c%14+1 -- [1,14]
 
 	circ(x2+64,y2+64,1,c)
+end
+
+for i=1,750 do
+	local x,y=rnd(128),rnd(128)
+	circ(x,y,1,pget(x,y))
 end
 
 --drw_mouse(mx-1,my-1)
@@ -212,4 +217,3 @@ a3qqqn03a300000j0j0j0jj3hhhhhh10j01h1h0jh000h0hj003hjhj0bbr0r01qbbb1r0r0rr1brbbb
 hhnnbnbaa00j0jj0j0300jjhjh01111qhh0h100j00000100003hhhbbbb0a10rqbbh1r0b0brqqqrbbb3a3q33q3qqqrqrqrn0033330aarrr30raaaab01j3rrr333
 hnnnnba0a000j00j000000j1hh11100h0hh1010001qhj000h313hhbbb0a0rqbrqhbh0r0b0bhqqqbbbb3aqq33q3qrqrh11nnnn33h3aaar303jraa3a1131rrrh3h
 nn0n000a00r00jj0j0000010110100h0h00010001q1j1j000131hq1b1a0r1rqbhbhbr0rqb0bhqqqbbbaaa3b33qqqrh1133nnbb33h3aa0330rjbjab331rrrrrh0
-

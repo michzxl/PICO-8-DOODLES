@@ -6,43 +6,56 @@ __lua__
 
 -- press ❎/🅾️ to swap palette
 
+function boxblur(x,y,w)
+	local sum=0
+	local num = (2*w+1)*(2*w+1)
+	for ox=x-w/2,x+w/2 do
+		for oy=y-w/2,y+w/2 do
+			sum+=pget(ox,oy)
+		end
+	end
+	return sum/num
+end
+
 pn=0
 p={
 	[0]={7+128,10,10+128,11,11+128,3,3+128,1,1+128,1+128,1+128,1+128},
-	{7+128,10,9,9+128,8,8+128,2,2+128},
+	[1]={7+128,10,9,9+128,8,8+128,2,2+128,0+128,0+128,0+128,0+128},
 }
-for i=1,14 do
-	pal(i,p[pn][i],1)
-end
+pal(p[pn],1)
+pal(13,nil,1)
+pal(14,nil,1)
 
-t=rnd(10)
-k=sqrt(2)
-rr=60.98*k
-pi=3.14
+local t=rnd(10)
+local ti=0
+local k=sqrt(2)
+local rr=60.98*k
+local pi=3.14
 
-cls()
+cls(5)
 ::♥::
 --cls()
 t+=0.01
+ti+=1
 
-if btnp(4) or btnp(5) then
+if ti%(4*30)>(4*30-2) then
 	pn=(pn+1)%2
-	for i=1,#p[pn] do
-	pal(i,p[pn][i],1)
-end
+	pal(p[pn],1)
+	pal(13,nil,1)
+	pal(14,nil,1)
 end
 
-for i=1,500 do
-	ang,ra=rnd(1),rnd(64*k)
+for i=1,750 do
+	local ang,ra=rnd(1),rnd(64*k)
 	if ra>rr*.2 then
-		ca,sa=cos(ang),sin(ang)
-		x,y=ra*ca,ra*sa
-		
-		r2=ra-1.5
-		ang2=ang+2/360
-		ca,sa=cos(ang2),sin(ang2)
-		smpl=pget(r2*ca+64,r2*sa+64)
-		
+		local ca,sa=cos(ang),sin(ang)
+		local x,y=ra*ca,ra*sa
+
+		local r2=ra-1.5
+		local ang2=ang+2/360
+		local ca,sa=cos(ang2),sin(ang2)
+		local smpl=pget(r2*ca+64,r2*sa+64)
+
 		if smpl~=10 then
 			circ(x+64,y+64,1,smpl)
 		elseif rnd(1)<0.01 then
@@ -52,31 +65,33 @@ for i=1,500 do
 end
 
 for i=1,250 do
-	ang,r=rnd(1)+t/8, rnd(rr)
-	r2=sqrt(r)*10*sin(rr)
-	
-	sa=sin(ang)
+	local ang,r = rnd(1)+t/8,rnd(rr)
+	local r2 = sqrt(r)*10*sin(rr)
+
+	local sa=sin(ang)
 	 + 0.5 * cos(-t/2 + sin(t/3))
-	ca=cos(ang)
-	 + 0.5*sin(t/2 + 0.5*cos(t/3))
-	
-	x,y=r*ca,r*sa
-	x2,y2=r2*ca,r2*sa
-	
+	local ca=cos(ang)
+	 + 0.5 * sin(t/2 + 0.5*cos(t/3))
+
+	local x,y=r*ca,r*sa
+	local x2,y2=r2*ca,r2*sa
+
 	--this is just cascade.
-	c=sin(x/64)+sin(y/64)
-	c=c%(2*t)+2*t
+	local c=( sin(x/64)+sin(y/64) )%(2*t)+2*t
 	c=26*abs((c/16%1)-1/2)-13/2+7.5
 	c=flr(c)+x/16
-	
-	l=#p[pn]
-	a=l+0.5
+
+	local l=#p[pn]
+	local a=l+0.5
 	c=2*a*abs((c/a/2)%1-1/2)+1
-	
-	--c=c%(#p[pn]+1)+1
 
 	circ(x2+64,y2+64,1,c)
 end
+
+-- for i=1,250 do
+-- 	local x,y=rnd(128),rnd(128)
+-- 	circ(x,y,1,pget(x,y))
+-- end
 
 flip() goto ♥
 __gfx__
@@ -216,4 +231,3 @@ b3abbanrrjrjarrnbq3aqaqanaqqaqaarrar333bbbbqbqhhjhja1j1hh1hh1h3h11h1jjha1111hjhj
 br03bbrb0rjbbanbn3q3aqrqqqqqqaaaqara333a3bqaqhhbhjajj1jh1h1rh33311111ha111h1hhjhhhhhh1j1jhh1h011j3jaa1110hhhhh0000hhh1j3r00jjjjj
 r0r03rb0b0bbbbrnqq3nqrqqqqqqqqaqrnraa3r3r3qqanhhb3qjhjh3h1ah3h3111111111111h1hhhhhh1hh1jhjhh111j1jhhh111ha1hhjj001hh1j3j3jjjjjj0
 0r03r0rb00bbrrbrqrqqqrqrqrqqqq0rqraraaar3rrqrn3r3qjhjh3hbjbah311111111111111hhhhhhhh1h11jhhh1111jahhhh11h1r1hjjj0hhh11j3jjj1jj03
-
