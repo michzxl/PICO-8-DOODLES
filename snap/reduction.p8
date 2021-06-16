@@ -40,7 +40,6 @@ pal(13,3+128,1)
 
 local boxes = {}
 
-
 function _init()
 	ttonum(torus)
 
