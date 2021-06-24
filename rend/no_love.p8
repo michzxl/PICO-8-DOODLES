@@ -2,6 +2,7 @@ pico-8 cartridge // http://www.pico-8.com
 version 30
 __lua__
 
+
 function _init()
 	cls()
 
@@ -28,7 +29,7 @@ function _init()
 
 	tt = {}
 	for i=0,7-1 do
-		
+
 		local pos = vec(8 + i*16+rnd(4)-2, 8 + rnd(16))
 		local w = vec(16,0)
 		local h = vec((10+rnd(2)-1) * (rnd(1)<0.5 and 1 or -1),64+32+rnd(16)-4)
@@ -57,7 +58,7 @@ function _update()
 		rectfill(x,y,x+7,y+7,0)
 	end
 
-	
+
 
 	draw_interface(w)
 
@@ -94,7 +95,7 @@ function _update()
 	fillp(0b1100110000110011)
 	circ(64+8*cos(t/8),64+8*sin(t/8),49,1)
 	fillp()
-	
+
 	if rnd(1)<0.025 then
 		co = vec(
 			rnd(8)-4,
@@ -123,7 +124,7 @@ function _update()
 		end
 	end
 
-	
+
 	rectfill(0,0,w,127,2)
 	rectfill(127-w,0,127,127,2)
 	rectfill(0,0,127,w,2)
@@ -226,7 +227,7 @@ function ui_bar(x,y,w,h,col,fill,per,side)
 	fillp()
 end
 
-function draw_cross(cen, col)	
+function draw_cross(cen, col)
 	local col1 = col
 	local col2 = col
 	local col3 = 5
@@ -249,7 +250,7 @@ function draw_cross(cen, col)
 
 	local ofs1 = dir2:norm(thick1/4+1+of1)
 	local ofs2 = dir1:norm(thick1/4+1+of2)
-	
+
 	local d1p1l = cen + dir1 + ofs1
 	local d1p2l = cen - dir1 - ofs1
 	local d1c1l = cen + dir1:norm(inlen1) + ofs1
@@ -268,8 +269,8 @@ function draw_cross(cen, col)
 	linefill(d1c2l.x, d1c2l.y, d1p2l.x, d1p2l.y, thick1/2, col1)
 	linefill(d1c1r.x, d1c1r.y, d1p1r.x, d1p1r.y, thick1/2, col1)
 	linefill(d1c2r.x, d1c2r.y, d1p2r.x, d1p2r.y, thick1/2, col1)
-	
-	
+
+
 	local d1p1l = cen + dir2 + ofs2
 	local d1p2l = cen - dir2 - ofs2
 	local d1c1l = cen + dir2:norm(inlen2) + ofs2
@@ -330,7 +331,7 @@ function linefill(ax,ay,bx,by,r,c)
  d*=sqrt(n*n+1)
     if(d<0.001) return
     local ca,sa=dx/d,-dy/d
-   
+
     -- polygon points
     local s={
      {0,-r},{d,-r},{d,r},{0,r}
@@ -371,7 +372,7 @@ vec = {
 		return vec(r*cos(ang), r*sin(ang))
 	end,
 	unit=function(rot)
-		return 
+		return
 			vec(1,0,0),
 			vec(0,1,0),
 			vec(0,0,1)
@@ -446,7 +447,7 @@ vec = {
 		)
 	end,
 	approach = function(a,b,dist)
-		if a:sqrdist(b) <= dist*dist then 
+		if a:sqrdist(b) <= dist*dist then
 			return b
 		end
 		local ang = atan2(b.x-a.x, b.y-a.y)
@@ -455,7 +456,7 @@ vec = {
 			dist * sin(ang)
 		)
 	end,
-		
+
 	project = function(v,w)
 		return b * (v:dot(w) / b:sqrmagn())
 	end,
@@ -530,7 +531,7 @@ vec = {
 	end,
 
 	fflr = function(self, unit)
-		return self:distr(function(a) 
+		return self:distr(function(a)
 			return fflr(a, unit or 1)
 		end)
 	end,
@@ -543,24 +544,24 @@ vec = {
 
 	rot_x = function(v, ang)
 		return vec(
-			v.x, 
-			v.y * cos(ang) - v.z * sin(ang), 
+			v.x,
+			v.y * cos(ang) - v.z * sin(ang),
 			v.y * sin(ang) + v.z * cos(ang)
 		)
 	end,
-	
+
 	rot_y = function(v, ang)
 		return vec(
-			v.z * sin(ang) + v.x * cos(ang), 
-			v.y, 
+			v.z * sin(ang) + v.x * cos(ang),
+			v.y,
 			v.z * cos(ang) - v.x * sin(ang)
 		)
 	end,
-	
+
 	rot_z = function(v, ang)
 		return vec(
-			v.x * cos(ang) - v.y * sin(ang), 
-			v.x * sin(ang) + v.y * cos(ang), 
+			v.x * cos(ang) - v.y * sin(ang),
+			v.x * sin(ang) + v.y * cos(ang),
 			v.z
 		)
 	end,
@@ -594,7 +595,7 @@ vec = {
 	end,
 
 	cache_trig = function(angs)
-		return 
+		return
 			cos(angs.x),sin(angs.x),
 			cos(angs.y),sin(angs.y),
 			cos(angs.z),sin(angs.z)
@@ -693,8 +694,8 @@ function tsprrect(x,y,sw_rot,mx,my,w,h)
 	end
 end
 
-function tsprsqr(x,y,sw_rot,mx,my,r)    
-	local cs, ss = cos(sw_rot), -sin(sw_rot)    
+function tsprsqr(x,y,sw_rot,mx,my,r)
+	local cs, ss = cos(sw_rot), -sin(sw_rot)
 	local ssx, ssy, cx, cy = mx - 0.3, my - 0.3, mx+r/2, my+r/2
 
 	ssy -=cy
@@ -933,9 +934,9 @@ function makeset(tbl)
 end
 
 puncts={
-	'.', ',', '\"', "!", "#", 
-	"-", "_", "=", "+", "?", 
-	":", ";", "/", "\\", "(", ")", 
+	'.', ',', '\"', "!", "#",
+	"-", "_", "=", "+", "?",
+	":", ";", "/", "\\", "(", ")",
 	"[", "]", "<", ">", "`", "|"
 }
 punctset=makeset(puncts)
@@ -1134,7 +1135,7 @@ thrower = {
 				add(self.deadqueue, p)
 			end
 		end
-		
+
 		self:recycle()
 	end,
 	drw = function(self)
@@ -1192,7 +1193,7 @@ thrower = {
 					for i=1,amt do
 						self:addstone(self:grabstone())
 					end
-					
+
 					self.timer -= amt
 				end
 			end
@@ -1259,19 +1260,19 @@ stone = {
 		end
 	end,
 	upd = function(self)
-		if (self.updoverride) then 
-			self:updoverride() 
+		if (self.updoverride) then
+			self:updoverride()
 			if self.postupd then self:postupd() end
-			return 
+			return
 		end
 		local pos,vel,grav,damp = self.pos,self.vel,self.grav,self.damp
-		
+
 		vel:set(vel * damp + grav)
 		pos:set(pos + vel)
 		self.life -= 1
 		if pos.x<0 or pos.x>127 or pos.y<0 or pos.y>127 then self.dead = true end
 		if self.life<0  then self.dead = true end
-		
+
 		if (self.postupd) then self:postupd() end
 	end,
 }
@@ -1317,5 +1318,135 @@ __gfx__
 0070000000000700077000000000077007700000000077000077000000007700a000000007777770077777700000000000000f00000000000000000000000000
 07000000000000700770000000000770077000000000770000077000000770001007700a077777700770077000000000000000f0000000000000000000000000
 0000000000000000007700000000770007777000007777000000770000770000a0a0a0a00000000000000000000000000000000f000000000000000000000000
+__label__
+000000hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh000000
+000hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh000
+00hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh00
+0hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh0
+0hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh0
+0hhhh1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111hhhh0
+hhhhh1jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj1hhhhh
+hhhhh1j000000000000000000000000000000000000000000000000000000000000000000j000000000000000j0000000000000000000000000000000j1hhhhh
+hhhhh1j0jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj0j0jjjjjjjjjjjjj0j0jjjjjjjjjjjjjjjjjjjjjjjjjjjjj0j1hhhhh
+hhhhh1j0jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj000j000j000j000j000j000j0jj00jj00jj000j000j000j0j0j0j0j0j0j0j0j0j0j0j0j0j0j0j0j0j0j1hhhhh
+hhhhh1j0jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj00j000j000j000j0000jj00j000000000000000jj00j000jj0j0jj0j0j0j0j0j0j0j0j0j0j0j0j0jj0j1hhhhh
+hhhhh1j0jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj000000000000000jj000000000000000j0j0j000000jj000j0j0j0j0j0j0j0j0j0j0j0j0j0j0j0j0j0j1hhhhh
+hhhhh1j0jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj00jj00jj00jj0jj00000000000jj00jjj0j0jj000j0000j000j0jj0j0j0j0j0j0j0j0j0j0j0j0j0jj0j1hhhhh
+hhhhh1j0jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj000j000j00j000000000000j000j000jj0j0j0j000j00000jjj0j0j0j0j0j0j0j0j0j0j0j0j0j0j0j0j1hhhhh
+hhhhh1j0jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj00j000j0j000000000j000j0000000000000000j000j000j000jjj0j0j0j0j0j0j0j0j0j0j0j0j0jj0j1hhhhh
+hhhhh1j0jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj0000000j000000000000000000000000j0j0j000j000j000j0j0000jjjjjjjjjjjjjjjjjjjjjjjjjj0j1hhhhh
+hhhhh1j0jjjjjjjjjjjjjjjjjjjjjjjjjjjj9j9999j0j0000000000000j000j000j000j00000j000j000j0000j0000000000000000000000000000000j1hhhhh
+hhhhh1j0jjjjjjjjjjjjjjjjjjjjj9999999999999000000000000000j0j0j0j0j0j0j0j0j0j0j000j000j000jjjj000jjjjjjjjjjjjjjjjjjjjjjjjjj1hhhhh
+hhhhh1j00000000000000000000000000999999999000000000000000000000000000000000000j000j000j0000000000000000000000000000000000j1hhhhh
+hhhhh1jjjjjjjjjjjjjjjjjjjjjp999pp999999999000jjj0000000j0j0000000000000000000000000j000j0j0jjjjj00jjjjjjjjjjjjjjjjjjjjjj0j1hhhhh
+hhhhh1j0000000000000000jjjppp99pp9999999990jjjj00000j0j00000000000000000000000000000j0000000j0jj0j0jj0j0j0j0j0j0j0jjjjjj0j1hhhhh
+hhhhh1j0jjjjjjjjjjjjjj0jjjppp99pp999999999jjjj0j0j0j00000000000000000000000000000000000j0j0j0j0j0j000j0j0j0j0j0j0jjjjjjj0j1hhhhh
+hhhhh1j0j0j000j000j00j0jjjjpp99pp999999999jjj0j0j0j00000000000000000000000000000000000000000j0j00j0jj0j0j0j0j0j0j0jjjjjj0j1hhhhh
+hhhhh1j0j00j000j000j0j0jjjjpp99pp9999999990j0j0j0000000000000000000000000000000000000000000j0j0qqqqqqqqqqqqj0j0j0jjjjjjj0j1hhhhh
+hhhhh1j0jj00jj00jj00jj0jqqqpp99pp999999999j0j0j000000000000000000000000000000000000000000000j0jqqqqqqqqqqqqjjjjjjjjjjjjj0j1hhhhh
+hhhhh1j0jj000j000j000j0jqqqpp99pp9999999990j0j0000000000000000000000000000000000000000000000000qqqqqqqqqqqq00000000000000j1hhhhh
+hhhhh1j0j0j000j000j00j0jqqqppp9pp999999999j0j00000000000000000000000000000000000000000000000000qqqqqqqqqqqqjjjjjjjjjjjjjjj1hhhhh
+hhhhh1j0j00j000j000j0j0jqqqppp9pp9999999990j000000000000000000000000000000000000000000000000000qqqqqqqqqqqqj0000000000000j1hhhhh
+hhhhh1j0jj00jj00jj00jj0jqqqppp0pp99999999900000000000000000000000000000000000000000000000000000qqqqqqqqqqqq0jjjjjjjjjjjj0j1hhhhh
+hhqqqqj0jqqqqj000j00qqqqqqqqqqqpp999999999000000000000000000000000000000000000000000000000000000qqqqqqqqqqqqjj00jj00jj0j0j1hhhhh
+hhqqqqj0jqqqq0j000j0qqqqqqqqqqqpp999999999000000000000000000000000000000000000000000000000000000qqqqqqqqqqqq0000j000j00j0j1hhhhh
+hhqqqqj0jqqqq00j000jqqqqqqqqqqqppp99999999900000000000000000000000000000000000000000000000000000qqqqqqqqqqqq00jj000j000j0j1hhhhh
+hhqqqqj0jqqqqj00jj00qqqqqqqqqqqppp99999999900000000000000000000000000000000000000000000000000000qqqqqqqqqqqq00000j0j0j0j0j1hhhhh
+hhqqqqj0jqqqqj000j00qqqqqqqqqqqqpp99999999900000000000000000000000000000000000000000000000000000qqqqqqqqqqqqjj00jj00jj0j0j1hhhhh
+hhqqqqj0jqqqq0j000j0qqqqqqqqqqqqpp9999999990000000qqqq000000000000000000000000000000000000000000qqqqqqqqqqqqj0000000j00j0j1hhhhh
+hhqqqqj0jqqqq00j000jqqqqqqqqqqqqpp9999999990000000qqqq0000000000000qqqqqqqqqqqqqqqq000qqqq000000qqqqqqqqqqqq0000000j000j0j1hhhhh
+hhqqqqj0jqqqqj00jj00qqqqqqqqqqqqpp9999999990000000qqqq0000000000000qqqqqqqqqqqqqqqq000qqqq000033qqqq333333000j0j0j0j0j0j0j1hhhhh
+hhqqqqj0jqqqqj000j00qqqqqqqqqqqqpp9999999990000000qqqq0000000000000qqqqqqqqqqqqqqqq000qqqq000033qqqq3333330j0j000j00jj0j0j1hhhhh
+hhhqqqq0j0qqqqj000j0qqqqqqqqqqqqpp9999999990000000qqqq0000000000000qqqqqqqqqqqqqqqq000qqqq000033qqqq33333300j0jjj0jjj00j0j1hhhhh
+hhhqqqq0j0qqqq0j000jqqqqqqqqqqqqpp9999999990000000qqqq0000000000000qqqqqqqqqqqq0qqqq000qqqq000033qqqq333333j0j0j00jj000j0j1hhhhh
+hhhqqqq0jjqqqq00jj00jqqqqqqqqqqqpp9999999990000030qqqq0000000000000qqqqqqqqqqqq0qqqq000qqqq000033qqqq3333330000jj0j0jjjj0j1hhhhh
+h33qqqq0j3qqqq000j000qqqqqqqqqqqpp99999999900000000qqqq0000000000000qqqqqqqqqqqqqqqq000qqqq000033qqqq333333q0j00jj00jjjj0j1hhhhh
+h33qqqq0j3qqqqj000333qqqq3333qqqpp99999999900000000qqqq0000000000000qqqqqqqqqqqqqqqq000qqqq000033qqqq3333330q000jj0jjjjj0j1hhhhh
+h33qqqq0j3qqqq0j00333qqqq3333qqqpp99999999900000000qqqq0000000000000qqqqqqqqqqqqqqqq000qqqq000033qqqq3333330000jjjj00jjj0j1hhhhh
+h33qqqq0j3qqqq003j333qqqq3333qqqpp99999999900000000qqqq0000000000000qqqqqqqqqqqqqqqq000qqqq000033qqqq33333300000jjj0jjjj0j1hhhhh
+h33qqqq0j3qqqq003j333qqqq3333qqqpp99999999900000000qqqq0000000000000qqqqqqqqqqqqqqqq000qqqq000033qqqq33333300j00jjj0jjjj0j1hhhhh
+h33qqqq0j3qqqqj030333qqqq3333qqqpp99999999900000000qqqq0000000000000qqqqqqqqqqqqqqqq000qqqq000033qqqq33333300000jjj0j0jj0j1hhhhh
+hh33qqqqj03qqqqj00333qqqq3333qqqpp99999999900000033qqqq0000000000000qqqqqqqqqqqqqqqq000qqqq000033qqqq333333003030jjj00jj0j1hhhhh
+hh33qqqqqj3qqqq0jj333qqqq3333qqqppp9999999990000033qqqq0000000000033qqqq3333qq33qqqq003qqqq0030033qqqq3333330030000j0j000j1hhhhh
+hh33qqqqqj3qqqq00j333qqqq3333qqqpp99999999990000033qqqq0000000000033qqqq3333qq33qqqq003qqqq0030033qqqqqqqqqq00030j000j000j1hhhhh
+hh33qqqqq03qqqq000333qqqq3333qqqqp99999999990000033qqqq0000000000333qqqq3333qqq33qqqq003qqqq000033qqqqqqqqqq00q0j00000jj0j1hhhhh
+hh33qqqqq03qqqqj000333qqqq3333qqpp9999pp999900000033qqqq0000000000033qqqq3333qq33qqqq003qqqq000033qqqqqqqqqq000q000j00jj0j1hhhhh
+hh33qqqqqj3qqqq0jj0333qqqq3333qqpp999999999900000033qqqq0000000000033qqqq3333qq33qqqq003qqqq000033qqqqqqqqqq0000000j00000j1hhhhh
+hh33qqqqqq3qqqq0030333qqqq3333qqpp99999p999990000033qqqq0000000000033qqqq3333qq33qqqq003qqqq000033qqqqqqqqqq000q0j00j0000j1hhhhh
+hh33qqqqqq3qqqq003j333qqqq3333qqpp99999p999990000033qqqq0000000000033qqqq3333qq33qqqq003qqqq000033qqqqqqqqqq0000j000j0jj0j1hhhhh
+hh33qqqqqq3qqqqj030333qqqq0j33qqp999999p999999000033qqqq0000000000033qqqq3333qq33qqqq003qqqq000033qqqqqqqqqq000q000j00jj0j1hhhhh
+hhh33qqqqqq3qqqqjj0333qqqq3033qqp99999ppp99999900033qqqq0000000000033qqqq3333qq33qqqq003qqqq000033qqqqqqqqqq00j0j0jjj0000j1hhhhh
+hhh33qqqqqq3qqqqjjj333qqqq0333qp999999pppp9999990033qqqq0000000000033qqqq3333qq33qqqq003qqqq0030033qqqqqqqqqq00j0j0jj0000j1hhhhh
+hhh33qqqqqq3qqqqjjj333qqqq3033q99999900ppp9999999933qqqq0000000000033qqqq3333qq33qqqq003qqqq0030033qqqqqqqqqq0j0j0jjj0jj0j1hhhhh
+hhh33qqqqqq3qqqqjjj333qqqq0j339999999000ppp99999999999999999999999993qqqq3333qq33qqqq003qqqq0030033qqqqqqqqqq00j0j0jj0jj0j1hhhhh
+hhh33qqqqqq3qqqqjjj333qqqqj0999999990000pppp99999999999999999999999933qqqq3333q33qqqq003qqqq0030033qqqqqqqqqq0j0j0jjj0000j1hhhhh
+hhh33qqqqqq3qqqqjjj3399999999999999000000ppppp999999999999999999999933qqqq0033qq33qqqq003qqqq000033qqqq33330000j0j0jj0000j1hhhhh
+hhh33qqqqqq9999999999999999999999pqq000000pppppp9999999999999999999933qqqq0033qq33qqqq003qqqq000033qqqq3333000j0j0jjj0jj0j1hhhhh
+hhh33qqqqqq999999999999999999999pqqq00000000pppppppppp9ppp999999999933qqqq0033qq33qqqq003qqqq000033qqqq33330000j0j0jj0jj0j1hhhhh
+hhh33qqqqpp999999999999999999ppqqqqq0000000000ppppp9999999999999999993qqqq0033qq33qqqq003qqqq000033qqqq333300000j0jjj00j0j1hhhhh
+hhhh33qqqppp9999999999ppp9pppp3qqqqq0000000000009999999999999999999993qqqq0033qq33qqqq003qqqq000033qqqq33330000j0jjj0jjj0j1hhhhh
+hhhh33qqqppp99999999999999999999qqqq0000000000099999999999999999999993qqqq0033qq33qqqq003qqqq000033qqqq3333000j0jjjj00jj0j1hhhhh
+hhhh33qqqqpp9999999999999999999999qq00000000099999999999999pppppppp033qqqq0033qq33qqqq003qqqq0000033qqqq3333000j0jjj00jj0j1hhhhh
+hhhh33qqqqpp9999999999999999999999990000000099999999ppppppppppppppp033qqqq0033qq33qqqq003qqqq0030033qqqq333300j0jjjj0jjj0j1hhhhh
+hhhh33qqqqpp99999999999999999999999990000009999999ppppppp0000000000033qqqq0033qq33qqqq003qqqq0030033qqqq33330j0j0jjj0jjj0j1hhhhh
+hhhh33qqqqpppppppppppppppppppp999999990000p999999p033qqqq00000000003033qqqq0033q33qqqq003qqqq0030033qqqq333300j0jjj0j0jj0j1hhhhh
+hhhh33qqqqpppppppppppppppppppppp999999000p999999000033qqqq0000000000033qqqq0033q33qqqq003qqqq0030033qqqq33330j0jjjj00jjj0j1hhhhh
+hhhh33qqqqqqqqqqqpp3p333qqqqppppp99999900p999990000033qqqq0000000000033qqqq0033qq33qqqq003qqqq000033qqqq33330030jjj0jjjj0j1hhhhh
+hhhh33qqqqqqqqqqqpp3p333qqqq0jpppp999999p9999990000033qqqq0000000000033qqqq0033qq33qqqq003qqqq000033qqqq33330303jjj0jjjj0j1hhhhh
+hhhhh33qqqqqqqqqqqqq3333qqqqj03pppp99999p9999900000033qqqq0000000000033qqqq0033qq33qqqq00qqqqq000033qqqq00000000000j00000j1hhhhh
+hhhhh33qqqqqqqqqqqqqj333qqqq0j33ppp99999p9999900000033qqqq0000000000033qqqq0033qq33qqqq00qqqqq000033qqqq00030j0jjj0j0jjjjj1hhhhh
+hhhhh33qqqqqqqqqqqqqj333qqqqj033qppp999999999900000033qqqq0000000000033qqqq0033qq33qqqq00qqqqq0000033qqqq0000000000000000j1hhhhh
+hhhhh33qqqq33qqqqqqqj333qqqqjj33qppp9999pp999900000033qqqq0000000000033qqqq0033qq33qqqq00qqqqq0000033qqqq0030j0jj000jjjj0j1hhhhh
+hhhhh33qqqq33qqqqqqqj333qqqqjj33qqpp999999999900000033qqqq0000000000033qqqq0033qq33qqqq00qqqqq0000033qqqq0000j0000j00j0j0j1hhhhh
+hhhhh33qqqq33qqqqq000333qqqq0033qqpp999999999900000033qqqq0000000000033qqqq0033qq33qqqq00qqqqq0030033qqqq30300000000000j0j1hhhhh
+hhhhh33qqqq33qqqqqjj3333qqqqjj33qqpp999999999000000033qqqq00000000003033qqqq0033q33qqqq00qqqqq0030033qqqq00000000j00000j0j1hhhhh
+hhhhh33qqqq33qqqqqj03333qqqqj033qqppp999999999000000033qqqq0000000000033qqqq0033q33qqqq00qqqqq0030033qqqqj0jj0j0j0j0j0jj0j1hhhhh
+hhhhh33qqqq33qqqqq003333qqqq0j33qqppp999999999000000033qqqq0000000000033qqqq0033q33qqqq00qqqqq0030033qqqq00jjjj00jjjjjjj0j1hhhhh
+hhhhh133qqqq33qqqqq000333qqqq0033qqpp999999999000000033qqqq0000000000033qqqq0033qq33qqqq00qqqqq000033qqqqj00000j000000000j1hhhhh
+hhhhh133qqqq33qqqqq00j333qqqq0033qqpp999999999000000033qqqq0000000000033qqqq0033qq33qqqq00qqqqq000033qqqqjjjj0j0jjjjjjjjjj1hhhhh
+hhhhh133qqqq33qqqqq0j0333qqqq0j33qqpp999999999000000033qqqq0000000000033qqqq0033qq33qqqq00qqqqq000033qqqqj000000000000000j1hhhhh
+hhhhh133qqqq33qqqqqjjj333qqqq0033qqpp999999999000000033qqqq0000000000033qqqq0033qq33qqqq00qqqqq0000033qqqq0j00jjjjjjjjjj0j1hhhhh
+hhhhh133qqqq33qqqqq000333qqqq0j33qqpp999999999000000033qqqq0000000000033qqqq0033qq3333qqqqqqq000000333qqqqqqqqqqqq000j0j0j1hhhhh
+hhhhh133qqqq33qqqqqqqj333qqqqj033qqpp999999999000000033qqqq0000000000033qqqq0033qq3333qqqqqqq00000j033qqqqqqqqqqqq0j000j0j1hhhhh
+hhhhh133qqqq333qqqqq03333qqqq0033qqpp999999999000000033qqqq0000000000033qqqq0033qq3333qqqqqqq0000j0j33qqqqqqqqqqqq00000j0j1hhhhh
+hhhhh133qqqq333qqqqq03333qqqqjj33qqpp999999999000000033qqqq00000000003033qqqq0033q3333qqqqqqq000j3j033qqqqqqqqqqqqj0j0jj0j1hhhhh
+hhhhh133qqqq333qqqqq03333qqqqjj33qqpp9999999990000000033qqqq0000000000033qqqq0033q3333qqqqqqq00q030j33qqqqqqqqqqqq000j0j0j1hhhhh
+hhhhh1j33qqqq333qqqq0q333qqqq0j33qqpp999999999j000000033qqqq0000000000033qqqq0033q3333qqqqqqq0q0j3jj33qqqqqqqqqqqq0j000j0j1hhhhh
+hhhhh1j33qqqq333qqqq0q333qqqqjj33qqpp9999999990000000033qqqq0000000000033qqqq0033qq3333qqqqqqq0q0jjj33qqqqqqqqqqqq00000j0j1hhhhh
+hhhhh1j33qqqq333qqqq0q3333qqqqj033qpp999999999j0j0000033qqqq0000000000033qqqq0033qq3333qqqqqqqq0jjjj33qqqqqqqqqqqqj0j0jj0j1hhhhh
+hhhhh1j33qqqq333qqqq0j0333qqqqqqqqqpp99999999900090j0033qqqq0000000000033qqqq0033qq3333qqqqqqq0qjjj0033qqqqqqqqqqqq00j0j0j1hhhhh
+hhhhh1j33qqqq333qqqq0jj333qqqqqqqqqpp999999999j0j000j033qqqq0000000000033qqqq0033qq3333qqqqqqqjjqq00j33qqqqqqqqqqqqqqqqq0j1hhhhh
+hhhhh1j33qqqq333qqqq0j0333qqqqqqqqqpp999999999j00j0j0j33qqqqqqqqqqqq00033qqqq0033qq3333qqqqqqqjjq000j33qqqqqqqqqqqqqqqqq0j1hhhhh
+hhhhh1j33qqqq333qqqq0j3333qqqqqqqqqppp9999999990jj00j033qqqqqqqqqqqq00033qqqq0j33qq3333qqqqqqqj000jj333qqqqqqqqqqqqqqqqq0j1hhhhh
+hhhhh1j33qqqq333qqqq0j3333qqqqqqqqqppp9999999990jj0j0j33qqqqqqqqqqqq00033qqqqj033qq3333qqqqqqq0j00jj333qqqqqqqqqqqq000000j1hhhhh
+hhhhh1j33qqqq333qqqq0j3333qqqqqqqqqqpp9999999990jj0jjj33qqqqqqqqqqqq003033qqqqqqqqqqq3333qqq0000jj00j333333333333qq3qqqqqj1hhhhh
+hhhhh1j03333jjjj333j0j0333qqqqqqqqqqpp99999999900j0jjjj33qqqqqqqqqqqq30q33qqqqqqqqqqq3333qqqjj00003003333333333330000000001hhhhh
+hhhhh1j03333jjjj333j0jj333qqqqqqqqqqpp999999999j0000jjj33qqqqqqqqqqqq03033qqqqqqqqqqq3333qqqjjjjqq3jj333333333333qq33qqqq01hhhhh
+hhhhh1j03333jjjj333j0j0333qqqqqqqqqqpp9999999990j0jj00j33qqqqqqqqqqqq30333qqqqqqqqqqq3333qqqj0jjj03jj3333333333330jjj0jjj01hhhhh
+hhhhh1j03333jjjj333j0jj333qqqqqqqqqqpp9999999990jj00jj033qqqqqqqqqqqqjjj33qqqqqqqqqqqq3333qqqjj00jj00j333333333333j00jj0j01hhhhh
+hhhhh1j03333jjjj333j0j0j333qqqqqqqqqpp9999999990jj0jjj033qqqqqqqqqqqqjjj33qqqqqqqqqqqq3333qqqjjj0jjj0j333333333333jj0jjjj01hhhhh
+hhhhh1j03333jjjj333j0jj0333qqqqqqqqqpp999999999jjj0jjjj33qqqqqqqqqqqq00033qqqqqqqqqqqq3333qqqj000j000j333333333333000j00j01hhhhh
+hhhhh1j03333jjjj333j0j03333qqqqqqqqqpp9999999990000jjjj33qqqqqqqqqqqq0jj33qqqqqqqqqqqq3333qqq0jjj0jjj0333333333333jjj0jjj01hhhhh
+hhhhh1j03333jjjj333j0jj3333333333333pp999999999jjjjjjjj33qqqqqqqqqqqqjjj33qqqqqqqqqqqq3333qqqjj00jj00j333333333333j00jj0j01hhhhh
+hhhhh1j03333jjjj333j0j03333333333333pp9999999990000000033qqqqqqqqqqqq00033qqqqqqqqqqqq3333qqqjjj0jjj0j333333333333jj0jjjj01hhhhh
+hhhhh1j0j3333jjjj3330jj0333333333333pp999999999jjjjjjjj333333333333jjjj3333qqqqqqqqqqq3333qqqj000j000j333333333333000j00j01hhhhh
+hhhhh1j0j3333jjj03330j0j333333333333pp999999999jjjjjjjjj333333333333jjjjj33qqqqqqqqqqq3333qqq0jjj0jjj0333333333333jjj0jjj01hhhhh
+hhhhh1j0j3333jjjj3330jj0333333333333pp9999ppp0jjj0jjj0jj333333333333j0jjj33qqqqqqqqqqq3333qqqjj00jj30jj00jj00jj00jj00jj0j01hhhhh
+hhhhh1j0jjjjjjjj0j0j0j0j333333333333pppppppppjj0jjj0jjj0333333333333jjj0j333333333333jjj33330jjj0jj30jjj0jjj0jjj0jjj0jjjj01hhhhh
+hhhhh1j0jjjjjjjjjj0j0jj0333333333333pppp00jj00jj00jj00jj33333333333300jj03333333333330jj33330j000j030j000j000j000j000j00j01hhhhh
+hhhhh1j0jjjjjjjj0j0j0j0j3333333333333jjjjjjjjjjjjjjjjjjj333333333333jjjjj333333333333jjj033330jjj0jjj0jjj0jjj0jjj0jjj0jjj01hhhhh
+hhhhh1j0jjjjjjjjjj0j0jj0j3333333333333jjj0jjj0jjj0jjj0jj333333333333j0jjj3333333333330jj03333jj00jj00jj00jj00jj00jj00jj0j01hhhhh
+hhhhh1j0jjjjjjjj0j0j0j0j03333333333333j0jjj0jjj0jjj0jjj0333333333333jjj0j333333333333jjj03333j0jjjjjjj3333333333330jjj0jj01hhhhh
+hhhhh1j0jjjjjjjjjj0j0jj0j3333333333333jj00jj00jj00jj00jj33333333333300jj03333333333330jj03333j33jjjjjj333333333333jjjjjjj01hhhhh
+hhhhh1j0jjjjjjjjjj0j0jjjj3333333333333jjjjjjjjjjjjjjjjjj333333333333jjjjjj3333333333333j03333j33jjjjjj333333333333jjjjjjj01hhhhh
+hhhhh1j000000000000j0000033333333333330000000000000000003333333333330000303333333333330003333000000000000000000000000000001hhhhh
+hhhhh1jjjjjjjjjjjjjjjjjjj3333333333333jjjjjjjjjjjjjjjjjjj333333333333jjjjj333333333333jjj3333jjjjjjjjjjj33333333333jjjjjjj1hhhhh
+0hhhh1111111111111111111111111111111111111111111111111111333333333333111113333333333331113333111111131111111111111111111111hhhh0
+0hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh333333333333hhh3333hhhhhhh3hhhhhhhhhhhhhhhhhhhhhhhhhh0
+0hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh333333333333hhh3333hhhhhhh3hhhhhhhhhhhhhhhhhhhhhhhhhh0
+00hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh3333hhhhhhh3hhhhhhhhhhhhhhhhhhhhhhhhh00
+000hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh000
+000000hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh000000
+
 __map__
 0d0e3b0b0e150400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
